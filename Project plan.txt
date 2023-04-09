@@ -1,0 +1,10 @@
+Chức năng: (bottom navigator)
+- Mainpage (sharing)
+- Thư viện
+- Tạo recipe
+- Setting
+--------------------
+- Recipe tracking
+----------------------------------
+
+
