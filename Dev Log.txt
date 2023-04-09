@@ -1,0 +1,17 @@
+Module: (bottom navigator)
+- Mainpage (sharing)
+- Recipe Library
+- Recipe Maker
+- Setting
+- Recipe tracker
+- Recipe Detail
+- Recipe List
+- Firebase connection pool
+-------------Dev Log----------------
+#09/04/2023:
+- Build app layout
+- Build "Recipe Tracker" module - Kiên
+- Build "Recipe Detail" module - Tài
+- Build "Main Page" Module - Nam
+- Build "Recipe List, Recipe Library" - Đạt
+- Config Database using Firebase - Trung
