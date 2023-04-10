@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    tools:context=".SettingFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment"
-        tools:text="Home"
+        tools:text="Setting"
         tools:ignore="VisualLintOverlap" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,17 +20,17 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="176dp"
-            android:layout_marginTop="372dp"
-            android:layout_marginEnd="177dp"
-            android:text="@string/textview"
+            android:layout_marginStart="178dp"
+            android:layout_marginTop="343dp"
+            android:layout_marginEnd="189dp"
+            android:text="@string/textview_setting"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Home" />
+            tools:text="Setting" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
