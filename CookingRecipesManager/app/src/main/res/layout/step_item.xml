@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:id="@+id/step"
+    card_view:contentPaddingLeft="15dp"
+    card_view:contentPaddingRight="15dp"
+    android:layout_height="50dp"
+    card_view:cardCornerRadius="30dp"
+    card_view:cardBackgroundColor="#FFBB86FC"
+    android:layout_margin="1dp">
+
+    <TextView
+        android:id="@+id/stepName"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="4dp"
+        android:text="Step 1: An example step using step name"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        android:textStyle="bold">
+
+    </TextView>
+</androidx.cardview.widget.CardView>
