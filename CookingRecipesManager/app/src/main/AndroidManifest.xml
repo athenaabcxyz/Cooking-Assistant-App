@@ -15,15 +15,6 @@
             android:name=".recipetracker.RecipeStepPreview"
             android:exported="true" />
         <activity
-            android:name=".recipetracker.Recipe_Timer"
-            android:exported="false" />
-        <activity
-            android:name=".recipetracker.Recipe_Basic"
-            android:exported="false" />
-        <activity
-            android:name=".recipetracker.Recipe_Prepare"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
