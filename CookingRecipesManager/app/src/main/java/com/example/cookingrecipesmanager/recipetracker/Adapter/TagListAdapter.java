@@ -52,7 +52,7 @@ class TagListViewHolder extends RecyclerView.ViewHolder {
 
     public TagListViewHolder(@NonNull View itemView) {
         super(itemView);
-        tagName = itemView.findViewById(R.id.tagName);
+        tagName = itemView.findViewById(R.id.textName);
 
     }
 }
