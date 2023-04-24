@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "531077607132",
+    "project_id": "cookingrecipesmanager",
+    "storage_bucket": "cookingrecipesmanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531077607132:android:1bd07a4cb0ad55f374ce19",
+        "android_client_info": {
+          "package_name": "com.example.cookingrecipesmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "531077607132-l5k2r7h04r7d4k85lgfj46i7ojrr9jb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_AESpskyfeM6xF9JfB5E_RxGXje0CaoU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "531077607132-l5k2r7h04r7d4k85lgfj46i7ojrr9jb3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
