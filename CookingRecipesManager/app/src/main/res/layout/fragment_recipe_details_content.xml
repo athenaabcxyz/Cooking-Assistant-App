@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#0c000000"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:contentPadding="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@android:style/Widget.Material.RatingBar.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:isIndicator="false"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title_prep"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Prep Time"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title_wait"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Wait Time"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/title_prep"
+                app:layout_constraintTop_toTopOf="@+id/title_prep" />
+
+            <TextView
+                android:id="@+id/title_total"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Total time"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/title_wait"
+                app:layout_constraintTop_toTopOf="@+id/title_prep" />
+
+            <TextView
+                android:id="@+id/time_prep"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="15 mins"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/title_prep"
+                app:layout_constraintStart_toStartOf="@+id/title_prep"
+                app:layout_constraintTop_toBottomOf="@+id/title_prep" />
+
+            <TextView
+                android:id="@+id/time_wait"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="2 hrs"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                app:layout_constraintEnd_toEndOf="@+id/title_wait"
+                app:layout_constraintStart_toStartOf="@+id/title_wait"
+                app:layout_constraintTop_toBottomOf="@+id/title_wait" />
+
+            <TextView
+                android:id="@+id/time_total"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="2h 15m"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                app:layout_constraintEnd_toEndOf="@+id/title_total"
+                app:layout_constraintStart_toStartOf="@+id/title_total"
+                app:layout_constraintTop_toBottomOf="@+id/title_total" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#0c000000"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:contentPadding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Author"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Author Name"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="12dp" />
+
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Recipe Description"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#0c000000"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:contentPadding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/text_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ingredients"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_ingredient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:cardBackgroundColor="#0c000000"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:contentPadding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/text_nutrition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nutrition Facts"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
