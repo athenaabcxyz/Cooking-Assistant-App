@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,13 +69,13 @@ public class RecipeDetailsFragment extends Fragment {
 
     private FragmentRecipeDetailsBinding binding;
 
-    private RecipeDetail mParamRecipe;
+    private CookingNote mParamRecipe;
 
     public RecipeDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(RecipeDetail recipe) {
+    public static RecipeDetailsFragment newInstance(CookingNote recipe) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putParcelable("RECIPE", recipe);
@@ -97,12 +98,14 @@ public class RecipeDetailsFragment extends Fragment {
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
         binding.appBarImage.setImageDrawable(getResources().getDrawable(R.drawable.img_recipe1, getContext().getTheme()));
 
-        binding.toolbar.setTitle(mParamRecipe.recipeName);
-        binding.content.authorName.setText(mParamRecipe.recipeAuthor);
-        binding.content.textDescription.setText(mParamRecipe.recipeDescription);
+        binding.toolbar.setTitle(mParamRecipe.getTitle());
+        binding.content.authorName.setText(mParamRecipe.getAuthor());
+        binding.content.textDescription.setText(mParamRecipe.getDescription());
+
+        ArrayList<String> ingredients = new ArrayList<String>(Arrays.asList(requireContext().getResources().getStringArray(R.array.sample_recipe_ingredients)));
 
         binding.content.listIngredient.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.ingredients));
+        binding.content.listIngredient.setAdapter(new IngredientAdapter(ingredients));
 
         return binding.getRoot();
     }
