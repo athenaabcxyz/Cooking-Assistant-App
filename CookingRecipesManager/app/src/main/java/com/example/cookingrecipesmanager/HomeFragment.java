@@ -1,18 +1,21 @@
 package com.example.cookingrecipesmanager;
 
+import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.cookingrecipesmanager.databinding.FragmentHomeBinding;
+import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
+import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,8 +23,6 @@ import java.util.Objects;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-
-    private FragmentHomeBinding binding;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,7 +32,12 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private RecyclerView rcl_trend;
+    private RecyclerView rcl_tag;
+    private TrendAdapter trendAdapter;
+    private TagAdapter tagAdapter;
 
+    Context thiscontext;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -57,10 +63,13 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
 
     }
 
@@ -68,20 +77,40 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_home, container, false);
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        thiscontext = container.getContext();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(thiscontext, RecyclerView.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(thiscontext, RecyclerView.HORIZONTAL, false);
+
+        rcl_trend = rootView.findViewById(R.id.rcl_trend);
+        rcl_trend.setLayoutManager(linearLayoutManager);
+        trendAdapter = new TrendAdapter();
+        trendAdapter.setData(getListData());
+        rcl_trend.setAdapter(trendAdapter);
+
+        rcl_tag = rootView.findViewById(R.id.rcl_tag);
+        rcl_tag.setLayoutManager(linearLayoutManager2);
+        tagAdapter = new TagAdapter();
+        tagAdapter.setData(getListTagData());
+        rcl_tag.setAdapter(tagAdapter);
+        return rootView;
+
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        binding.detailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(RecipeDetail.GetDemoRecipe(requireContext()))).commitNow();
-//                getParentFragmentManager().beginTransaction().replace(R.id.layoutFragment, new RecipeDetailsFragment()).commitNow();
-            }
-        });
+    private List<CookingNote> getListData() {
+        List<CookingNote> list = new ArrayList<>();
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", R.drawable.mon_1, new Float("4.5"), true));
+        return list;
+    }
+
+    private List<Tag> getListTagData() {
+        List<Tag> list = new ArrayList<>();
+        list.add(new Tag(R.drawable.mon_1, "See Food 1"));
+        list.add(new Tag(R.drawable.mon_1, "See Food 2"));
+        list.add(new Tag(R.drawable.mon_1, "See Food 3"));
+        return list;
     }
 }
