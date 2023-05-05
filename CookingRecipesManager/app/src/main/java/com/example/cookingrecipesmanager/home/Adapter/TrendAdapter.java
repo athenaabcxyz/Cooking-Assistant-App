@@ -62,7 +62,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
                             .commitNow();
                 }
             });

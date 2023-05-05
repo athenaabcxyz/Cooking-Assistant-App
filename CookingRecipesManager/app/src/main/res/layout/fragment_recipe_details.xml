@@ -5,17 +5,19 @@
 
 
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
 
         android:layout_width="match_parent"
         android:layout_height="192dp"
-        android:background="#ffffffff"
+        android:background="?android:colorBackground"
         app:elevation="8dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
@@ -23,13 +25,14 @@
             android:paddingTop="8dp"
             android:paddingRight="8dp"
             android:paddingBottom="0dp"
-            app:collapsedTitleGravity="fill_vertical"
-            app:contentScrim="#ffffffff"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:collapsedTitleGravity="center_vertical|start"
+            app:contentScrim="#00ffffff"
+            app:layout_scrollFlags="snapMargins|scroll|exitUntilCollapsed"
             app:titleCollapseMode="scale"
             app:toolbarId="@+id/toolbar">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/appbar_card"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FF0000"
@@ -54,7 +57,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:alpha="0.8"
-                        android:src="@drawable/alpha_gradient_bottomtop" />
+                        android:src="@drawable/alpha_gradient_bottomtop"
+                        android:tint="?android:colorBackground"/>
                 </FrameLayout>
 
             </androidx.cardview.widget.CardView>
@@ -82,10 +86,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/ThemeOverlay.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:soundEffectsEnabled="true"
         android:src="@drawable/baseline_restaurant_24" />"
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
