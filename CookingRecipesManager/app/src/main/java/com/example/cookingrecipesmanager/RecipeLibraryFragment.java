@@ -1,12 +1,22 @@
 package com.example.cookingrecipesmanager;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
+import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
+import com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +34,10 @@ public class RecipeLibraryFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
+    Context thisContext;
+    private RecyclerView rcl;
+    private LibraryAdapter adapter;
     public RecipeLibraryFragment() {
         // Required empty public constructor
     }
@@ -59,6 +73,26 @@ public class RecipeLibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipe_library, container, false);
+
+
+        View rootView = inflater.inflate(R.layout.fragment_recipe_library, container, false);
+        thisContext = container.getContext();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(thisContext, RecyclerView.VERTICAL, false);
+
+        rcl = rootView.findViewById(R.id.rcl_lib);
+        rcl.setLayoutManager(linearLayoutManager);
+        adapter = new LibraryAdapter();
+        adapter.setData(getListData());
+        rcl.setAdapter(adapter);
+
+        return rootView;
+    }
+    private List<CookingNote> getListData() {
+        List<CookingNote> list = new ArrayList<>();
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        return list;
     }
 }
