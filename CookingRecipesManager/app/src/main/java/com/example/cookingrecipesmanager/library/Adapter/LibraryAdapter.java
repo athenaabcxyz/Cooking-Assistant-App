@@ -1,8 +1,8 @@
-package com.example.cookingrecipesmanager.home.Adapter;
+package com.example.cookingrecipesmanager.library.Adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,7 +19,10 @@ import com.example.cookingrecipesmanager.RecipeDetailsFragment;
 
 import java.util.List;
 
-public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHolder> {
+
+
+
+public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder> {
     private Context context;
     private List<CookingNote> cookingNoteList;
     public void setData( List<CookingNote> list){
@@ -28,33 +31,42 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
     }
     @NonNull
     @Override
-    public TrendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trend_item, parent, false);
+    public com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trend_item_vertical, parent, false);
         context = parent.getContext();
-        return new TrendViewHolder(view);
+        return new com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrendViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder holder, int position) {
         CookingNote note = cookingNoteList.get(position);
         if(note == null){
             return;
         }
-
         holder.title.setText(note.getTitle());
         holder.author.setText(note.getAuthor());
         holder.img.setImageResource(note.getImg());
-//        holder.evaluate.setText(note.getEvaluate().toString());
+
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     PopupMenu popup = new PopupMenu(context, v);
                     popup.getMenuInflater().inflate(R.menu.menu_popup,
                             popup.getMenu());
                     if(note.getiFavorites()){
                         popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
                     }
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            cookingNoteList.remove(position);
+                            notifyDataSetChanged();
+                            return false;
+                        }
+                    });
                     popup.show();
                 }
             });
@@ -80,14 +92,14 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
         return 0;
     }
 
-    public class TrendViewHolder extends RecyclerView.ViewHolder {
+    public class LibraryViewHolder extends RecyclerView.ViewHolder {
         private View rootView;
         private TextView title;
         private TextView author;
         private ImageView img;
         private TextView evaluate;
         private ImageView iFavorites;
-        public TrendViewHolder(@NonNull View itemView) {
+        public LibraryViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
             title = itemView.findViewById(R.id.textTitle) ;

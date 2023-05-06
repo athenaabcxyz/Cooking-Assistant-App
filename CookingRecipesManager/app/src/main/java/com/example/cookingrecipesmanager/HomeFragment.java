@@ -106,9 +106,9 @@ public class HomeFragment extends Fragment {
 
     private List<CookingNote> getListData() {
         List<CookingNote> list = new ArrayList<>();
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
         return list;
     }
 

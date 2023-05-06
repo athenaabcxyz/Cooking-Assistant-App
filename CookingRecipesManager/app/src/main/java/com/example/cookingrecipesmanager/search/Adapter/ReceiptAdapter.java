@@ -1,7 +1,6 @@
-package com.example.cookingrecipesmanager.home.Adapter;
+package com.example.cookingrecipesmanager.search.Adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookingrecipesmanager.CookingNote;
-import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
-import com.example.cookingrecipesmanager.RecipeDetailsFragment;
 
 import java.util.List;
 
-public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHolder> {
+public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendViewHolder> {
     private Context context;
     private List<CookingNote> cookingNoteList;
     public void setData( List<CookingNote> list){
@@ -29,7 +26,8 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
     @NonNull
     @Override
     public TrendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trend_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.receipt_item_vertical, parent, false);
+        view.findViewById(R.id.receipt_item_vertical_wrapper);
         context = parent.getContext();
         return new TrendViewHolder(view);
     }
@@ -58,14 +56,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                     popup.show();
                 }
             });
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
-                            .commitNow();
-                }
-            });
+
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -81,7 +72,6 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
     }
 
     public class TrendViewHolder extends RecyclerView.ViewHolder {
-        private View rootView;
         private TextView title;
         private TextView author;
         private ImageView img;
@@ -89,7 +79,6 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
         private ImageView iFavorites;
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
-            rootView = itemView;
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
