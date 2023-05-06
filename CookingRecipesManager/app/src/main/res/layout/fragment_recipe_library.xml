@@ -7,29 +7,58 @@
     tools:context=".RecipeLibraryFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
-        tools:text="Library"
-        tools:ignore="VisualLintOverlap" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        tools:ignore="UselessParent"
+        android:orientation="vertical">
+        <RelativeLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADD"
+                    android:layout_alignParentRight="true"
+                    >
+                </Button>
+        </RelativeLayout>
+        <RelativeLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            >
+            <RelativeLayout android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content">
+                <Button
+                    android:id="@+id/btn_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All Recipe"
+                    >
+                </Button>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Recipe"
+                    android:layout_toRightOf="@id/btn_all"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/btn_my_recipe"
+                    >
+                </Button>
+            </RelativeLayout>
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcl_lib"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="176dp"
-            android:layout_marginTop="333dp"
-            android:layout_marginEnd="192dp"
-            android:text="@string/textview2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Library" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+
+    </LinearLayout>
 
 </FrameLayout>
