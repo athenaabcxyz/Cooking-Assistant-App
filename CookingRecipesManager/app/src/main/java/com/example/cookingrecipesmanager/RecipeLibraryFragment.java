@@ -40,6 +40,8 @@ public class RecipeLibraryFragment extends Fragment {
     private RecyclerView rcl;
     private LibraryAdapter adapter;
     private Button btnMyRecipe;
+    private Button btnGetAll;
+
 
 
     public RecipeLibraryFragment() {
@@ -90,10 +92,30 @@ public class RecipeLibraryFragment extends Fragment {
         adapter.setData(getListData());
         rcl.setAdapter(adapter);
 
-        btnMyRecipe = rootView.findViewById(R.id.btn_all);
-
-
+        btnMyRecipe = rootView.findViewById(R.id.btn_my_recipe);
+        btnGetAll = rootView.findViewById(R.id.btn_all);
+        btnMyRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.setData(getMyRecipeList());
+            }
+        });
+        btnGetAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.setData(getListData());
+            }
+        });
         return rootView;
+    }
+    private List<CookingNote> getMyRecipeList() {
+        List<CookingNote> list = new ArrayList<>();
+        list.add(new CookingNote("XSA to cook 2", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("5"), true));
+        list.add(new CookingNote("DSA  to cook 3", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("4.2"), true));
+        list.add(new CookingNote("How to cook 4", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("3.4"), true));
+        list.add(new CookingNote("How to cook 5", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("5.3"), true));
+        list.add(new CookingNote("How to cook 6", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("4.5"), true));
+        return list;
     }
     private List<CookingNote> getListData() {
         List<CookingNote> list = new ArrayList<>();
