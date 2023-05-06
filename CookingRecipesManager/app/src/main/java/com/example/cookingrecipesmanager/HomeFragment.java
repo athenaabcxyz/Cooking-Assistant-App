@@ -1,6 +1,7 @@
 package com.example.cookingrecipesmanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
@@ -94,6 +96,10 @@ public class HomeFragment extends Fragment {
         tagAdapter = new TagAdapter();
         tagAdapter.setData(getListTagData());
         rcl_tag.setAdapter(tagAdapter);
+
+
+        SearchView search = (SearchView) rootView.findViewById(R.id.search);
+
         return rootView;
 
     }
