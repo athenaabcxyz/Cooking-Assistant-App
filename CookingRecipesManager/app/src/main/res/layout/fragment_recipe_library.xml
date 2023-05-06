@@ -33,15 +33,16 @@
                     android:id="@+id/btn_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="All Receipt"
+                    android:text="All Recipe"
                     >
                 </Button>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="My Receipt"
+                    android:text="My Recipe"
                     android:layout_toRightOf="@id/btn_all"
                     android:layout_marginLeft="10dp"
+                    android:id="@+id/btn_my_recipe"
                     >
                 </Button>
             </RelativeLayout>

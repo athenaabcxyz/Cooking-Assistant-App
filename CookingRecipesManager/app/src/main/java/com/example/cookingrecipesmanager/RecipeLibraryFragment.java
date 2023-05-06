@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
@@ -38,6 +39,9 @@ public class RecipeLibraryFragment extends Fragment {
     Context thisContext;
     private RecyclerView rcl;
     private LibraryAdapter adapter;
+    private Button btnMyRecipe;
+
+
     public RecipeLibraryFragment() {
         // Required empty public constructor
     }
@@ -86,13 +90,22 @@ public class RecipeLibraryFragment extends Fragment {
         adapter.setData(getListData());
         rcl.setAdapter(adapter);
 
+        btnMyRecipe = rootView.findViewById(R.id.btn_all);
+
+
         return rootView;
     }
     private List<CookingNote> getListData() {
         List<CookingNote> list = new ArrayList<>();
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 1", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 2", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 3", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 4", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 5", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 6", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 7", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 8", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook 9", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
         return list;
     }
 }
