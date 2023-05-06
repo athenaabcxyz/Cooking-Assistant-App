@@ -98,7 +98,30 @@ public class HomeFragment extends Fragment {
         rcl_tag.setAdapter(tagAdapter);
 
 
-        SearchView search = (SearchView) rootView.findViewById(R.id.search);
+        SearchView searchView = (SearchView) rootView.findViewById(R.id.search_view);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Search.class);
+////                Bundle bd = new Bundle();
+////                bd.put("student", data);
+//
+                startActivity(intent);
+            }
+        });
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(getActivity(), Search.class);
+////                Bundle bd = new Bundle();
+////                bd.put("student", data);
+//
+                startActivity(intent);
+                searchView.setIconified(true);
+            }
+        });
 
         return rootView;
 
