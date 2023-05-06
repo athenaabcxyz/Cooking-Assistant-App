@@ -30,14 +30,27 @@
             tools:layout_editor_absoluteY="19dp"
             />
 
-        <SearchView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/border"
-            android:queryHint="Search here"
-            android:iconifiedByDefault="false"
-            android:autoHandwritingEnabled="false"
-            />
+            android:layout_height="wrap_content">
+            <SearchView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/border"
+                android:id="@+id/search_view"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Search here"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="40dp"
+                android:textSize="16dp"
+                >
+
+            </TextView>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
