@@ -10,7 +10,46 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#0c000000"
+        app:cardBackgroundColor="#0f888888"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:contentPadding="8dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_bookmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
+                app:srcCompat="@drawable/baseline_bookmark_add_24"
+                app:tint="#FFAAAAAA" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_tags"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:requiresFadingEdge="horizontal"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="16dp"
+                android:nestedScrollingEnabled="false"/>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#0f888888"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
         app:contentPadding="8dp">
@@ -107,7 +146,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#0c000000"
+        app:cardBackgroundColor="#0f888888"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
         app:contentPadding="8dp">
@@ -153,7 +192,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#0c000000"
+        app:cardBackgroundColor="#0f888888"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
         app:contentPadding="8dp">
@@ -178,7 +217,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_ingredient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
