@@ -1,15 +1,22 @@
 package com.example.cookingrecipesmanager.home.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookingrecipesmanager.CookingNote;
@@ -47,15 +54,45 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
 //        holder.evaluate.setText(note.getEvaluate().toString());
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("RestrictedApi")
                 @Override
                 public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(context, v);
-                    popup.getMenuInflater().inflate(R.menu.menu_popup,
-                            popup.getMenu());
+                    Context wrapper = new ContextThemeWrapper(context, R.style.YOURSTYLE_PopupMenu);
+                    PopupMenu popup = new PopupMenu(wrapper, v);
+//                    if(note.getiFavorites()){
+//                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
+//                    }
+
+                    MenuBuilder builder = new MenuBuilder(wrapper);
+                    MenuInflater inflater = new MenuInflater(wrapper);
+                    inflater.inflate(R.menu.menu_popup, builder);
+                    MenuPopupHelper popupHelper = new MenuPopupHelper(wrapper, builder, v);
+                    popupHelper.setForceShowIcon(true);
+
+//                    popup.inflate(R.menu.menu_popup);
+//                    if(note.getiFavorites()){
+//                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
+//                    }
+//                    popup.show();
                     if(note.getiFavorites()){
-                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
+                        builder.findItem(R.id.Save).setTitle("UnSave");
                     }
-                    popup.show();
+                    popupHelper.show();
+
+                    builder.setCallback(new MenuBuilder.Callback() {
+                        @Override
+                        public boolean onMenuItemSelected(@NonNull MenuBuilder menu, @NonNull MenuItem item) {
+                            if(note.getiFavorites()){
+                                Toast.makeText(wrapper, "abc", Toast.LENGTH_SHORT).show();
+                            }
+                            return false;
+                        }
+
+                        @Override
+                        public void onMenuModeChange(@NonNull MenuBuilder menu) {
+
+                        }
+                    });
                 }
             });
             holder.rootView.setOnClickListener(new View.OnClickListener(){
