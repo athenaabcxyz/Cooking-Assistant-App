@@ -1,5 +1,6 @@
 package com.example.cookingrecipesmanager.recipetracker.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,7 +49,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StepListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StepListViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String stepNamePlaceHolder = "Step " + (position + 1) + ": \n" + stepList.get(position).stepIntruction;
         holder.stepName.setText(stepNamePlaceHolder);
         switch (stepList.get(position).stepType) {
@@ -74,7 +75,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
             public void onClick(View view) {
                 if (stepList.get(position).stepType.equals("Timer")) {
                     holder.checkBox.setChecked(false);
-                    holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
+                    holder.stepName.setTextColor((ColorStateList.valueOf(0xFF605F5F)));
                     holder.checkBox.setEnabled(false);
                     holder.checkBox.setVisibility(View.GONE);
                     holder.textTimer.setEnabled(true);
@@ -104,7 +105,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
                                     holder.textTimer.setEnabled(false);
                                     holder.textTimer.setVisibility(View.GONE);
                                     holder.checkBox.setChecked(true);
-                                    holder.stepName.setTextColor(ColorStateList.valueOf(0xff8b7e74));
+                                    holder.stepName.setTextColor(ColorStateList.valueOf(0xFFC4C4C4));
                                 }
                             });
 
@@ -118,9 +119,9 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
                 }
                 else {
                     if (holder.checkBox.isChecked()) {
-                        holder.stepName.setTextColor(ColorStateList.valueOf(0xff8b7e74));
+                        holder.stepName.setTextColor(ColorStateList.valueOf(0xFFC4C4C4));
                     } else {
-                        holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
+                        holder.stepName.setTextColor((ColorStateList.valueOf(0xFF605F5F)));
                     }
                 }
 

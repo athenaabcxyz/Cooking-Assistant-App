@@ -1,10 +1,12 @@
 package com.example.cookingrecipesmanager.recipetracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cookingrecipesmanager.CookingStep;
@@ -12,6 +14,7 @@ import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetail;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.StepListAdapter;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.TagListAdapter;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 
@@ -31,7 +34,8 @@ public class RecipeStepPreview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_step_preview);
         stepList=findViewById(R.id.stepList);
-        textView=findViewById((R.id.recipeName));
+        ImageView appBarImage = findViewById(R.id.app_bar_image);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         //Create data sample for testing
         recipe = new RecipeDetail();
@@ -57,7 +61,12 @@ public class RecipeStepPreview extends AppCompatActivity {
         stepListAdapter = new StepListAdapter(RecipeStepPreview.this, recipe.cookingStepsList);
         stepList.setLayoutManager(linearLayoutManagerForStep);
         stepList.setAdapter(stepListAdapter);
-        textView.setText(recipe.recipeName);
+        toolbar.setTitle(recipe.recipeName);
+        appBarImage.setImageResource(R.drawable.mon3);
+
+        CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsingToolbar);
+        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
+        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
 
     }
