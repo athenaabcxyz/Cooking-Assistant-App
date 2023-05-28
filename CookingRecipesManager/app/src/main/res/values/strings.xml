@@ -23,4 +23,5 @@
         <item>Timer</item>
         <item>Basic</item>
     </string-array>
+    <string name="api_key">e6f3dc1b857f4ad0b84684bcf2da349d</string>
 </resources>

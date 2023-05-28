@@ -1,21 +1,37 @@
 package com.example.cookingrecipesmanager.recipetracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.cookingrecipesmanager.CookingStep;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetail;
+import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.example.cookingrecipesmanager.database.Model.Step;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.StepListAdapter;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.TagListAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class RecipeStepPreview extends AppCompatActivity {
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     RecyclerView stepList;
 
@@ -24,34 +40,85 @@ public class RecipeStepPreview extends AppCompatActivity {
 
     StepListAdapter stepListAdapter;
 
-    RecipeDetail recipe;
+    RecipeDetail recipe= new RecipeDetail();
+    List<DocumentSnapshot> snapshotList;
+    ArrayList<CookingStep> cookingSteps = new ArrayList<CookingStep>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_step_preview);
-        stepList=findViewById(R.id.stepList);
-        textView=findViewById((R.id.recipeName));
+        stepList = findViewById(R.id.stepList);
+        textView = findViewById((R.id.recipeName));
 
         //Create data sample for testing
-        recipe = new RecipeDetail();
-        ArrayList<CookingStep> cookingSteps = new ArrayList<CookingStep>();
-        cookingSteps.add(new CookingStep( "Prepare 4 cups of water.", "Prepare", 0));
-        cookingSteps.add(new CookingStep( "Pour 4 cups of water into a pot and boil it for 2 minutes.", "Timer", 10));
-        cookingSteps.add(new CookingStep( "Turn of the stove and pour the hot water into 4 cups.", "Basic", 0));
-        cookingSteps.add(new CookingStep( "Turn of the stove and pour the hot water into 4 cups.", "Basic", 0));
-        cookingSteps.add(new CookingStep( "Turn of the stove and pour the hot water into 4 cups.", "Basic", 0));
-        cookingSteps.add(new CookingStep( "Turn of the stove and pour the hot water into 4 cups.", "Basic", 0));
-        cookingSteps.add(new CookingStep( "Turn of the stove and pour the hot water into 4 cups.", "Basic", 0));
-        cookingSteps.add(new CookingStep( "Turn of the stove and pour the hot water into 4 cups.", "Basic", 0));
+
+
+        //Get data from cloud FireStore
+        db.collection("recipes")
+                //Use query to find specific document
+                .whereEqualTo("id",655060)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        //Create a list of result. The number of result can be 1
+                        snapshotList = queryDocumentSnapshots.getDocuments();
+                        //Convert the result to class Object for easier processing.
+                        for(DocumentSnapshot snapshot:snapshotList)
+                        {
+                            Recipe recipe = snapshot.toObject(Recipe.class);
+                            assert recipe != null;
+
+                            AnalyzedInstruction instruction = recipe.analyzedInstructions.get(0);
+                            for(Step step:instruction.steps)
+                            {
+                                String instructionDetail = step.step;
+                                int time = 0;
+                                String type="Basic";
+                                if(step.length!=null)
+                                {
+                                    switch (step.length.unit)
+                                    {
+                                        case "seconds":
+                                            time=step.length.number;
+                                            break;
+                                        case "minutes":
+                                            time=step.length.number*60;
+                                            break;
+                                        case "hours":
+                                            time=step.length.number*3600;
+                                            break;
+                                        default:
+
+                                    }
+                                    type="Timer";
+                                }
+                                else
+                                {
+                                    type="Basic";
+                                }
+                                cookingSteps.add(new CookingStep(instructionDetail, type, time));
+                                stepListAdapter.notifyItemInserted(cookingSteps.size()-1);
+
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+        Log.d("TagTest",""+cookingSteps.size());
         recipe.CreateStepList(cookingSteps);
-        recipe.recipeName="Boiled water";
+        recipe.recipeName = "Boiled water";
         ArrayList<String> tagList = new ArrayList<String>();
         tagList.add("Boil");
         tagList.add("Water");
         recipe.CreateTagList(tagList);
         //End data sample creating
-
 
         linearLayoutManagerForStep = new LinearLayoutManager(RecipeStepPreview.this, LinearLayoutManager.VERTICAL, false);
         stepListAdapter = new StepListAdapter(RecipeStepPreview.this, recipe.cookingStepsList);
