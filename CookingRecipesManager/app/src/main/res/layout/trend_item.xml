@@ -2,18 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="280dp"
     android:layout_height="wrap_content"
-    android:paddingEnd="10dp"
+    android:paddingEnd="3dp"
     >
     <androidx.cardview.widget.CardView
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="8dp"
         android:id="@+id/header"
         android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
         >
         <ImageView
+
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,15 +26,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="13dp"
-        >
+            >
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#E2787878"
-                android:paddingLeft="3dp"
-                android:paddingRight="3dp"
+                android:backgroundTint="#C3787878"
+                android:background="@drawable/border_none"
+                android:paddingLeft="5dp"
+                android:paddingRight="10dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
                 android:layout_centerVertical="true"
-               >
+                >
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="25dp"
@@ -57,20 +62,22 @@
 
     </androidx.cardview.widget.CardView>
     <RelativeLayout
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/header"
         android:id="@+id/container"
         android:orientation="vertical"
+        android:paddingRight="3dp"
+        android:paddingLeft="3dp"
         >
         <TextView
-        android:id="@+id/textTitle"
+            android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title of cooking note"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold"
-            android:textColor="#333333"
+            android:textColor="@color/text"
             android:layout_marginBottom="5dp"
             />
         <TextView
@@ -80,13 +87,13 @@
             android:text="Name of author"
             android:textSize="16dp"
             android:layout_below="@id/textTitle"
-        />
+            />
 
-       <androidx.appcompat.widget.ActionMenuView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content">
+        <androidx.appcompat.widget.ActionMenuView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-       </androidx.appcompat.widget.ActionMenuView>
+        </androidx.appcompat.widget.ActionMenuView>
 
         <ImageButton
             android:id="@+id/imageButton"
