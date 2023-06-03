@@ -2,20 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="280dp"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingEnd="3dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
     >
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         app:cardCornerRadius="8dp"
         android:id="@+id/header"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
+        android:layout_centerVertical="true"
         >
         <ImageView
-
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,35 +30,37 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
+        android:layout_toRightOf="@+id/header"
         android:id="@+id/container"
         android:orientation="vertical"
+        android:paddingLeft="5dp"
         android:paddingRight="3dp"
-        android:paddingLeft="3dp"
+        android:layout_centerVertical="true"
         >
         <TextView
-            android:id="@+id/textTitle"
+        android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title of cooking note"
             android:textSize="18dp"
             android:textStyle="bold"
-            android:textColor="@color/text"
+            android:textColor="#333333"
             android:layout_marginBottom="5dp"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginRight="50dp"
             />
         <TextView
             android:id="@+id/textAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name of author"
-            android:textSize="16dp"
+            android:textSize="14dp"
+            android:textColor="#C4C4C4"
             android:layout_below="@id/textTitle"
-            />
-        <androidx.appcompat.widget.ActionMenuView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </androidx.appcompat.widget.ActionMenuView>
+            android:textStyle="bold"
+        />
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
@@ -69,6 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/textAuthor"
+            android:layout_toLeftOf="@id/imageButton"
             android:weightSum="100"
             >
             <LinearLayout
@@ -131,6 +137,7 @@
 
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

@@ -7,12 +7,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.example.cookingrecipesmanager.home.Adapter.DishAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
 
@@ -97,6 +99,14 @@ public class HomeFragment extends Fragment {
         tagAdapter.setData(getListTagData());
         rcl_tag.setAdapter(tagAdapter);
 
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+
+        RecyclerView rcl = rootView.findViewById(R.id.rcl_lib);
+        rcl.setLayoutManager(layoutManager);
+        DishAdapter adapter = new DishAdapter();
+        adapter.setData(getListData());
+        rcl.setAdapter(adapter);
+
 
         SearchView searchView = (SearchView) rootView.findViewById(R.id.search_view);
         searchView.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +140,11 @@ public class HomeFragment extends Fragment {
     private List<CookingNote> getListData() {
         List<CookingNote> list = new ArrayList<>();
         list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon3, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.img_recipe1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon3, new Float("4.5"), true));
+        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.img_recipe1, new Float("4.5"), true));
         return list;
     }
 
