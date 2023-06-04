@@ -37,12 +37,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
-        //Ẩn thanh actionBar
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.hide();
-        //kết thúc
-
-
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -53,28 +47,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.btnReset);
         textEmail = findViewById(R.id.textEmail);
 
-
-        //Set animation______________________________________________________
-        title.setTranslationX(800);
-        des1.setTranslationX(800);
-        des2.setTranslationX(800);
-        textEmail.setTranslationX(800);
-        btnReset.setTranslationX(800);
-        ret.setTranslationX(800);
-
-        title.setAlpha(v);
-        des1.setAlpha(v);
-        des2.setAlpha(v);
-        textEmail.setAlpha(v);
-        btnReset.setAlpha(v);
-        ret.setAlpha(v);
-
-        title.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(300).start();
-        des1.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(400).start();
-        des2.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(500).start();
-        textEmail.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(600).start();
-        btnReset.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(700).start();
-        ret.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(800).start();
         //____________________________________________________________________
 
         ret.setOnClickListener(new View.OnClickListener() {

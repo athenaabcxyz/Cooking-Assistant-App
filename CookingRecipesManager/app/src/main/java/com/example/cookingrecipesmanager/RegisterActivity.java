@@ -45,14 +45,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-//        broadcastReceiver = new NetworkChangeListener();
-//        CheckInternet();
-        //Ẩn thanh actionBar
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-       // ActionBar actionBar = getSupportActionBar();
-        //actionBar.hide();
-        //kết thúc
-
         btnLoginActivity = findViewById(R.id.btnLoginActivity);
         btnRegister = findViewById(R.id.btnRegister);
 
@@ -66,27 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        //Set animation______________________________________________________
-        textFullName.setTranslationX(800);
-        textEmail.setTranslationX(800);
-        textPassword.setTranslationX(800);
-        textConPassword.setTranslationX(800);
-        btnRegister.setTranslationX(800);
-        btnLoginActivity.setTranslationX(800);
-
-        textFullName.setAlpha(v);
-        textEmail.setAlpha(v);
-        textPassword.setAlpha(v);
-        textConPassword.setAlpha(v);
-        btnRegister.setAlpha(v);
-        btnLoginActivity.setAlpha(v);
-
-        textFullName.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(300).start();
-        textEmail.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(400).start();
-        textPassword.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(500).start();
-        textConPassword.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(600).start();
-        btnRegister.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(700).start();
-        btnLoginActivity.animate().translationX(0).alpha(1).setDuration(1000).setStartDelay(800).start();
         //____________________________________________________________________
 
         btnLoginActivity.setOnClickListener((view)->{
