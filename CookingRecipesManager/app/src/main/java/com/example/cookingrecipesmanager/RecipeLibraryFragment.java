@@ -1,16 +1,25 @@
 package com.example.cookingrecipesmanager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
@@ -41,7 +50,7 @@ public class RecipeLibraryFragment extends Fragment {
     private LibraryAdapter adapter;
     private Button btnMyRecipe;
     private Button btnGetAll;
-
+    private boolean isAllRecipe = true;
 
 
     public RecipeLibraryFragment() {
@@ -84,10 +93,10 @@ public class RecipeLibraryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_library, container, false);
         thisContext = container.getContext();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(thisContext, RecyclerView.VERTICAL, false);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         rcl = rootView.findViewById(R.id.rcl_lib);
-        rcl.setLayoutManager(linearLayoutManager);
+        rcl.setLayoutManager(layoutManager);
         adapter = new LibraryAdapter();
         adapter.setData(getListData());
         rcl.setAdapter(adapter);
@@ -95,18 +104,95 @@ public class RecipeLibraryFragment extends Fragment {
         btnMyRecipe = rootView.findViewById(R.id.btn_my_recipe);
         btnGetAll = rootView.findViewById(R.id.btn_all);
         btnMyRecipe.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                isAllRecipe = false;
+                btnMyRecipe.setBackgroundColor(Color.parseColor("#2D67F6"));
+                btnMyRecipe.setTextColor(getResources().getColor(R.color.white, null));
+                btnGetAll.setBackgroundColor(getResources().getColor(R.color.white, null));
+                btnGetAll.setTextColor(getResources().getColor(R.color.text, null));
                 adapter.setData(getMyRecipeList());
             }
         });
         btnGetAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isAllRecipe = true;
+                btnMyRecipe.setBackgroundColor(getResources().getColor(R.color.white,null));
+                btnMyRecipe.setTextColor(getResources().getColor(R.color.text, null));
+                btnGetAll.setBackgroundColor(Color.parseColor("#2D67F6"));
+                btnGetAll.setTextColor(getResources().getColor(R.color.white, null));
                 adapter.setData(getListData());
+
+            }
+        });
+        ImageView img = rootView.findViewById(R.id.sort);
+        img.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
+            @Override
+            public void onClick(View view) {
+                Context wrapper = new ContextThemeWrapper(getContext(), R.style.YOURSTYLE_PopupMenu);
+                PopupMenu popup = new PopupMenu(wrapper, view);
+                popup.inflate(R.menu.menu_popup_sort);
+                popup.show();
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.Asc:
+                                adapter.sortAsc();
+                                break;
+                            case R.id.Desc:
+                                adapter.sortDes();
+                                break;
+                            default:
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+        SearchView searchView = rootView.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                filterList(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                filterList(query);
+                return false;
             }
         });
         return rootView;
+    }
+    public void filterList(String text){
+        List<CookingNote> filterList = new ArrayList<>();
+        List<CookingNote> listData = new ArrayList<>();
+        if(isAllRecipe){
+            listData = getListData();
+        }
+        else {
+            listData = getMyRecipeList();
+        }
+        for(CookingNote item : listData){
+            if(item.getTitle().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(item);
+            }
+        }
+        if(filterList.isEmpty()){
+            adapter.setData(filterList);
+            Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            adapter.setData(filterList);
+        }
     }
     private List<CookingNote> getMyRecipeList() {
         List<CookingNote> list = new ArrayList<>();
