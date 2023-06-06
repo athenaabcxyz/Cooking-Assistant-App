@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.R;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendViewHolder> {
@@ -85,5 +87,24 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
             evaluate = itemView.findViewById(R.id.textView2);
             iFavorites = itemView.findViewById(R.id.imageButton);
         }
+    }
+    public void sortAsc(){
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        notifyDataSetChanged();
+    }
+    public void sortDes(){
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        Collections.reverse(cookingNoteList);
+        notifyDataSetChanged();
     }
 }

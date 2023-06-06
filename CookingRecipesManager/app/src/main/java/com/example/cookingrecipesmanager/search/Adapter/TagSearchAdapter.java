@@ -1,0 +1,119 @@
+package com.example.cookingrecipesmanager.search.Adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cookingrecipesmanager.CookingNote;
+import com.example.cookingrecipesmanager.R;
+import com.example.cookingrecipesmanager.Tag;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagViewHolder> {
+    private Context context;
+    private List<Tag> tagList;
+    private List<Tag> tagListClicked = new ArrayList<>();
+
+    private ItemClickListener itemClickListener;
+
+    public interface ItemClickListener{
+        void onItemClick(Tag tag, TagViewHolder holder);
+    }
+    public TagSearchAdapter(Context context, ItemClickListener itemClickListener) {
+        this.context = context;
+        this.itemClickListener = itemClickListener;
+    }
+
+    public void setData(List<Tag> list){
+        this.tagList = list;
+        notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public TagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_item_search, parent, false);
+        return new TagViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
+        Tag tag = tagList.get(position);
+        if(tag == null){
+            return;
+        }
+        holder.name.setText(tag.getName());
+        holder.img.setImageResource(tag.getImg());
+        holder.content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemClickListener.onItemClick(tag, holder);
+//                if(holder.name.getTextColors().getDefaultColor() == context.getResources().getColor(R.color.text, null)){
+//                    holder.name.setTextColor(context.getResources().getColor(R.color.white, null));
+//                    holder.content.getBackground().setTint(context.getResources().getColor(R.color.blue, null));
+//                    tagListClicked.add(tag);
+//                }
+//                else {
+//                    holder.name.setTextColor(context.getResources().getColor(R.color.text, null));
+//                    holder.content.getBackground().setTint(context.getResources().getColor(R.color.white, null));
+//                    tagListClicked.remove(tag);
+//                }
+            }
+        });
+//        holder.evaluate.setText(note.getEvaluate().toString());
+    }
+
+    @Override
+    public int getItemCount() {
+        if(tagList!= null){
+            return tagList.size();
+        }
+        return 0;
+    }
+
+    public List<Tag> getTagListClicked() {
+        return tagListClicked;
+    }
+
+    public void setTagListClicked(List<Tag> tagListClicked) {
+        this.tagListClicked = tagListClicked;
+    }
+
+    public class TagViewHolder extends RecyclerView.ViewHolder{
+        public TextView name;
+        private ImageView img;
+        public LinearLayout content;
+
+        public TagViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.textName) ;
+            img = itemView.findViewById(R.id.imageIcon);
+            content = itemView.findViewById(R.id.tag_content);
+
+        }
+
+        public ImageView getImg() {
+            return img;
+        }
+
+        public void setImg(ImageView img) {
+            this.img = img;
+        }
+    }
+    private List<CookingNote> getListData() {
+        List<CookingNote> list = new ArrayList<>();
+        list.add(new CookingNote("How to cook Pizza Margherita", "Dyan","Description", R.drawable.mon2, new Float("4.5"), true));
+        list.add(new CookingNote("cook Peking Duck", "XiaoCheng","Description", R.drawable.mon_1, new Float("4.5"), true));
+
+        return list;
+    }
+}
