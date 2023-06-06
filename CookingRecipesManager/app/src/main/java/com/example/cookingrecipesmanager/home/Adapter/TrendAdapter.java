@@ -23,13 +23,15 @@ import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHolder> {
     private Context context;
-    private List<CookingNote> cookingNoteList;
-    public void setData( List<CookingNote> list){
+    private List<Recipe> cookingNoteList;
+    public void setData( List<Recipe> list){
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
@@ -43,17 +45,19 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TrendViewHolder holder, int position) {
-        CookingNote note = cookingNoteList.get(position);
+        Recipe note = cookingNoteList.get(position);
         if(note == null){
             return;
         }
 
-        holder.title.setText(note.getTitle());
-        holder.author.setText(note.getAuthor());
-        holder.img.setImageResource(note.getImg());
+        holder.title.setText(note.title);
+        holder.author.setText("Hoang Nam");
+        holder.like.setText(String.valueOf(note.aggregateLikes));
+        holder.time.setText(String.valueOf(note.readyInMinutes));
+        Picasso.get().load(note.image).into(holder.img);
 //        holder.evaluate.setText(note.getEvaluate().toString());
         try {
-            holder.iFavorites.setOnClickListener(new View.OnClickListener() {
+            holder.icon_more.setOnClickListener(new View.OnClickListener() {
                 @SuppressLint("RestrictedApi")
                 @Override
                 public void onClick(View v) {
@@ -74,17 +78,17 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
 //                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
 //                    }
 //                    popup.show();
-                    if(note.getiFavorites()){
-                        builder.findItem(R.id.Save).setTitle("UnSave");
-                    }
+//                    if(note.getiFavorites()){
+//                        builder.findItem(R.id.Save).setTitle("UnSave");
+//                    }
                     popupHelper.show();
 
                     builder.setCallback(new MenuBuilder.Callback() {
                         @Override
                         public boolean onMenuItemSelected(@NonNull MenuBuilder menu, @NonNull MenuItem item) {
-                            if(note.getiFavorites()){
-                                Toast.makeText(wrapper, "abc", Toast.LENGTH_SHORT).show();
-                            }
+//                            if(note.getiFavorites()){
+//                                Toast.makeText(wrapper, "abc", Toast.LENGTH_SHORT).show();
+//                            }
                             return false;
                         }
 
@@ -95,11 +99,12 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                     });
                 }
             });
+            CookingNote note1 = new CookingNote(note.title, "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true);
             holder.rootView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note1))
                             .commitNow();
                 }
             });
@@ -121,17 +126,19 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
         private View rootView;
         private TextView title;
         private TextView author;
+        private TextView like;
+        private TextView time;
         private ImageView img;
-        private TextView evaluate;
-        private ImageView iFavorites;
+        private ImageView icon_more;
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
+            like = itemView.findViewById(R.id.like) ;
+            time = itemView.findViewById(R.id.time);
             img = itemView.findViewById(R.id.imageView);
-            evaluate = itemView.findViewById(R.id.textView2);
-            iFavorites = itemView.findViewById(R.id.imageButton);
+            icon_more = itemView.findViewById(R.id.imageButton);
         }
     }
 }

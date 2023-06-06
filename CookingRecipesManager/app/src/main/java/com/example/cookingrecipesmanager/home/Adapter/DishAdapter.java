@@ -17,6 +17,8 @@ import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,8 +27,8 @@ import java.util.List;
 
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder> {
     private Context context;
-    private List<CookingNote> cookingNoteList;
-    public void setData( List<CookingNote> list){
+    private List<Recipe> cookingNoteList;
+    public void setData( List<Recipe> list){
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
@@ -40,13 +42,15 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DishViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        CookingNote note = cookingNoteList.get(position);
+        Recipe note = cookingNoteList.get(position);
         if(note == null){
             return;
         }
-        holder.title.setText(note.getTitle());
-        holder.author.setText(note.getAuthor());
-        holder.img.setImageResource(note.getImg());
+        holder.title.setText(note.title);
+        holder.author.setText("Hoang Nam");
+        holder.like.setText(String.valueOf(note.aggregateLikes));
+        holder.time.setText(String.valueOf(note.readyInMinutes));
+        Picasso.get().load(note.image).into(holder.img);
 
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
@@ -56,9 +60,9 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                     PopupMenu popup = new PopupMenu(context, v);
                     popup.getMenuInflater().inflate(R.menu.menu_popup,
                             popup.getMenu());
-                    if(note.getiFavorites()){
-                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
-                    }
+//                    if(note.getiFavorites()){
+//                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
+//                    }
 
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
@@ -71,11 +75,12 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                     popup.show();
                 }
             });
+            CookingNote note1 = new CookingNote(note.title, "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true);
             holder.rootView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note1))
                             .commitNow();
                 }
             });
@@ -97,34 +102,36 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         private View rootView;
         private TextView title;
         private TextView author;
+        private TextView like;
+        private TextView time;
         private ImageView img;
-        private TextView evaluate;
         private ImageView iFavorites;
         public DishViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
+            like = itemView.findViewById(R.id.like) ;
+            time = itemView.findViewById(R.id.time);
             img = itemView.findViewById(R.id.imageView);
-            evaluate = itemView.findViewById(R.id.textView2);
             iFavorites = itemView.findViewById(R.id.imageButton);
         }
     }
 
     public void sortAsc(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
             @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            public int compare(Recipe i0, Recipe i1) {
+                return i0.title.compareToIgnoreCase(i1.title);
             }
         });
         notifyDataSetChanged();
     }
     public void sortDes(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
             @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            public int compare(Recipe i0, Recipe i1) {
+                return i0.title.compareToIgnoreCase(i1.title);
             }
         });
         Collections.reverse(cookingNoteList);

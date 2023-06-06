@@ -1,20 +1,13 @@
 package com.example.cookingrecipesmanager;
 
 public class Tag {
-    private int img;
     private String name;
 
-    public Tag(Integer img, String name) {
-        this.img = img;
+    private Boolean clicked;
+
+    public Tag(String name, boolean clicked) {
         this.name = name;
-    }
-
-    public Integer getImg() {
-        return img;
-    }
-
-    public void setImg(Integer img) {
-        this.img = img;
+        this.clicked = clicked;
     }
 
     public String getName() {
@@ -23,5 +16,13 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getClicked() {
+        return clicked;
+    }
+
+    public void setClicked(Boolean clicked) {
+        this.clicked = clicked;
     }
 }
