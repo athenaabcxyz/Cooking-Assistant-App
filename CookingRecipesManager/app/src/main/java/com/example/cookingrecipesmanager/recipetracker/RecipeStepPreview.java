@@ -15,6 +15,8 @@ import com.example.cookingrecipesmanager.CookingStep;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetail;
 import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
+import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
+import com.example.cookingrecipesmanager.database.Model.Ingredient;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.database.Model.Step;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.StepListAdapter;
@@ -75,8 +77,15 @@ public class RecipeStepPreview extends AppCompatActivity {
                         {
                             Recipe recipe = snapshot.toObject(Recipe.class);
                             assert recipe != null;
-
+                            StringBuilder prepareInstruction= new StringBuilder("Prepare these ingredients: \n");
+                            for (ExtendedIngredient ingredient:recipe.extendedIngredients)
+                            {
+                                prepareInstruction.append(" - ").append(ingredient.original).append("\n");
+                            }
+                            cookingSteps.add(new CookingStep(prepareInstruction.toString(), "Prepare", 0));
+                            stepListAdapter.notifyItemInserted(cookingSteps.size()-1);
                             AnalyzedInstruction instruction = recipe.analyzedInstructions.get(0);
+
                             for(Step step:instruction.steps)
                             {
                                 String instructionDetail = step.step;

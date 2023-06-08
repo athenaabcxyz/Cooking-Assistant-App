@@ -18,5 +18,6 @@ public class Recipe {
     public ArrayList<String> dishTypes;
     public ArrayList<String> diets;
     public String instructions;
+    public String userID;
     public ArrayList<AnalyzedInstruction> analyzedInstructions;
 }

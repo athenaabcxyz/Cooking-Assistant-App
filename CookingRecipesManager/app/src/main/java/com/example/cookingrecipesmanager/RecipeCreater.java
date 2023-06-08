@@ -1,4 +1,4 @@
-package com.example.cookingrecipesmanager.recipetracker;
+package com.example.cookingrecipesmanager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,7 +40,7 @@ public class RecipeCreater extends AppCompatActivity {
     EditText time;
     Spinner spinner;
     LinearLayoutManager linearLayoutManagerForStep;
-    ImageButton imageButton;
+    Button buttonAddStep;
     Button buttonSave;
     Button buttonCancel;
     Button Save;
@@ -52,14 +52,14 @@ public class RecipeCreater extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recipe_creater);
+        setContentView(R.layout.activity_create_recipe);
         stepList = findViewById(R.id.stepList);
         textView = findViewById((R.id.recipeName));
-        imageButton = findViewById(R.id.addstep);
+        buttonAddStep = findViewById(R.id.addStep);
         Save =findViewById(R.id.save_recipe);
         Cancel =findViewById(R.id.cancel_recipe);
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        buttonAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -86,7 +86,7 @@ public class RecipeCreater extends AppCompatActivity {
 
 
 
-        imageButton.setOnClickListener(view -> {
+        buttonAddStep.setOnClickListener(view -> {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.popup_addstep, null);
 
