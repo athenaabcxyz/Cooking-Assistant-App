@@ -11,14 +11,23 @@ import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.example.cookingrecipesmanager.home.Adapter.DishAdapter;
+import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.search.Adapter.ReceiptAdapter;
 import com.example.cookingrecipesmanager.search.Adapter.TagSearchAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +45,8 @@ public class Search extends AppCompatActivity {
     private List<Recipe> listRecipeSearch= new ArrayList<>();
     private String textSearch="";
     private List<Tag> listTag = new ArrayList<>();
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    List<DocumentSnapshot> snapshotList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +55,7 @@ public class Search extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             try{
-                listRecipe = (List<Recipe>) extras.getSerializable("recipes");
+//                listRecipe = (List<Recipe>) extras.getSerializable("recipes");
                 listRecipeSearch = listRecipe;
                 listTag = (List<Tag>) extras.getSerializable("tags");
             }
@@ -53,6 +63,7 @@ public class Search extends AppCompatActivity {
 
             }
         }
+        getListData();
 
 //      ------------------ findViewId ----------------------------
         rcl = findViewById(R.id.rcl_search);
@@ -214,8 +225,37 @@ public class Search extends AppCompatActivity {
         return list;
     }
 
+    public void getListData(){
+        db.collection("recipes")
+                //Use query to find specific document
+                .orderBy("aggregateLikes", Query.Direction.DESCENDING).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        //Create a list of result. The number of result can be 1
+                        snapshotList = queryDocumentSnapshots.getDocuments();
+                        //Convert the result to class Object for easier processing.
+                        for(DocumentSnapshot snapshot:snapshotList)
+                        {
+                            Recipe recipe = snapshot.toObject(Recipe.class);
+                            assert recipe != null;
+                            listRecipe.add(recipe);
+                        }
+                        listRecipeSearch = listRecipe;
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+
 }

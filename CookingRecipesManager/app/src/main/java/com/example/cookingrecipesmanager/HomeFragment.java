@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
@@ -143,12 +144,18 @@ public class HomeFragment extends Fragment {
                 List<Tag> newListTag = new ArrayList<>();
 //                Tag firstTag = new Tag("All", false);
 //                newListTag.add(firstTag);
+                List<Recipe> listTrend = new ArrayList<>();
+                if(listRecipe.size()>0){
+                    for(int i=0; i< 5;  i++){
+                        listTrend.add(listRecipe.get(i));
+                    }
+                }
                 for (Tag tag: listTag){
                     Tag newTag = tag;
                     newTag.setClicked(false);
                     newListTag.add(newTag);
                 }
-                intent.putExtra("recipes", (Serializable) listRecipe);
+//                intent.putExtra("recipes", (Serializable) listTrend);
                 intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
             }
@@ -165,7 +172,7 @@ public class HomeFragment extends Fragment {
                     newTag.setClicked(false);
                     newListTag.add(newTag);
                 }
-                intent.putExtra("recipes", (Serializable) listRecipe);
+//                intent.putExtra("recipes", (Serializable) listRecipe);
                 intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
                 searchView.setIconified(true);

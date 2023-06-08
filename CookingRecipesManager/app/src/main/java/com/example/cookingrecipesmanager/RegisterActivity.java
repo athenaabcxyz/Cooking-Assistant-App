@@ -16,6 +16,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.example.cookingrecipesmanager.database.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -143,15 +145,19 @@ public class RegisterActivity extends AppCompatActivity {
                                 String userID ;
                                 progressDialog.dismiss();
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                                User data = new User();
+                                data.name = fullname;
+                                data.email = email;
+                                data.uid = user.getUid();
 
-                                HashMap<Object,String> hashMap = new HashMap<>();
-                                hashMap.put("email",email);
-                                hashMap.put("name",fullname);
-                                hashMap.put("uid",user.getUid());
+//                                HashMap<Object,String> hashMap = new HashMap<>();
+//                                hashMap.put("email",email);
+//                                hashMap.put("name",fullname);
+//                                hashMap.put("uid",user.getUid());
                                 userID = user.getUid();
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 DocumentReference drf = db.collection("Users").document(userID);
-                                drf.set(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                drf.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         firebaseAuth.signOut();
