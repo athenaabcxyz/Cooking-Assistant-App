@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 
 import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -102,13 +104,15 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         thiscontext = container.getContext();
-        progressDialog = new ProgressDialog(thiscontext);
-
 //        Tag firstTag = new Tag("All", false);
 //        listTag.add(firstTag);
 
+//      ------------------ Show loading --------------------
+        progressDialog = new ProgressDialog(thiscontext);
         progressDialog.setMessage("Loading...");
         progressDialog.show();
+
+//      ------------------ Load list recipe --------------------
         if(listRecipe.size()>0){
             listRecipe.clear();
             getListData();
@@ -116,8 +120,9 @@ public class HomeFragment extends Fragment {
         else {
             getListData();
         }
+
+//      ------------------ create recycleView -------------------------
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(thiscontext, RecyclerView.HORIZONTAL, false);
-//        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(thiscontext, RecyclerView.HORIZONTAL, false);
         rcl_trend = rootView.findViewById(R.id.rcl_trend);
         rcl_trend.setLayoutManager(linearLayoutManager);
 
@@ -129,13 +134,22 @@ public class HomeFragment extends Fragment {
         rcl_dish = rootView.findViewById(R.id.rcl_lib);
         rcl_dish.setLayoutManager(layoutManager);
 
+//       ------------------ Intent to Search -------------------------
         SearchView searchView = (SearchView) rootView.findViewById(R.id.search_view);
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Search.class);
-////                Bundle bd = new Bundle();
-////                bd.put("student", data);
+                List<Tag> newListTag = new ArrayList<>();
+//                Tag firstTag = new Tag("All", false);
+//                newListTag.add(firstTag);
+                for (Tag tag: listTag){
+                    Tag newTag = tag;
+                    newTag.setClicked(false);
+                    newListTag.add(newTag);
+                }
+                intent.putExtra("recipes", (Serializable) listRecipe);
+                intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
             }
         });
@@ -143,8 +157,16 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Search.class);
-////                Bundle bd = new Bundle();
-////                bd.put("student", data);
+                List<Tag> newListTag = new ArrayList<>();
+//                Tag firstTag = new Tag("All", false);
+//                newListTag.add(firstTag);
+                for (Tag tag: listTag){
+                    Tag newTag = tag;
+                    newTag.setClicked(false);
+                    newListTag.add(newTag);
+                }
+                intent.putExtra("recipes", (Serializable) listRecipe);
+                intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
                 searchView.setIconified(true);
             }
@@ -152,46 +174,26 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-//    private List<CookingNote> getListData() {
-//        List<CookingNote> list = new ArrayList<>();
-//        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
-//        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon3, new Float("4.5"), true));
-//        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.img_recipe1, new Float("4.5"), true));
-//        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
-//        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.mon3, new Float("4.5"), true));
-//        list.add(new CookingNote("How to cook see food", "Nguyen Hoang Nam", "", R.drawable.img_recipe1, new Float("4.5"), true));
-//        return list;
-//    }
-//
-//    private List<Tag> getListTagData() {
-//        List<Tag> list = new ArrayList<>();
-//        list.add(new Tag(R.drawable.mon_1, "See Food 1"));
-//        list.add(new Tag(R.drawable.mon_1, "See Food 2"));
-//        list.add(new Tag(R.drawable.mon_1, "See Food 3"));
-//        return list;
-//    }
-
     public void getListData(){
-
         db.collection("recipes")
-                //Use query to find specific document
-                .orderBy("aggregateLikes", Query.Direction.DESCENDING).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        //Create a list of result. The number of result can be 1
-                        progressDialog.dismiss();
-                        snapshotList = queryDocumentSnapshots.getDocuments();
-                        //Convert the result to class Object for easier processing.
-                        for(DocumentSnapshot snapshot:snapshotList)
-                        {
-                            Recipe recipe = snapshot.toObject(Recipe.class);
-                            assert recipe != null;
-                            listRecipe.add(recipe);
-                        }
-                        tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
-                            @Override
-                            public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
+            //Use query to find specific document
+            .orderBy("aggregateLikes", Query.Direction.DESCENDING).get()
+            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    //Create a list of result. The number of result can be 1
+                    progressDialog.dismiss();
+                    snapshotList = queryDocumentSnapshots.getDocuments();
+                    //Convert the result to class Object for easier processing.
+                    for(DocumentSnapshot snapshot:snapshotList)
+                    {
+                        Recipe recipe = snapshot.toObject(Recipe.class);
+                        assert recipe != null;
+                        listRecipe.add(recipe);
+                    }
+                    tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
+                        @Override
+                        public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
 //                                if(holder.name.getTextColors().getDefaultColor() == getResources().getColor(R.color.text, null)){
 //                                    holder.name.setTextColor(getResources().getColor(R.color.white, null));
 //                                    holder.content.getBackground().setTint(getResources().getColor(R.color.blue, null));
@@ -219,33 +221,34 @@ public class HomeFragment extends Fragment {
 //                                else{
 //                                    tag.setClicked(false);
 //                                }
-                               if(tag.getClicked()==false){
-                                    tag.setClicked(true);
+                           if(tag.getClicked()==false){
+                                tag.setClicked(true);
 
-                                }
-                                else{
-                                    tag.setClicked(false);
-                                }
-                                tagAdapter.setData(listTag);
-                                tagAdapter.notifyDataSetChanged();
-                                loadDishList();
                             }
-                        });
-                        rcl_tag.setAdapter(tagAdapter);
-                        dishAdapter = new DishAdapter();
-                        rcl_dish.setAdapter(dishAdapter);
-                        loadTrendList();
-                        loadTagList();
-                        loadDishList();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                            else{
+                                tag.setClicked(false);
+                            }
+                            tagAdapter.setData(listTag);
+                            tagAdapter.notifyDataSetChanged();
+                            loadDishList();
+                        }
+                    });
+                    rcl_tag.setAdapter(tagAdapter);
+                    dishAdapter = new DishAdapter();
+                    rcl_dish.setAdapter(dishAdapter);
+                    loadTrendList();
+                    loadTagList();
+                    loadDishList();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
+                }
+            });
     }
+
     public void loadTrendList(){
         List<Recipe> listTrend = new ArrayList<>();
         if(listRecipe.size()>0){
@@ -257,6 +260,7 @@ public class HomeFragment extends Fragment {
         trendAdapter.setData(listTrend);
         rcl_trend.setAdapter(trendAdapter);
     }
+
     public void loadTagList(){
         List<String> listStringTag = new ArrayList<>();
         if(listRecipe.size()>0){
@@ -280,6 +284,7 @@ public class HomeFragment extends Fragment {
         tagAdapter.setData(listTag);
 
     }
+
     public void loadDishList(){
         List<Recipe> listDish = new ArrayList<>();
         if(listRecipe.size()>0){

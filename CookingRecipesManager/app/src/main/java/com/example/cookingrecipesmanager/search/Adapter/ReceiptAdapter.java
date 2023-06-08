@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.R;
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,31 +22,34 @@ import java.util.List;
 
 public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendViewHolder> {
     private Context context;
-    private List<CookingNote> cookingNoteList;
-    public void setData( List<CookingNote> list){
+    private List<Recipe> cookingNoteList;
+    public void setData( List<Recipe> list){
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
     @NonNull
     @Override
     public TrendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.receipt_item_vertical, parent, false);
-        view.findViewById(R.id.receipt_item_vertical_wrapper);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trend_item_vertical, parent, false);
+//        view.findViewById(R.id.receipt_item_vertical_wrapper);
         context = parent.getContext();
         return new TrendViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TrendViewHolder holder, int position) {
-        CookingNote note = cookingNoteList.get(position);
+
+        Recipe note = cookingNoteList.get(position);
         if(note == null){
             return;
         }
 
-        holder.title.setText(note.getTitle());
-        holder.author.setText(note.getAuthor());
-        holder.img.setImageResource(note.getImg());
-//        holder.evaluate.setText(note.getEvaluate().toString());
+        holder.title.setText(note.title);
+        holder.author.setText("Hoang Nam");
+        holder.like.setText(String.valueOf(note.aggregateLikes));
+        holder.time.setText(String.valueOf(note.readyInMinutes));
+        Picasso.get().load(note.image).into(holder.img);
+
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -52,15 +57,14 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
                     PopupMenu popup = new PopupMenu(context, v);
                     popup.getMenuInflater().inflate(R.menu.menu_popup,
                             popup.getMenu());
-                    if(note.getiFavorites()){
-                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
-                    }
+//                    if(note.getiFavorites()){
+//                        popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
+//                    }
                     popup.show();
                 }
             });
 
         } catch (Exception e) {
-
             e.printStackTrace();
         }
     }
@@ -77,31 +81,35 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
         private TextView title;
         private TextView author;
         private ImageView img;
-        private TextView evaluate;
+        private TextView like;
+        private TextView time;
         private ImageView iFavorites;
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
-            evaluate = itemView.findViewById(R.id.textView2);
             iFavorites = itemView.findViewById(R.id.imageButton);
+            like = itemView.findViewById(R.id.like) ;
+            time = itemView.findViewById(R.id.time);
         }
     }
+
     public void sortAsc(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
             @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            public int compare(Recipe i0, Recipe i1) {
+                return i0.title.compareToIgnoreCase(i1.title);
             }
         });
         notifyDataSetChanged();
     }
+
     public void sortDes(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
             @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            public int compare(Recipe i0, Recipe i1) {
+                return i0.title.compareToIgnoreCase(i1.title);
             }
         });
         Collections.reverse(cookingNoteList);

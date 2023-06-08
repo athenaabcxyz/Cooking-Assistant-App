@@ -1,5 +1,6 @@
 package com.example.cookingrecipesmanager.library.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,7 +41,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
     }
 
     @Override
-    public void onBindViewHolder(@NonNull com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         CookingNote note = cookingNoteList.get(position);
         if(note == null){
             return;
@@ -99,7 +100,6 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         private TextView title;
         private TextView author;
         private ImageView img;
-        private TextView evaluate;
         private ImageView iFavorites;
         public LibraryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,7 +107,6 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
-            evaluate = itemView.findViewById(R.id.textView2);
             iFavorites = itemView.findViewById(R.id.imageButton);
         }
     }

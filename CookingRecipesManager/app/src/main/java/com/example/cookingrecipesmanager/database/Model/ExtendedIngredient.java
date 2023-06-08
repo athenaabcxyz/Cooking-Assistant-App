@@ -1,8 +1,9 @@
 package com.example.cookingrecipesmanager.database.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ExtendedIngredient {
+public class ExtendedIngredient implements Serializable {
     public int id;
     public String aisle;
     public String image;
