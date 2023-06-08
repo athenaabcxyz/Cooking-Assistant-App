@@ -21,15 +21,13 @@ import java.util.List;
 public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagViewHolder> {
     private Context context;
     private List<Tag> tagList;
-    private List<Tag> tagListClicked = new ArrayList<>();
 
     private ItemClickListener itemClickListener;
 
     public interface ItemClickListener{
         void onItemClick(Tag tag, TagViewHolder holder);
     }
-    public TagSearchAdapter(Context context, ItemClickListener itemClickListener) {
-        this.context = context;
+    public TagSearchAdapter( ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
@@ -42,6 +40,7 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
     @Override
     public TagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tag_item_search, parent, false);
+        context = parent.getContext();
         return new TagViewHolder(view);
     }
 
@@ -52,7 +51,15 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
             return;
         }
         holder.name.setText(tag.getName());
-        holder.img.setImageResource(tag.getImg());
+        if(tag.getClicked() == true){
+            holder.name.setTextColor(context.getResources().getColor(R.color.white, null));
+            holder.content.getBackground().setTint(context.getResources().getColor(R.color.blue, null));
+        }
+        else {
+            holder.name.setTextColor(context.getResources().getColor(R.color.text, null));
+            holder.content.getBackground().setTint(context.getResources().getColor(R.color.white, null));
+        }
+//        holder.img.setImageResource(tag.getImg());
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,7 +76,6 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
 //                }
             }
         });
-//        holder.evaluate.setText(note.getEvaluate().toString());
     }
 
     @Override
@@ -78,14 +84,6 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
             return tagList.size();
         }
         return 0;
-    }
-
-    public List<Tag> getTagListClicked() {
-        return tagListClicked;
-    }
-
-    public void setTagListClicked(List<Tag> tagListClicked) {
-        this.tagListClicked = tagListClicked;
     }
 
     public class TagViewHolder extends RecyclerView.ViewHolder{

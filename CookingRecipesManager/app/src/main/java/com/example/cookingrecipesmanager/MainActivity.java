@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import com.example.cookingrecipesmanager.databinding.ActivityMainBinding;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -21,7 +22,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         replaceFragment(new HomeFragment());
-
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
+        {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()){

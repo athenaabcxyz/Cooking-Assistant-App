@@ -1,6 +1,8 @@
 package com.example.cookingrecipesmanager.database.Model;
 
-public class Ingredient {
+import java.io.Serializable;
+
+public class Ingredient implements Serializable {
     public int id;
     public String name;
     public String localizedName;

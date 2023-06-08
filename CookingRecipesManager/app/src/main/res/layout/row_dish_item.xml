@@ -82,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingTop="8dp"
-                android:id="@+id/like"
+                android:id="@+id/like_group"
                 android:layout_weight="30"
                 >
                 <ImageView
@@ -96,7 +96,7 @@
                     android:layout_gravity="center_vertical"
                     />
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingTop="8dp"
-                android:id="@+id/time"
+                android:id="@+id/time_group"
                 android:layout_weight="40"
                 >
                 <ImageView
@@ -125,7 +125,7 @@
                     app:tint="@color/blue"
                     />
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"

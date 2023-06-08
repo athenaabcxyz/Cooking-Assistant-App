@@ -1,6 +1,8 @@
 package com.example.cookingrecipesmanager.database.Model;
 
-public class Us {
+import java.io.Serializable;
+
+public class Us implements Serializable {
     public double amount;
     public String unitShort;
     public String unitLong;

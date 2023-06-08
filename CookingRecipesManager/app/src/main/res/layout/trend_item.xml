@@ -42,6 +42,10 @@
             android:textStyle="bold"
             android:textColor="@color/text"
             android:layout_marginBottom="5dp"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginRight="40dp"
             />
         <TextView
             android:id="@+id/textAuthor"
@@ -50,6 +54,10 @@
             android:text="Name of author"
             android:textSize="16dp"
             android:layout_below="@id/textTitle"
+            android:lines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginRight="40dp"
             />
         <androidx.appcompat.widget.ActionMenuView
             android:layout_width="wrap_content"
@@ -76,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingTop="8dp"
-                android:id="@+id/like"
+                android:id="@+id/like_group"
                 android:layout_weight="30"
                 >
                 <ImageView
@@ -90,12 +98,12 @@
                     android:layout_gravity="center_vertical"
                     />
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="4.500"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textColor="@color/grey3"
                     android:textStyle="bold"
                     />
@@ -106,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingTop="8dp"
-                android:id="@+id/time"
+                android:id="@+id/time_group"
                 android:layout_weight="40"
                 >
                 <ImageView
@@ -119,12 +127,12 @@
                     app:tint="@color/blue"
                     />
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="45 min"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textColor="@color/grey3"
                     android:textStyle="bold"
                     />
