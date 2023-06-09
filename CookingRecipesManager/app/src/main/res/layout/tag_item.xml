@@ -26,8 +26,7 @@
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/lobster"
-            />
+            android:src="@drawable/lobster" />
 
         <TextView
             android:id="@+id/textName"
@@ -36,7 +35,7 @@
             android:gravity="center"
             android:text="Sea Food"
             android:textColor="#333333"
-            android:textSize="18dp"
+            android:textSize="14dp"
             android:textStyle="bold" />
 
     </LinearLayout>

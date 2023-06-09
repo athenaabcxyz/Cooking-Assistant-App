@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
+import com.example.cookingrecipesmanager.details.DetailsTagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.google.android.material.appbar.AppBarLayout;
 import com.squareup.picasso.Picasso;
@@ -30,6 +31,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -163,13 +165,15 @@ public class RecipeDetailsFragment extends Fragment {
 
         ArrayList<String> ingredients = new ArrayList<String>(Arrays.asList(requireContext().getResources().getStringArray(R.array.sample_recipe_ingredients)));
 
-        ArrayList<Tag> tags = new ArrayList<>(Arrays.asList(
-                new Tag("Dessert", false),
-                new Tag("Cold", false),
-                new Tag("Fruit", false)
-        ));
+        ArrayList<Tag> tags = new ArrayList<>();
+        mParamRecipe.dishTypes.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+                tags.add(new Tag(s, false));
+            }
+        });
         binding.content.listTags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        TagAdapter adapter = new TagAdapter();
+        DetailsTagAdapter adapter = new DetailsTagAdapter();
         adapter.setData(tags);
         binding.content.listTags.setAdapter(adapter);
 
