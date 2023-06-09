@@ -47,7 +47,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
             return;
         }
         holder.title.setText(note.title);
-        holder.author.setText("Hoang Nam");
+        holder.author.setText(note.userName);
         holder.like.setText(String.valueOf(note.aggregateLikes));
         holder.time.setText(String.valueOf(note.readyInMinutes));
         Picasso.get().load(note.image).into(holder.img);

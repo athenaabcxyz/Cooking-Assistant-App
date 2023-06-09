@@ -20,5 +20,6 @@ public class Recipe implements Serializable {
     public ArrayList<String> diets;
     public String instructions;
     public String userID;
+    public String userName;
     public ArrayList<AnalyzedInstruction> analyzedInstructions;
 }
