@@ -21,9 +21,17 @@ import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
 import com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +42,17 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class RecipeLibraryFragment extends Fragment {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid;
+
+    {
+        assert user != null;
+        uid = user.getUid();
+    }
+
+    List<CookingNote> listAll = new ArrayList<>();
+    List<CookingNote> listMy = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,16 +112,58 @@ public class RecipeLibraryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_library, container, false);
         thisContext = container.getContext();
 
+        db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currentUser = documentSnapshot.toObject(User.class);
+                assert currentUser != null;
+                if (currentUser.recipesList != null) {
+                    for (int i = 0; i <= currentUser.recipesList.size() - 1; i++) {
+                        listMy.add(new CookingNote(currentUser.recipesList.get(i),currentUser.recipesList.get(i).id, currentUser.recipesList.get(i).title, "Nguyen Hoang Nam", "", currentUser.recipesList.get(i).image, new Float("5"), true));
+                    }
+                }
+            }
+        });
+
+        db.collection("Users").document(uid).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User currentUser = documentSnapshot.toObject(User.class);
+                        assert currentUser != null;
+                        if (currentUser.savedRecipes != null) {
+                            for (int i = 0; i <= currentUser.savedRecipes.size() - 1; i++) {
+
+                                db.collection("recipes").whereEqualTo("id", currentUser.savedRecipes.get(i)).get()
+                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                                                for (DocumentSnapshot snapshot : snapshotList) {
+                                                    Recipe recipe = snapshot.toObject(Recipe.class);
+                                                    assert recipe != null;
+                                                    listAll.add(new CookingNote(recipe,recipe.id, recipe.title, "Nguyen Hoang Nam", "", recipe.image, new Float("5"), true));
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         rcl = rootView.findViewById(R.id.rcl_lib);
         rcl.setLayoutManager(layoutManager);
         adapter = new LibraryAdapter();
-        adapter.setData(getListData());
+        adapter.setData(listAll);
         rcl.setAdapter(adapter);
 
         btnMyRecipe = rootView.findViewById(R.id.btn_my_recipe);
         btnGetAll = rootView.findViewById(R.id.btn_all);
+        btnGetAll.performClick();
+
+
         btnMyRecipe.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -112,21 +173,23 @@ public class RecipeLibraryFragment extends Fragment {
                 btnMyRecipe.setTextColor(getResources().getColor(R.color.white, null));
                 btnGetAll.setBackgroundColor(getResources().getColor(R.color.white, null));
                 btnGetAll.setTextColor(getResources().getColor(R.color.text, null));
-                adapter.setData(getMyRecipeList());
+
+                adapter.setData(listMy);
             }
         });
         btnGetAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isAllRecipe = true;
-                btnMyRecipe.setBackgroundColor(getResources().getColor(R.color.white,null));
+                btnMyRecipe.setBackgroundColor(getResources().getColor(R.color.white, null));
                 btnMyRecipe.setTextColor(getResources().getColor(R.color.text, null));
                 btnGetAll.setBackgroundColor(Color.parseColor("#2D67F6"));
                 btnGetAll.setTextColor(getResources().getColor(R.color.white, null));
-                adapter.setData(getListData());
+                adapter.setData(listAll);
 
             }
         });
+
         ImageView img = rootView.findViewById(R.id.sort);
         img.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("RestrictedApi")
@@ -139,7 +202,7 @@ public class RecipeLibraryFragment extends Fragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.Asc:
                                 adapter.sortAsc();
                                 break;
@@ -172,48 +235,27 @@ public class RecipeLibraryFragment extends Fragment {
         });
         return rootView;
     }
-    public void filterList(String text){
+
+    public void filterList(String text) {
         List<CookingNote> filterList = new ArrayList<>();
         List<CookingNote> listData = new ArrayList<>();
-        if(isAllRecipe){
-            listData = getListData();
+        if (isAllRecipe) {
+            listData = listAll;
+        } else {
+            listData = listMy;
         }
-        else {
-            listData = getMyRecipeList();
-        }
-        for(CookingNote item : listData){
-            if(item.getTitle().toLowerCase().contains(text.toLowerCase())){
+        for (CookingNote item : listData) {
+            if (item.getTitle().toLowerCase().contains(text.toLowerCase())) {
                 filterList.add(item);
             }
         }
-        if(filterList.isEmpty()){
+        if (filterList.isEmpty()) {
             adapter.setData(filterList);
             Toast.makeText(getContext(), "No Data Found", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             adapter.setData(filterList);
         }
     }
-    private List<CookingNote> getMyRecipeList() {
-        List<CookingNote> list = new ArrayList<>();
-        list.add(new CookingNote("XSA to cook 2", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("5"), true));
-        list.add(new CookingNote("DSA  to cook 3", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("4.2"), true));
-        list.add(new CookingNote("How to cook 4", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("3.4"), true));
-        list.add(new CookingNote("How to cook 5", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("5.3"), true));
-        list.add(new CookingNote("How to cook 6", "Nguyen Hoang Nam", "", R.drawable.mon2, new Float("4.5"), true));
-        return list;
-    }
-    private List<CookingNote> getListData() {
-        List<CookingNote> list = new ArrayList<>();
-        list.add(new CookingNote("How to cook 1", "Nguyen Hoang Nam", requireContext().getResources().getString(R.string.sample_recipe_description), R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 2", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 3", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 4", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 5", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 6", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 7", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 8", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        list.add(new CookingNote("How to cook 9", "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true));
-        return list;
-    }
+
+
 }

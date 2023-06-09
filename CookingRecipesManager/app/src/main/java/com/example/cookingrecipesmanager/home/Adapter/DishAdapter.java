@@ -47,7 +47,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
             return;
         }
         holder.title.setText(note.title);
-        holder.author.setText("Hoang Nam");
+        holder.author.setText("Spooncular");
         holder.like.setText(String.valueOf(note.aggregateLikes));
         holder.time.setText(String.valueOf(note.readyInMinutes));
         Picasso.get().load(note.image).into(holder.img);
@@ -75,12 +75,14 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                     popup.show();
                 }
             });
-            CookingNote note1 = new CookingNote(note.title, "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true);
+
+            CookingNote note1 = new CookingNote(note, note.id, note.title, "Nguyen Hoang Nam", "", note.image, new Float("4.5"), true);
+
             holder.rootView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note1))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
                             .commitNow();
                 }
             });

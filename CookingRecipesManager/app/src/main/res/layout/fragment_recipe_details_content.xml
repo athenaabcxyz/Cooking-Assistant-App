@@ -71,7 +71,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/title_prep"
+                android:id="@+id/title_time"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -83,58 +83,58 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/title_wait"
+                android:id="@+id/title_count"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Wait Time"
+                android:text="Servings"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/title_prep"
-                app:layout_constraintTop_toTopOf="@+id/title_prep" />
+                app:layout_constraintStart_toEndOf="@+id/title_time"
+                app:layout_constraintTop_toTopOf="@+id/title_time" />
 
             <TextView
-                android:id="@+id/title_total"
+                android:id="@+id/title_cost"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Total time"
+                android:text="Price per Serving"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/title_wait"
-                app:layout_constraintTop_toTopOf="@+id/title_prep" />
+                app:layout_constraintStart_toEndOf="@+id/title_count"
+                app:layout_constraintTop_toTopOf="@+id/title_time" />
 
             <TextView
-                android:id="@+id/time_prep"
+                android:id="@+id/value_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:text="15 mins"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/title_prep"
-                app:layout_constraintStart_toStartOf="@+id/title_prep"
-                app:layout_constraintTop_toBottomOf="@+id/title_prep" />
+                app:layout_constraintEnd_toEndOf="@+id/title_time"
+                app:layout_constraintStart_toStartOf="@+id/title_time"
+                app:layout_constraintTop_toBottomOf="@+id/title_time" />
 
             <TextView
-                android:id="@+id/time_wait"
+                android:id="@+id/value_count"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2 hrs"
+                android:text="2"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                app:layout_constraintEnd_toEndOf="@+id/title_wait"
-                app:layout_constraintStart_toStartOf="@+id/title_wait"
-                app:layout_constraintTop_toBottomOf="@+id/title_wait" />
+                app:layout_constraintEnd_toEndOf="@+id/title_count"
+                app:layout_constraintStart_toStartOf="@+id/title_count"
+                app:layout_constraintTop_toBottomOf="@+id/title_count" />
 
             <TextView
-                android:id="@+id/time_total"
+                android:id="@+id/value_cost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2h 15m"
+                android:text="$10"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                app:layout_constraintEnd_toEndOf="@+id/title_total"
-                app:layout_constraintStart_toStartOf="@+id/title_total"
-                app:layout_constraintTop_toBottomOf="@+id/title_total" />
+                app:layout_constraintEnd_toEndOf="@+id/title_cost"
+                app:layout_constraintStart_toStartOf="@+id/title_cost"
+                app:layout_constraintTop_toBottomOf="@+id/title_cost" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

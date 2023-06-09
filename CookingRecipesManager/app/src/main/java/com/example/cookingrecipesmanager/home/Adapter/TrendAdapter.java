@@ -99,12 +99,13 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                     });
                 }
             });
-            CookingNote note1 = new CookingNote(note.title, "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true);
+            CookingNote note1 = new CookingNote(note, note.id,note.title, "Nguyen Hoang Nam", "", note.image, new Float("4.5"), true);
+
             holder.rootView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note1))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
                             .commitNow();
                 }
             });

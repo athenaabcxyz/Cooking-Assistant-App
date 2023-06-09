@@ -5,15 +5,21 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+
 public class CookingNote implements Parcelable {
+    public int id;
+    public Recipe recipe;
     private String title;
     private String author;
     private String description;
-    private int img;
+    public String img;
     private Float evaluate;
     private Boolean iFavorites;
 
-    public CookingNote(String title, String author, String description, int img, Float evaluate, Boolean iFavorites) {
+    public CookingNote(Recipe recipe, Integer recipeID,String title, String author, String description, String img, Float evaluate, Boolean iFavorites) {
+        this.recipe = recipe;
+        this.id = recipeID;
         this.title = title;
         this.author = author;
         this.description = description;
@@ -26,7 +32,7 @@ public class CookingNote implements Parcelable {
         title = in.readString();
         author = in.readString();
         description = in.readString();
-        img = in.readInt();
+        img = in.readString();
         if (in.readByte() == 0) {
             evaluate = null;
         } else {
@@ -66,11 +72,11 @@ public class CookingNote implements Parcelable {
         this.author = author;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -100,7 +106,7 @@ public class CookingNote implements Parcelable {
         dest.writeString(title);
         dest.writeString(author);
         dest.writeString(description);
-        dest.writeInt(img);
+        dest.writeString(img);
         if (evaluate == null) {
             dest.writeByte((byte) 0);
         } else {

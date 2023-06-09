@@ -28,7 +28,7 @@
             app:collapsedTitleGravity="center_vertical|start"
             app:contentScrim="#00ffffff"
             app:layout_scrollFlags="snapMargins|scroll|exitUntilCollapsed"
-            app:titleCollapseMode="scale"
+            app:titleCollapseMode="fade"
             app:toolbarId="@+id/toolbar">
 
             <androidx.cardview.widget.CardView
@@ -59,15 +59,48 @@
                         android:alpha="0.8"
                         android:src="@drawable/alpha_gradient_bottomtop"
                         app:tint="?android:colorBackground" />
+
                 </FrameLayout>
 
             </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:id="@+id/toolbar_title_ex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="16dp"
+                android:ellipsize="marquee"
+                android:shadowColor="?android:colorBackground"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="2"
+                android:singleLine="true"
+                android:text="RecipeName"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                android:textColor="?android:colorForeground" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                android:gravity="center_vertical"
+                android:paddingStart="24dp"
+                android:paddingEnd="32dp"
+                android:text="RecipeName"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                android:textColor="?android:colorForeground"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="RecipeName"></androidx.appcompat.widget.Toolbar>
+                android:layout_height="?attr/actionBarSize">
+
+            </androidx.appcompat.widget.Toolbar>
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -92,6 +125,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:soundEffectsEnabled="true"
-        android:src="@drawable/baseline_restaurant_24" />
+        android:src="@drawable/baseline_restaurant_24"
+        android:contentDescription="TODO" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
