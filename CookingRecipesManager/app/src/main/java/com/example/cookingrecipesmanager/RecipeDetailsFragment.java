@@ -11,25 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
-import android.text.Html;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
-import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.google.android.material.appbar.AppBarLayout;
-import com.squareup.picasso.Picasso;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,9 +52,9 @@ public class RecipeDetailsFragment extends Fragment {
 
     public class IngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder>
     {
-        private ArrayList<ExtendedIngredient> mData;
+        private ArrayList<String> mData;
 
-        public IngredientAdapter(ArrayList<ExtendedIngredient> data)
+        public IngredientAdapter(ArrayList<String> data)
         {
             mData = data;
             mData.trimToSize();
@@ -71,25 +66,9 @@ public class RecipeDetailsFragment extends Fragment {
             return new IngredientViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredient, parent, false));
         }
 
-        protected String formatIngredient(ExtendedIngredient item)
-        {
-            if (item.name != null)
-            {
-                item.name = item.name.substring(0, 1).toUpperCase() + item.name.substring(1);
-            }
-            String funit = "";
-            if (item.unit != null && item.unit.length() > 0)
-            {
-                funit = String.format(" %s", item.unit);
-            }
-            DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-            df.setMaximumFractionDigits(3);
-            return String.format("%s%s %s", df.format(item.amount), funit, item.name);
-        }
-
         @Override
         public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-            holder.mTextView.setText(formatIngredient(mData.get(position)));
+            holder.mTextView.setText(mData.get(position));
         }
 
         @Override
@@ -100,16 +79,16 @@ public class RecipeDetailsFragment extends Fragment {
 
     private FragmentRecipeDetailsBinding binding;
 
-    private Recipe mParamRecipe;
+    private CookingNote mParamRecipe;
 
     public RecipeDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(Recipe recipe) {
+    public static RecipeDetailsFragment newInstance(CookingNote recipe) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
-        args.putSerializable("RECIPE", recipe);
+        args.putParcelable("RECIPE", recipe);
         fragment.setArguments(args);
         return fragment;
     }
@@ -118,7 +97,7 @@ public class RecipeDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParamRecipe = (Recipe) getArguments().getSerializable("RECIPE");
+            mParamRecipe = getArguments().getParcelable("RECIPE");
         }
         TransitionInflater trans = TransitionInflater.from(requireContext());
         setEnterTransition(trans.inflateTransition(R.transition.slide_right));
@@ -137,29 +116,11 @@ public class RecipeDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
-//        binding.appBarImage.setImageDrawable(getResources().getDrawable(R.drawable.img_recipe1, getContext().getTheme()));
-        Picasso.get().load(mParamRecipe.image).into(binding.appBarImage);
+        binding.appBarImage.setImageDrawable(getResources().getDrawable(R.drawable.img_recipe1, getContext().getTheme()));
 
-//        binding.toolbar.setTitle(mParamRecipe.title);
-        binding.toolbarTitleEx.setText(mParamRecipe.title);
-        binding.toolbarTitleEx.setSelected(true);
-        binding.toolbarTitle.setText(mParamRecipe.title);
-        if (mParamRecipe.userID != null && mParamRecipe.userID.length() > 0)
-        {
-            binding.content.authorName.setText(mParamRecipe.userID);
-        }
-        else
-        {
-            binding.content.authorName.setText(requireContext().getResources().getString(R.string.username_anon));
-        }
-        binding.content.textDescription.setText(Html.fromHtml(mParamRecipe.summary, 0));
-
-        DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-        df.setMaximumFractionDigits(2);
-
-        binding.content.valueTime.setText(mParamRecipe.readyInMinutes + " mins");
-        binding.content.valueCount.setText(String.format("%d", mParamRecipe.servings));
-        binding.content.valueCost.setText(String.format("$%s", df.format(mParamRecipe.pricePerServing)));
+        binding.toolbar.setTitle(mParamRecipe.getTitle());
+        binding.content.authorName.setText(mParamRecipe.getAuthor());
+        binding.content.textDescription.setText(mParamRecipe.getDescription());
 
         ArrayList<String> ingredients = new ArrayList<String>(Arrays.asList(requireContext().getResources().getStringArray(R.array.sample_recipe_ingredients)));
 
@@ -174,7 +135,7 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.listTags.setAdapter(adapter);
 
         binding.content.listIngredient.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients));
+        binding.content.listIngredient.setAdapter(new IngredientAdapter(ingredients));
 
         binding.content.btnBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,12 +156,6 @@ public class RecipeDetailsFragment extends Fragment {
                 float hPadding = (8 * getResources().getDisplayMetrics().density + verticalOffset/16);
                 hPadding = hPadding < 0 ? 0 : hPadding;
                 binding.toolbarParent.setPadding((int)hPadding, (int) (8 * getResources().getDisplayMetrics().density), (int)hPadding, 0);
-
-                float titleAlpha = 1.f - (float)Math.abs(verticalOffset) / 200;
-                titleAlpha = Math.max(0.f, Math.min(1.f, titleAlpha));
-                binding.toolbarTitleEx.setAlpha(titleAlpha);
-                binding.toolbarTitleEx.setSelected(titleAlpha == 1.f);
-                binding.toolbarTitle.setAlpha(1.f - titleAlpha);
             }
         });
 

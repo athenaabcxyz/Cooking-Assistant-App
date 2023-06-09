@@ -75,11 +75,12 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                     popup.show();
                 }
             });
+            CookingNote note1 = new CookingNote(note.title, "Nguyen Hoang Nam", "", R.drawable.mon_1, new Float("4.5"), true);
             holder.rootView.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note1))
                             .commitNow();
                 }
             });
