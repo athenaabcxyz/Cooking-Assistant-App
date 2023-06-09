@@ -3,7 +3,6 @@ package com.example.cookingrecipesmanager;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,12 +29,6 @@ public class Search extends AppCompatActivity {
         receiptApdapter.setData(getListData());
         rcl.setAdapter(receiptApdapter);
 
-        String query = getIntent().getStringExtra("query");
-        if (query != null)
-        {
-            SearchView v = (SearchView) findViewById(R.id.search_view);
-            v.setQuery(query, true);
-        }
     }
     private List<CookingNote> getListData() {
         List<CookingNote> list = new ArrayList<>();
