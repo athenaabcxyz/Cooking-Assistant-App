@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cookingrecipesmanager.CookingStep;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetail;
+import com.example.cookingrecipesmanager.Tag;
 import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
 import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 import com.example.cookingrecipesmanager.database.Model.Ingredient;
@@ -49,9 +51,21 @@ public class RecipeStepPreview extends AppCompatActivity {
     List<DocumentSnapshot> snapshotList;
     ArrayList<CookingStep> cookingSteps = new ArrayList<CookingStep>();
 
+    Recipe paramRecipe;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            try{
+                paramRecipe = (Recipe) extras.getSerializable("RECIPE");
+                Toast.makeText(this, "Name recipe: "+ paramRecipe.title, Toast.LENGTH_SHORT).show();
+            }
+            catch (Exception e){
+
+            }
+        }
         setContentView(R.layout.activity_recipe_step_preview);
         stepList = findViewById(R.id.stepList);
         textView = findViewById((R.id.toolbar));
@@ -65,7 +79,7 @@ public class RecipeStepPreview extends AppCompatActivity {
         //Get data from cloud FireStore
         db.collection("recipes")
                 //Use query to find specific document
-                .whereEqualTo("id",655060)
+                .whereEqualTo("id",paramRecipe.id)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

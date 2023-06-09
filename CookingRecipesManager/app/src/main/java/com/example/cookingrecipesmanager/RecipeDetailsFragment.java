@@ -1,6 +1,7 @@
 package com.example.cookingrecipesmanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -26,6 +27,7 @@ import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
+import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +41,7 @@ import com.squareup.picasso.Picasso;
 import org.jsoup.Jsoup;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -141,6 +144,7 @@ public class RecipeDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParamRecipe = (Recipe) getArguments().getSerializable("RECIPE");
         }
@@ -291,7 +295,14 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
 
-
+        binding.viewStepRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RecipeStepPreview.class);
+                intent.putExtra("RECIPE", (Serializable) mParamRecipe);
+                startActivity(intent);
+            }
+        });
         return binding.getRoot();
     }
 

@@ -1,6 +1,8 @@
 package com.example.cookingrecipesmanager.search.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookingrecipesmanager.CookingNote;
+import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
+import com.example.cookingrecipesmanager.RecipeDetailsFragment;
+import com.example.cookingrecipesmanager.Search;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +50,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
         }
 
         holder.title.setText(note.title);
-        holder.author.setText("Hoang Nam");
+        holder.author.setText(note.userName);
         holder.like.setText(String.valueOf(note.aggregateLikes));
         holder.time.setText(String.valueOf(note.readyInMinutes));
         Picasso.get().load(note.image).into(holder.img);
@@ -63,6 +68,15 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
                     popup.show();
                 }
             });
+            holder.rootView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra("RECIPE", note);
+                    context.startActivity(intent);
+
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,6 +92,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
     }
 
     public class TrendViewHolder extends RecyclerView.ViewHolder {
+        private View rootView;
         private TextView title;
         private TextView author;
         private ImageView img;
@@ -86,6 +101,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
         private ImageView iFavorites;
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
+            rootView = itemView;
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);

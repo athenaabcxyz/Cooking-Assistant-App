@@ -126,6 +126,8 @@
         android:layout_margin="16dp"
         android:soundEffectsEnabled="true"
         android:src="@drawable/baseline_restaurant_24"
-        android:contentDescription="TODO" />
+        android:contentDescription="TODO"
+        android:id="@+id/viewStepRecipe"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

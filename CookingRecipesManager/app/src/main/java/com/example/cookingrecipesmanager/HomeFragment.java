@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +23,21 @@ import android.widget.Toast;
 import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.database.Model.Step;
+import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.home.Adapter.DishAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
@@ -189,15 +197,30 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                     //Create a list of result. The number of result can be 1
-                    progressDialog.dismiss();
+
                     snapshotList = queryDocumentSnapshots.getDocuments();
                     //Convert the result to class Object for easier processing.
                     for(DocumentSnapshot snapshot:snapshotList)
                     {
                         Recipe recipe = snapshot.toObject(Recipe.class);
                         assert recipe != null;
-                        listRecipe.add(recipe);
+                        if(recipe.userID != null){
+                            DocumentReference dr = db.collection("Users").document(recipe.userID);
+                            dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    String name = value.getString("name");
+                                    recipe.userName = name;
+                                    listRecipe.add(recipe);
+                                }
+                            });
+                        }
+                        else{
+                            recipe.userName = "";
+                            listRecipe.add(recipe);
+                        }
                     }
+
                     tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
                         @Override
                         public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
@@ -228,7 +251,7 @@ public class HomeFragment extends Fragment {
 //                                else{
 //                                    tag.setClicked(false);
 //                                }
-                           if(tag.getClicked()==false){
+                            if(tag.getClicked()==false){
                                 tag.setClicked(true);
 
                             }
@@ -240,12 +263,15 @@ public class HomeFragment extends Fragment {
                             loadDishList();
                         }
                     });
+
                     rcl_tag.setAdapter(tagAdapter);
                     dishAdapter = new DishAdapter();
                     rcl_dish.setAdapter(dishAdapter);
                     loadTrendList();
                     loadTagList();
                     loadDishList();
+                    progressDialog.dismiss();
+
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
@@ -258,7 +284,7 @@ public class HomeFragment extends Fragment {
 
     public void loadTrendList(){
         List<Recipe> listTrend = new ArrayList<>();
-        if(listRecipe.size()>0){
+        if(listRecipe.size()>5){
             for(int i=0; i< 5;  i++){
                 listTrend.add(listRecipe.get(i));
             }
@@ -269,6 +295,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void loadTagList(){
+        listTag.clear();
         List<String> listStringTag = new ArrayList<>();
         if(listRecipe.size()>0){
             for(Recipe recipe: listRecipe){
@@ -277,11 +304,11 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
-
         Set<String> set = new LinkedHashSet<String>(listStringTag);
         List<String> listWithoutDuplicateElements = new ArrayList<String>(set);
 
         for(String item: listWithoutDuplicateElements){
+
             Tag tag = new Tag(item, false);
             listTag.add(tag);
         }
