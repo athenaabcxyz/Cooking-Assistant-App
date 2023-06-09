@@ -50,6 +50,8 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         }
         holder.title.setText(note.getTitle());
         holder.author.setText(note.getAuthor());
+        holder.like.setText(String.valueOf(note.recipe.aggregateLikes)+ " like");
+        holder.time.setText(String.valueOf(note.recipe.readyInMinutes)+ " min");
         Picasso.get().load(note.img).into(holder.img);
 
         try {
@@ -111,6 +113,8 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         private TextView title;
         private TextView author;
         private ImageView img;
+        private TextView like;
+        private TextView time;
         private ImageView iFavorites;
         public LibraryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,6 +123,8 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
             iFavorites = itemView.findViewById(R.id.imageButton);
+            like = itemView.findViewById(R.id.like) ;
+            time = itemView.findViewById(R.id.time);
         }
     }
     public void sortAsc(){

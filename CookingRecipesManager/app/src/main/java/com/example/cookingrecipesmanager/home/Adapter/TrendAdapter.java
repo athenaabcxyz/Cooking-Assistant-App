@@ -52,8 +52,8 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
 
         holder.title.setText(note.title);
         holder.author.setText(note.userName);
-        holder.like.setText(String.valueOf(note.aggregateLikes));
-        holder.time.setText(String.valueOf(note.readyInMinutes));
+        holder.like.setText(String.valueOf(note.aggregateLikes)+ " like");
+        holder.time.setText(String.valueOf(note.readyInMinutes)+" min");
         Picasso.get().load(note.image).into(holder.img);
 //        holder.evaluate.setText(note.getEvaluate().toString());
         try {
