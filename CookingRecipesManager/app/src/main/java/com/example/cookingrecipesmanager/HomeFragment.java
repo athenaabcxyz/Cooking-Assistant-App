@@ -204,18 +204,21 @@ public class HomeFragment extends Fragment {
                     {
                         Recipe recipe = snapshot.toObject(Recipe.class);
                         assert recipe != null;
-                        DocumentReference dr = db.collection("Users").document("HyYM04sh0pMq943Z1oEuxIU5Dl43");
-                        dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                            @Override
-                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                String name = value.getString("name");
-                                recipe.userName = name;
-                                listRecipe.add(recipe);
-                                loadTrendList();
-                                loadTagList();
-                                loadDishList();
-                            }
-                        });
+                        if(recipe.userID != null){
+                            DocumentReference dr = db.collection("Users").document(recipe.userID);
+                            dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                @Override
+                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                    String name = value.getString("name");
+                                    recipe.userName = name;
+                                    listRecipe.add(recipe);
+                                }
+                            });
+                        }
+                        else{
+                            recipe.userName = "";
+                            listRecipe.add(recipe);
+                        }
                     }
 
                     tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
@@ -260,10 +263,15 @@ public class HomeFragment extends Fragment {
                             loadDishList();
                         }
                     });
+
                     rcl_tag.setAdapter(tagAdapter);
                     dishAdapter = new DishAdapter();
                     rcl_dish.setAdapter(dishAdapter);
+                    loadTrendList();
+                    loadTagList();
+                    loadDishList();
                     progressDialog.dismiss();
+
                 }
             })
             .addOnFailureListener(new OnFailureListener() {

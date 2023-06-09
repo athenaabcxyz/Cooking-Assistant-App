@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.ActivityMainBinding;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,8 +21,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        try {
+            Recipe note = (Recipe) getIntent().getSerializableExtra("RECIPE");
+            if (note != null)
+            {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                        .commitNow();
+            }
+            else {
 
-        replaceFragment(new HomeFragment());
+                replaceFragment(new HomeFragment());
+            }
+        }
+        catch (Exception e)
+        {
+            replaceFragment(new HomeFragment());
+        }
+//        replaceFragment(new HomeFragment());
         if (FirebaseAuth.getInstance().getCurrentUser() == null)
         {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));

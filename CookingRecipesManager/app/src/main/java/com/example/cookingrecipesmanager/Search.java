@@ -12,6 +12,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,8 +25,11 @@ import com.example.cookingrecipesmanager.search.Adapter.ReceiptAdapter;
 import com.example.cookingrecipesmanager.search.Adapter.TagSearchAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -233,9 +237,24 @@ public class Search extends AppCompatActivity {
                         {
                             Recipe recipe = snapshot.toObject(Recipe.class);
                             assert recipe != null;
-                            listRecipe.add(recipe);
+                            if(recipe.userID != null){
+                                DocumentReference dr = db.collection("Users").document(recipe.userID);
+                                dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        String name = value.getString("name");
+                                        recipe.userName = name;
+                                        listRecipe.add(recipe);
+
+                                    }
+                                });
+                            }
+                            else{
+                                recipe.userName = "";
+                                listRecipe.add(recipe);
+                            }
                         }
-                        listRecipeSearch = listRecipe;
+                        listRecipeSearch= listRecipe;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

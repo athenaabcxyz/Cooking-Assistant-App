@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,8 +30,11 @@ import com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -119,7 +123,7 @@ public class RecipeLibraryFragment extends Fragment {
                 assert currentUser != null;
                 if (currentUser.recipesList != null) {
                     for (int i = 0; i <= currentUser.recipesList.size() - 1; i++) {
-                        listMy.add(new CookingNote(currentUser.recipesList.get(i),currentUser.recipesList.get(i).id, currentUser.recipesList.get(i).title, "Nguyen Hoang Nam", "", currentUser.recipesList.get(i).image, new Float("5"), true));
+                        listMy.add(new CookingNote(currentUser.recipesList.get(i),currentUser.recipesList.get(i).id, currentUser.recipesList.get(i).title, currentUser.name, "", currentUser.recipesList.get(i).image, new Float("5"), true));
                     }
                 }
             }
@@ -142,8 +146,25 @@ public class RecipeLibraryFragment extends Fragment {
                                                 for (DocumentSnapshot snapshot : snapshotList) {
                                                     Recipe recipe = snapshot.toObject(Recipe.class);
                                                     assert recipe != null;
-                                                    listAll.add(new CookingNote(recipe,recipe.id, recipe.title, "Nguyen Hoang Nam", "", recipe.image, new Float("5"), true));
+
+                                                    if(recipe.userID != null){
+                                                        DocumentReference dr = db.collection("Users").document(recipe.userID);
+                                                        dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                                String name = value.getString("name");
+                                                                recipe.userName = name;
+                                                                listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
+                                                            }
+                                                        });
+                                                    }
+                                                    else{
+                                                        recipe.userName = "";
+                                                        listAll.add(new CookingNote(recipe,recipe.id, recipe.title, "", "", recipe.image, new Float("5"), true));
+                                                    }
+
                                                 }
+                                                adapter.setData(listAll);
                                             }
                                         });
                             }

@@ -17,6 +17,7 @@ import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
+import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -82,6 +83,15 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
 //                            .commitNow();
 //                }
 //            });
+
+            holder.rootView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe))
+                            .commitNow();
+                }
+            });
         } catch (Exception e) {
 
             e.printStackTrace();
