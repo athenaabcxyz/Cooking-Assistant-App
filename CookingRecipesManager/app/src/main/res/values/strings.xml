@@ -9,8 +9,6 @@
     <string name="textview2">Library</string>
     <string name="textview_setting">Setting</string>
 
-    <string name="username_anon">Anonymous</string>
-
     <string name="sample_recipe_name">Banana Ice Cream</string>
     <string name="sample_recipe_description">Whip up a plant-based creamy treat in minutes with a handful of ingredients. All you need is a blender or food processor to make smooth and frosty banana nice cream with no added sugar. Easy variations include chocolate, peanut butter, strawberry, and more!</string>
     <string name="sample_recipe_author">Robin Asbell</string>
