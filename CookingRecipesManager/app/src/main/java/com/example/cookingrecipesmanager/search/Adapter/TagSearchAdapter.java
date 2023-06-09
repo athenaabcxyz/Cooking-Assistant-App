@@ -107,11 +107,5 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
             this.img = img;
         }
     }
-    private List<CookingNote> getListData() {
-        List<CookingNote> list = new ArrayList<>();
-        list.add(new CookingNote("How to cook Pizza Margherita", "Dyan","Description", R.drawable.mon2, new Float("4.5"), true));
-        list.add(new CookingNote("cook Peking Duck", "XiaoCheng","Description", R.drawable.mon_1, new Float("4.5"), true));
 
-        return list;
-    }
 }

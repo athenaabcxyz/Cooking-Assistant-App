@@ -217,13 +217,7 @@ public class Search extends AppCompatActivity {
         filterList(textSearch);
     }
 
-    private List<CookingNote> getListData2() {
-        List<CookingNote> list = new ArrayList<>();
-        list.add(new CookingNote("How to cook Pizza Margherita", "Dyan","Description", R.drawable.mon2, new Float("4.5"), true));
-        list.add(new CookingNote("cook Peking Duck", "XiaoCheng","Description", R.drawable.mon_1, new Float("4.5"), true));
 
-        return list;
-    }
 
     public void getListData(){
         db.collection("recipes")

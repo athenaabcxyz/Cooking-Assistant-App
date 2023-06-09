@@ -17,6 +17,7 @@ import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +49,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         }
         holder.title.setText(note.getTitle());
         holder.author.setText(note.getAuthor());
-        holder.img.setImageResource(note.getImg());
+        Picasso.get().load(note.img).into(holder.img);
 
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
@@ -73,14 +74,14 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
                     popup.show();
                 }
             });
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
-                            .commitNow();
-                }
-            });
+//            holder.rootView.setOnClickListener(new View.OnClickListener(){
+//                @Override
+//                public void onClick(View v) {
+//                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+//                            .commitNow();
+//                }
+//            });
         } catch (Exception e) {
 
             e.printStackTrace();
