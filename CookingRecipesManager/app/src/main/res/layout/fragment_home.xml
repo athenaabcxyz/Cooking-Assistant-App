@@ -15,7 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="30dp"
+        android:paddingTop="30dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+
         >
         <TextView
             android:id="@+id/textView"
@@ -25,7 +29,7 @@
             android:textColor="@color/black"
             android:textSize="28dp"
             android:textStyle="bold"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="20dp"
             tools:layout_editor_absoluteX="32dp"
             tools:layout_editor_absoluteY="19dp"
             />
@@ -38,7 +42,6 @@
                 android:layout_height="50dp"
                 android:background="@drawable/border"
                 android:id="@+id/search_view"
-
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -56,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/trending"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -66,19 +69,39 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:layout_centerVertical="true"
+                android:id="@+id/trend_title"
                 >
             </TextView>
+            <ImageView
+                android:layout_toRightOf="@+id/trend_title"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/hot_icon"
+                >
+
+            </ImageView>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="See all"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:textColor="@color/black"
-                android:layout_alignParentRight="true"
+                android:textColor="#E33A3A"
+                android:layout_toLeftOf="@+id/imageView3"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="3dp"
                 >
             </TextView>
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="25dp"
+                android:layout_height="23dp"
+                android:src="@drawable/baseline_arrow_back_24"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:tint="#E33A3A"
+                android:rotation="-180"
+                />
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -99,7 +122,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tags"
+                android:text="Types Of Dish"
                 android:textSize="22dp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
@@ -111,11 +134,22 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcl_tag"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcl_lib"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingRight="-15dp"
+            android:clipToPadding="false"
+
             />
     </LinearLayout>
 

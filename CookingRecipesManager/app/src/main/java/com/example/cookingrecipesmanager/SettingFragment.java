@@ -1,5 +1,8 @@
 package com.example.cookingrecipesmanager;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +10,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +30,9 @@ public class SettingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private LinearLayout layoutChangePassword, layoutLogout;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -59,6 +68,51 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        layoutLogout = view.findViewById(R.id.layoutLogout);
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(getActivity());
+        layoutChangePassword = view.findViewById(R.id.layoutChangePassword);
+
+        layoutChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().startActivity(new Intent(getActivity(),ChangePasswordActivity.class));
+            }
+        });
+        layoutLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_logout,null);
+
+                TextView OK = view.findViewById(R.id.OK);
+                TextView CANCEL = view.findViewById(R.id.CANCEL);
+
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(view);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                OK.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        firebaseAuth.signOut();
+                        getActivity().startActivity(new Intent(getActivity(),LoginActivity.class));
+                        getActivity().finish();
+                    }
+                });
+
+                CANCEL.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+        return view;
     }
 }

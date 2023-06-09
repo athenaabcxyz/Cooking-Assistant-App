@@ -11,4 +11,13 @@
     <color name="timer_step">#7709ea</color>
     <color name="tag">#FFBB86FC</color>
     <color name="basic_step">#338ffd</color>
+    <color name="text">#FF333333</color>
+    <color name="grey">#F6F7FB</color>
+    <color name="grey2">#FFC4C4C4</color>
+    <color name="grey3">#FFB1B1B1</color>
+    <color name="grey4">#FF605F5F</color>
+    <color name="blue">#FF2D67F6</color>
+    <color name="main">#124CDC</color>
+    <color name="sub">#555555</color>
+
 </resources>

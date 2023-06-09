@@ -125,9 +125,9 @@ public class RecipeDetailsFragment extends Fragment {
         ArrayList<String> ingredients = new ArrayList<String>(Arrays.asList(requireContext().getResources().getStringArray(R.array.sample_recipe_ingredients)));
 
         ArrayList<Tag> tags = new ArrayList<>(Arrays.asList(
-                new Tag(0, "Dessert"),
-                new Tag(0, "Cold"),
-                new Tag(0, "Fruit")
+                new Tag("Dessert", false),
+                new Tag("Cold", false),
+                new Tag("Fruit", false)
         ));
         binding.content.listTags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         TagAdapter adapter = new TagAdapter();

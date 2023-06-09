@@ -18,4 +18,10 @@
         <item>1/2 teaspoon vanilla extract</item>
         <item>2 tablespoons plain milk</item>
     </string-array>
+    <string-array name="step_type">
+        <item>Prepare</item>
+        <item>Timer</item>
+        <item>Basic</item>
+    </string-array>
+    <string name="api_key">e6f3dc1b857f4ad0b84684bcf2da349d</string>
 </resources>

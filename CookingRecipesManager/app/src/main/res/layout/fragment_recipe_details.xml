@@ -58,7 +58,7 @@
                         android:layout_height="match_parent"
                         android:alpha="0.8"
                         android:src="@drawable/alpha_gradient_bottomtop"
-                        android:tint="?android:colorBackground"/>
+                        app:tint="?android:colorBackground" />
                 </FrameLayout>
 
             </androidx.cardview.widget.CardView>
@@ -92,6 +92,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:soundEffectsEnabled="true"
-        android:src="@drawable/baseline_restaurant_24" />"
+        android:src="@drawable/baseline_restaurant_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

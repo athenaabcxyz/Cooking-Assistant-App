@@ -1,5 +1,6 @@
 package com.example.cookingrecipesmanager.library.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,6 +18,8 @@ import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -38,7 +41,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
     }
 
     @Override
-    public void onBindViewHolder(@NonNull com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         CookingNote note = cookingNoteList.get(position);
         if(note == null){
             return;
@@ -97,7 +100,6 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         private TextView title;
         private TextView author;
         private ImageView img;
-        private TextView evaluate;
         private ImageView iFavorites;
         public LibraryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,8 +107,26 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
             title = itemView.findViewById(R.id.textTitle) ;
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
-            evaluate = itemView.findViewById(R.id.textView2);
             iFavorites = itemView.findViewById(R.id.imageButton);
         }
+    }
+    public void sortAsc(){
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        notifyDataSetChanged();
+    }
+    public void sortDes(){
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        Collections.reverse(cookingNoteList);
+        notifyDataSetChanged();
     }
 }
