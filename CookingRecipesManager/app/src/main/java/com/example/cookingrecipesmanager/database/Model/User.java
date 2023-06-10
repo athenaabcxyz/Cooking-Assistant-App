@@ -16,6 +16,5 @@ public class User implements Serializable {
     public String uid;
     public ArrayList<Integer> likedRecipes;
     public ArrayList<Integer> savedRecipes;
-    public ArrayList<Recipe> recipesList;
 
 }

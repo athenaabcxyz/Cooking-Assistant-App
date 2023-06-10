@@ -14,65 +14,330 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:id="@+id/title"
             android:text="RECIPE CREATER"
             android:textAlignment="center"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/recipeImage"
+            android:layout_width="200dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/recipe_book"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+        <Button
+            android:id="@+id/addImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Add Image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
 
         <EditText
             android:id="@+id/recipeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="132dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="20dp"
+
             android:text="RecipeName"
             android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/addImage" />
 
-        <TextView
-            android:id="@+id/textView6"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#0f888888"
+            app:cardCornerRadius="16dp"
+            android:layout_marginTop="20dp"
+            app:cardElevation="0dp"
+            android:id="@+id/cardview3"
+            app:contentPadding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipeName">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/textView120"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Summary"
+                    android:textSize="24sp" />
+
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+            <EditText
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:textColor="@color/black"
+                android:layout_height="178dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:background="@color/white"
+                android:hint="Type in your summary of the recipe."/>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+                <TextView
+                    android:id="@+id/textView121"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price per serving"
+                    android:textSize="24sp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+                <EditText
+                    android:id="@+id/price"
+                    android:layout_width="100dp"
+                    android:textColor="@color/black"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:ems="10"
+                    android:paddingStart="10dp"
+                    android:inputType="numberDecimal"
+                    android:gravity="start|top"
+                    android:background="@color/white"
+                    android:hint="         $"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <TextView
+                    android:id="@+id/textView123"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ready in minute"
+                    android:textSize="24sp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+                <EditText
+                    android:id="@+id/readyTime"
+                    android:layout_width="100dp"
+                    android:textColor="@color/black"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:paddingStart="10dp"
+                    android:gravity="start|top"
+                    android:background="@color/white"
+                    android:hint="minute"/>
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <TextView
+                    android:id="@+id/textView124"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Serving"
+                    android:textSize="24sp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+                <EditText
+                    android:id="@+id/serving"
+                    android:layout_width="100dp"
+                    android:textColor="@color/black"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="20dp"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:paddingStart="10dp"
+                    android:gravity="start|top"
+                    android:background="@color/white"
+                    android:hint="people"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#0f888888"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:contentPadding="8dp"
+            android:id="@+id/cardview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardview3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tag list"
+                    android:textSize="24sp" />
+
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/tagList"
+                    android:layout_width="match_parent"
+                    android:layout_height="47dp"
+                    android:layout_marginLeft="8dp"
+                    android:fadingEdge="horizontal"
+                    android:fadingEdgeLength="16dp"
+                    android:nestedScrollingEnabled="false"
+                    android:requiresFadingEdge="horizontal" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/addTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="159dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginEnd="159dp"
-            android:text="Step List"
-            android:textSize="24sp"
+            android:layout_marginTop="20dp"
+            android:text="Add Tag"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipeName" />
+            app:layout_constraintTop_toBottomOf="@+id/cardview" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/stepList"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="32dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#0f888888"
+            app:cardCornerRadius="16dp"
+            android:layout_marginTop="20dp"
+            app:cardElevation="0dp"
+            android:id="@+id/cardview1"
+            app:contentPadding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/addTag">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ingredients List"
+                    android:textSize="24sp" />
+
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ingredientsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:paddingStart="20dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/addIngredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Add Ingredients"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/cardview1" />
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#0f888888"
+            app:cardCornerRadius="16dp"
+            android:layout_marginTop="20dp"
+            app:cardElevation="0dp"
+            android:id="@+id/cardview2"
+            app:contentPadding="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addIngredients">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Step List"
+                    android:textSize="24sp" />
+
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/stepList"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
 
         <Button
             android:id="@+id/addStep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="152dp"
             android:text="Add Step"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stepList" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardview2" />
 
         <Button
             android:id="@+id/save_recipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="92dp"
+            android:layout_marginStart="90dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="20dp"
             android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addStep" />
 
@@ -80,13 +345,12 @@
             android:id="@+id/cancel_recipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="71dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="88dp"
+            android:layout_marginEnd="90dp"
+            android:layout_marginBottom="20dp"
             android:text="Cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.333"
-            app:layout_constraintStart_toEndOf="@+id/save_recipe"
             app:layout_constraintTop_toBottomOf="@+id/addStep" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

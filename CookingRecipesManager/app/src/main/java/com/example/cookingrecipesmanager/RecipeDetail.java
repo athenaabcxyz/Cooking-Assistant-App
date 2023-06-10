@@ -13,6 +13,8 @@ public class RecipeDetail {
     //The tags of this recipe
     public ArrayList<String> tagList;
 
+    public ArrayList<String> ingredientsList;
+
 
 
     public void CreateStepList(ArrayList<CookingStep> data) {

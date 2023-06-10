@@ -25,5 +25,23 @@
         <item>Timer</item>
         <item>Basic</item>
     </string-array>
+
+    <string-array name="tag">
+        <item>main course</item>
+        <item>side dish</item>
+        <item>dessert</item>
+        <item>appetizer</item>
+        <item>salad</item>
+        <item>bread</item>
+        <item>breakfast</item>
+        <item>soup</item>
+        <item>beverage</item>
+        <item>sauce</item>
+        <item>marinade</item>
+        <item>fingerfood</item>
+        <item>snack</item>
+        <item>drink</item>
+    </string-array>
+
     <string name="api_key">e6f3dc1b857f4ad0b84684bcf2da349d</string>
 </resources>

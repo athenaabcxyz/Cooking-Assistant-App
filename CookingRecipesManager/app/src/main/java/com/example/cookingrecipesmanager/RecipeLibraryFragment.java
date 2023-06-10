@@ -116,15 +116,15 @@ public class RecipeLibraryFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_recipe_library, container, false);
         thisContext = container.getContext();
 
-        db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("recipes").whereEqualTo("userID", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User currentUser = documentSnapshot.toObject(User.class);
-                assert currentUser != null;
-                if (currentUser.recipesList != null) {
-                    for (int i = 0; i <= currentUser.recipesList.size() - 1; i++) {
-                        listMy.add(new CookingNote(currentUser.recipesList.get(i),currentUser.recipesList.get(i).id, currentUser.recipesList.get(i).title, currentUser.name, "", currentUser.recipesList.get(i).image, new Float("5"), true));
-                    }
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                for(DocumentSnapshot snapshot:snapshotList)
+                {
+                   Recipe recipe = snapshot.toObject(Recipe.class);
+                    assert recipe != null;
+                    listMy.add(new CookingNote(recipe,recipe.id, recipe.title, user.getDisplayName(), "", recipe.image, new Float("5"), true));
                 }
             }
         });

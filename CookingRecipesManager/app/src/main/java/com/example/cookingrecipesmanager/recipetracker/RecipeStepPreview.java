@@ -31,6 +31,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +143,7 @@ public class RecipeStepPreview extends AppCompatActivity {
                 });
         Log.d("TagTest",""+cookingSteps.size());
         recipe.CreateStepList(cookingSteps);
-        recipe.recipeName = "Boiled water";
+        recipe.recipeName = paramRecipe.title;
         ArrayList<String> tagList = new ArrayList<String>();
         tagList.add("Boil");
         tagList.add("Water");
@@ -154,7 +155,7 @@ public class RecipeStepPreview extends AppCompatActivity {
         stepList.setLayoutManager(linearLayoutManagerForStep);
         stepList.setAdapter(stepListAdapter);
         toolbar.setTitle(recipe.recipeName);
-        appBarImage.setImageResource(R.drawable.mon3);
+        Picasso.get().load(paramRecipe.image).into(appBarImage);
 
         CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsingToolbar);
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);

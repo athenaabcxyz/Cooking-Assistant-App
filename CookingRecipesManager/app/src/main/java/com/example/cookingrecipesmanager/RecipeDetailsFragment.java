@@ -100,18 +100,8 @@ public class RecipeDetailsFragment extends Fragment {
 
         protected String formatIngredient(ExtendedIngredient item)
         {
-            if (item.name != null)
-            {
-                item.name = item.name.substring(0, 1).toUpperCase() + item.name.substring(1);
-            }
-            String funit = "";
-            if (item.unit != null && item.unit.length() > 0)
-            {
-                funit = String.format(" %s", item.unit);
-            }
-            DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-            df.setMaximumFractionDigits(3);
-            return String.format("%s%s %s", df.format(item.amount), funit, item.name);
+
+            return item.original;
         }
 
         @Override
@@ -176,9 +166,9 @@ public class RecipeDetailsFragment extends Fragment {
         binding.toolbarTitleEx.setText(mParamRecipe.title);
         binding.toolbarTitleEx.setSelected(true);
         binding.toolbarTitle.setText(mParamRecipe.title);
-        if (mParamRecipe.userID != null && mParamRecipe.userID.length() > 0)
+        if (mParamRecipe.userName != null && mParamRecipe.userName.length() > 0)
         {
-            binding.content.authorName.setText(mParamRecipe.userID);
+            binding.content.authorName.setText(mParamRecipe.userName);
         }
         else
         {
