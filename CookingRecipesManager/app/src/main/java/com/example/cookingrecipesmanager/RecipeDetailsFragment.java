@@ -2,12 +2,14 @@ package com.example.cookingrecipesmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +28,7 @@ import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
+import com.example.cookingrecipesmanager.details.DetailsTagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -131,6 +134,24 @@ public class RecipeDetailsFragment extends Fragment {
         return fragment;
     }
 
+    protected void UpdateLikeBtn()
+    {
+        int color = (bSaved ? 0xffff8080 : 0xffaaaaaa);
+        binding.content.btnLike.setIconTint(ColorStateList.valueOf(color));
+
+        db.collection("recipes").whereEqualTo("id", mParamRecipe.id).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Recipe recipe = queryDocumentSnapshots.getDocuments().get(0).toObject(Recipe.class);
+                        if (recipe != null)
+                        {
+                            binding.content.btnLike.setText(String.format("%d", recipe.aggregateLikes));
+                        }
+                    }
+                });
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,7 +216,7 @@ public class RecipeDetailsFragment extends Fragment {
             tags.add(new Tag(mParamRecipe.dishTypes.get(i), false));
         }
         binding.content.listTags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        TagAdapter adapter = new TagAdapter();
+        DetailsTagAdapter adapter = new DetailsTagAdapter();
         adapter.setData(tags);
         binding.content.listTags.setAdapter(adapter);
 
@@ -211,31 +232,18 @@ public class RecipeDetailsFragment extends Fragment {
                    for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
                        if (user.savedRecipes.get(i) == mParamRecipe.id) {
                            bSaved = true;
-                           binding.content.btnBookmark.setImageResource(R.drawable.baseline_bookmark_added_24);
-                           binding.content.btnBookmark.getDrawable().setTint(0xFFDDDD00);
-                           return;
+                           UpdateLikeBtn();
                        }
                    }
-                   binding.content.btnBookmark.setImageResource(R.drawable.baseline_bookmark_add_24);
-                   binding.content.btnBookmark.getDrawable().setTint(0xFFAAAAAA);
-                   bSaved = false;
-               }
-               else {
-                   binding.content.btnBookmark.setImageResource(R.drawable.baseline_bookmark_add_24);
-                   binding.content.btnBookmark.getDrawable().setTint(0xFFAAAAAA);
-                   bSaved = false;
                }
             }
         });
 
 
-        binding.content.btnBookmark.setOnClickListener(new View.OnClickListener() {
+        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageButton btn = (ImageButton) v;
                 bSaved = !bSaved;
-                btn.setImageResource(bSaved ? R.drawable.baseline_bookmark_added_24 : R.drawable.baseline_bookmark_add_24);
-                btn.getDrawable().setTint(bSaved ? 0xFFDDDD00 : 0xFFAAAAAA);
                 db.collection("Users").whereEqualTo("uid", uid).get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
@@ -264,6 +272,7 @@ public class RecipeDetailsFragment extends Fragment {
 
                             }
                         });
+                UpdateLikeBtn();
             }
         });
 
@@ -285,9 +294,31 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
 
+        binding.viewStepRecipe.hide();
+        binding.scrollContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY != 0)
+                {
+                    binding.viewStepRecipe.show();
+                }
+                else {
+                    binding.viewStepRecipe.hide();
+                }
+            }
+        });
+
         binding.viewStepRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RecipeStepPreview.class);
+                intent.putExtra("RECIPE", (Serializable) mParamRecipe);
+                startActivity(intent);
+            }
+        });
+        binding.content.btnCookStatic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RecipeStepPreview.class);
                 intent.putExtra("RECIPE", (Serializable) mParamRecipe);
                 startActivity(intent);
