@@ -1,17 +1,21 @@
 package com.example.cookingrecipesmanager;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -180,13 +184,22 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.listIngredient.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients));
 
-        binding.content.btnBookmark.setOnClickListener(new View.OnClickListener() {
+//        binding.content.btnBookmark.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ImageButton btn = (ImageButton) v;
+//                bSaved = !bSaved;
+//                btn.setImageResource(bSaved ? R.drawable.baseline_bookmark_added_24 : R.drawable.baseline_bookmark_add_24);
+//                btn.getDrawable().setTint(bSaved ? 0xFFDDDD00 : 0xFFAAAAAA);
+//            }
+//        });
+        binding.content.btnLike.setText(String.format("%d", mParamRecipe.aggregateLikes));
+        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageButton btn = (ImageButton) v;
                 bSaved = !bSaved;
-                btn.setImageResource(bSaved ? R.drawable.baseline_bookmark_added_24 : R.drawable.baseline_bookmark_add_24);
-                btn.getDrawable().setTint(bSaved ? 0xFFDDDD00 : 0xFFAAAAAA);
+                int color = (bSaved ? 0xffff8080 : 0xffaaaaaa);
+                binding.content.btnLike.setIconTint(ColorStateList.valueOf(color));
             }
         });
 
@@ -208,6 +221,13 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
 
+        binding.scrollContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                Log.d("scroll", String.format("%d", scrollY));
+
+            }
+        });
 
         return binding.getRoot();
     }

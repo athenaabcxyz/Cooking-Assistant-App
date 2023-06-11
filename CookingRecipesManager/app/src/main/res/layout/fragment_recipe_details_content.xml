@@ -13,31 +13,48 @@
         app:cardBackgroundColor="#0f888888"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:contentPadding="8dp" >
+        app:contentPadding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="0dp">
 
-            <ImageButton
-                android:id="@+id/btn_bookmark"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cook_static"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="8dp"
-                app:srcCompat="@drawable/baseline_bookmark_add_24"
-                app:tint="#FFAAAAAA" />
+                android:layout_marginEnd="16dp"
+                android:minWidth="0px"
+                android:paddingHorizontal="24dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:textColor="?android:colorForeground"
+                android:textSize="12sp"
+                app:icon="@drawable/baseline_restaurant_24"
+                app:iconPadding="0px"
+                app:iconSize="32dp"
+                app:iconTint="?attr/colorSecondaryVariant"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:strokeColor="#aaaaaa" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_tags"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="8dp"
-                android:requiresFadingEdge="horizontal"
-                android:fadingEdge="horizontal"
-                android:fadingEdgeLength="16dp"
-                android:nestedScrollingEnabled="false"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_like"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:textColor="?android:colorForeground"
+                android:textSize="14sp"
+                app:icon="@drawable/baseline_favorite_24"
+                app:iconSize="32dp"
+                app:iconTint="#aaaaaa"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:strokeColor="#aaaaaa" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -54,88 +71,106 @@
         app:cardElevation="0dp"
         app:contentPadding="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                style="@android:style/Widget.Material.RatingBar.Indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:isIndicator="false"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/title_time"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Prep Time"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="@android:style/Widget.Material.RatingBar.Indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:isIndicator="false"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/title_count"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Servings"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/title_time"
-                app:layout_constraintTop_toTopOf="@+id/title_time" />
+                <TextView
+                    android:id="@+id/title_time"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Prep Time"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/title_cost"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Price per Serving"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
-                android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/title_count"
-                app:layout_constraintTop_toTopOf="@+id/title_time" />
+                <TextView
+                    android:id="@+id/title_count"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Servings"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/title_time"
+                    app:layout_constraintTop_toTopOf="@+id/title_time" />
 
-            <TextView
-                android:id="@+id/value_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="15 mins"
-                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/title_time"
-                app:layout_constraintStart_toStartOf="@+id/title_time"
-                app:layout_constraintTop_toBottomOf="@+id/title_time" />
+                <TextView
+                    android:id="@+id/title_cost"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Price per Serving"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/title_count"
+                    app:layout_constraintTop_toTopOf="@+id/title_time" />
 
-            <TextView
-                android:id="@+id/value_count"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                app:layout_constraintEnd_toEndOf="@+id/title_count"
-                app:layout_constraintStart_toStartOf="@+id/title_count"
-                app:layout_constraintTop_toBottomOf="@+id/title_count" />
+                <TextView
+                    android:id="@+id/value_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="15 mins"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/title_time"
+                    app:layout_constraintStart_toStartOf="@+id/title_time"
+                    app:layout_constraintTop_toBottomOf="@+id/title_time" />
 
-            <TextView
-                android:id="@+id/value_cost"
-                android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/value_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    app:layout_constraintEnd_toEndOf="@+id/title_count"
+                    app:layout_constraintStart_toStartOf="@+id/title_count"
+                    app:layout_constraintTop_toBottomOf="@+id/title_count" />
+
+                <TextView
+                    android:id="@+id/value_cost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="$10"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                    app:layout_constraintEnd_toEndOf="@+id/title_cost"
+                    app:layout_constraintStart_toStartOf="@+id/title_cost"
+                    app:layout_constraintTop_toBottomOf="@+id/title_cost" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_tags"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="$10"
-                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-                app:layout_constraintEnd_toEndOf="@+id/title_cost"
-                app:layout_constraintStart_toStartOf="@+id/title_cost"
-                app:layout_constraintTop_toBottomOf="@+id/title_cost" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginLeft="8dp"
+                android:fadingEdge="horizontal"
+                android:fadingEdgeLength="16dp"
+                android:nestedScrollingEnabled="false"
+                android:paddingVertical="8dp"
+                android:requiresFadingEdge="horizontal" />
+
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
