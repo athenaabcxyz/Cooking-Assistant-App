@@ -114,17 +114,17 @@ public class RecipeCreater extends AppCompatActivity {
         stepList = findViewById(R.id.stepList);
         recipeName = findViewById((R.id.recipeName));
         buttonAddStep = findViewById(R.id.addStep);
-        Save =findViewById(R.id.save_recipe);
-        Cancel =findViewById(R.id.cancel_recipe);
-        buttonAddIngredients=findViewById(R.id.addIngredients);
-        ingredientsList=findViewById(R.id.ingredientsList);
-        tagListView=findViewById(R.id.tagList);
-        addTag=findViewById(R.id.addTag);
-        summary=findViewById(R.id.summary);
-        addImage=findViewById(R.id.addImage);
-        recipeImage=findViewById(R.id.recipeImage);
-        price=findViewById(R.id.price);
-        readyTime=findViewById(R.id.readyTime);
+        Save = findViewById(R.id.save_recipe);
+        Cancel = findViewById(R.id.cancel_recipe);
+        buttonAddIngredients = findViewById(R.id.addIngredients);
+        ingredientsList = findViewById(R.id.ingredientsList);
+        tagListView = findViewById(R.id.tagList);
+        addTag = findViewById(R.id.addTag);
+        summary = findViewById(R.id.summary);
+        addImage = findViewById(R.id.addImage);
+        recipeImage = findViewById(R.id.recipeImage);
+        price = findViewById(R.id.price);
+        readyTime = findViewById(R.id.readyTime);
         serving = findViewById(R.id.serving);
 
         addImage.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +142,7 @@ public class RecipeCreater extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
                 int count = snapshotList.size();
-                currentRecipeQuantity=count+1;
+                currentRecipeQuantity = count + 1;
             }
         });
 
@@ -150,19 +150,19 @@ public class RecipeCreater extends AppCompatActivity {
         recipe = new RecipeDetail();
         ArrayList<CookingStep> cookingSteps = new ArrayList<CookingStep>();
         ArrayList<String> ingredients = new ArrayList<>();
-        tagList= new ArrayList<>();
-        recipe.ingredientsList=ingredients;
+        tagList = new ArrayList<>();
+        recipe.ingredientsList = ingredients;
         recipe.CreateStepList(cookingSteps);
         //End data sample creating
 
-        linearLayoutManagerForTag=new LinearLayoutManager(RecipeCreater.this, LinearLayoutManager.HORIZONTAL, false);
-        tagAdapter=new TagAdapter();
+        linearLayoutManagerForTag = new LinearLayoutManager(RecipeCreater.this, LinearLayoutManager.HORIZONTAL, false);
+        tagAdapter = new TagAdapter();
         tagAdapter.setData(tagList);
         tagListView.setLayoutManager(linearLayoutManagerForTag);
         tagListView.setAdapter(tagAdapter);
 
         linearLayoutManagerForIngredients = new LinearLayoutManager(RecipeCreater.this, LinearLayoutManager.VERTICAL, false);
-        ingredientAdapter = new IngredientAdapter(RecipeCreater.this,recipe.ingredientsList);
+        ingredientAdapter = new IngredientAdapter(RecipeCreater.this, recipe.ingredientsList);
         ingredientsList.setLayoutManager(linearLayoutManagerForIngredients);
         ingredientsList.setAdapter(ingredientAdapter);
 
@@ -184,37 +184,33 @@ public class RecipeCreater extends AppCompatActivity {
 
             // Set the outside touchable property of the popup window to true.
             popupWindow.setOutsideTouchable(false);
-            spinner=popupView.findViewById(R.id.tagName);
+            spinner = popupView.findViewById(R.id.tagName);
             buttonSave = popupView.findViewById(R.id.save_edit);
             buttonCancel = popupView.findViewById(R.id.cancel_edit);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(RecipeCreater.this, R.array.tag, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
             spinner.setAdapter(adapter);
             buttonSave.setOnClickListener(view1 -> {
-                boolean hasAlreadyBeen=false;
-            for(Tag tag:tagList)
-            {
-                if(tag.getName().equals(spinner.getSelectedItem().toString()))
-                    hasAlreadyBeen=true;
-            }
-            if(!hasAlreadyBeen)
-            {
-                tagList.add(new Tag(spinner.getSelectedItem().toString(), false));
-                tagAdapter.notifyItemInserted(tagList.size()-1);
-                popupWindow.dismiss();
-            }
-            else
-            {
-                Toast.makeText(RecipeCreater.this, "This tag is already added.", Toast.LENGTH_SHORT).show();
-            }
+                boolean hasAlreadyBeen = false;
+                for (Tag tag : tagList) {
+                    if (tag.getName().equals(spinner.getSelectedItem().toString()))
+                        hasAlreadyBeen = true;
+                }
+                if (!hasAlreadyBeen) {
+                    tagList.add(new Tag(spinner.getSelectedItem().toString(), false));
+                    tagAdapter.notifyItemInserted(tagList.size() - 1);
+                    popupWindow.dismiss();
+                } else {
+                    Toast.makeText(RecipeCreater.this, "This tag is already added.", Toast.LENGTH_SHORT).show();
+                }
 
             });
             buttonCancel.setOnClickListener(view12 -> {
-                if(popupWindow.isShowing())
+                if (popupWindow.isShowing())
                     popupWindow.dismiss();
             });
-            if(!popupWindow.isShowing())
-                popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+            if (!popupWindow.isShowing())
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         });
 
 
@@ -230,30 +226,27 @@ public class RecipeCreater extends AppCompatActivity {
 
             // Set the outside touchable property of the popup window to true.
             popupWindow.setOutsideTouchable(false);
-            unit=popupView.findViewById(R.id.unit);
-            quantity=popupView.findViewById(R.id.quantity);
-            ingredient=popupView.findViewById(R.id.ingredient);
+            unit = popupView.findViewById(R.id.unit);
+            quantity = popupView.findViewById(R.id.quantity);
+            ingredient = popupView.findViewById(R.id.ingredient);
             buttonSave = popupView.findViewById(R.id.save_edit);
             buttonCancel = popupView.findViewById(R.id.cancel_edit);
             buttonSave.setOnClickListener(view1 -> {
-                if(ingredient.getText().toString().equals("")||unit.getText().toString().equals(""))
-                {
+                if (ingredient.getText().toString().equals("") || unit.getText().toString().equals("")) {
                     Toast.makeText(RecipeCreater.this, "Please input description.", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    String ingredientString = quantity.getText().toString()+" "+unit.getText().toString()+" of "+ingredient.getText().toString();
+                } else {
+                    String ingredientString = quantity.getText().toString() + " " + unit.getText().toString() + " of " + ingredient.getText().toString();
                     recipe.ingredientsList.add(ingredientString);
-                    ingredientAdapter.notifyItemInserted(recipe.ingredientsList.size()-1);
+                    ingredientAdapter.notifyItemInserted(recipe.ingredientsList.size() - 1);
                     popupWindow.dismiss();
                 }
             });
             buttonCancel.setOnClickListener(view12 -> {
-                if(popupWindow.isShowing())
+                if (popupWindow.isShowing())
                     popupWindow.dismiss();
             });
-            if(!popupWindow.isShowing())
-                popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+            if (!popupWindow.isShowing())
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         });
 
         buttonAddStep.setOnClickListener(view -> {
@@ -268,31 +261,28 @@ public class RecipeCreater extends AppCompatActivity {
 
             // Set the outside touchable property of the popup window to true.
             popupWindow.setOutsideTouchable(false);
-            spinner =popupView.findViewById(R.id.spinner);
+            spinner = popupView.findViewById(R.id.spinner);
             buttonSave = popupView.findViewById(R.id.save_edit);
             buttonCancel = popupView.findViewById(R.id.cancel_edit);
-            description =popupView.findViewById(R.id.editTextTextMultiLine);
-            time=popupView.findViewById(R.id.editTextNumber);
+            description = popupView.findViewById(R.id.editTextTextMultiLine);
+            time = popupView.findViewById(R.id.editTextNumber);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(RecipeCreater.this, R.array.step_type, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
             spinner.setAdapter(adapter);
             buttonSave.setOnClickListener(view1 -> {
-                if(description.getText().toString().equals(""))
-                {
+                if (description.getText().toString().equals("")) {
                     Toast.makeText(RecipeCreater.this, "Please input description.", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     int timer = 0;
-                    if(!time.getText().toString().equals(""))
-                        timer=Integer.parseInt(time.getText().toString());
+                    if (!time.getText().toString().equals(""))
+                        timer = Integer.parseInt(time.getText().toString());
                     cookingSteps.add(new CookingStep(description.getText().toString(), spinner.getSelectedItem().toString(), timer));
-                    recipeCreaterAdapter.notifyItemInserted(cookingSteps.size()-1);
+                    recipeCreaterAdapter.notifyItemInserted(cookingSteps.size() - 1);
                     popupWindow.dismiss();
                 }
             });
             buttonCancel.setOnClickListener(view12 -> {
-                if(popupWindow.isShowing())
+                if (popupWindow.isShowing())
                     popupWindow.dismiss();
             });
 
@@ -307,120 +297,95 @@ public class RecipeCreater extends AppCompatActivity {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
                 }
             });
-            if(!popupWindow.isShowing())
-                popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
+            if (!popupWindow.isShowing())
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         });
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StringBuilder notice = new StringBuilder();
-                if(tagList.size()==0)
+                if (tagList.size() == 0)
                     notice.append("- Your recipe tag(s) is empty.\n");
-                if(recipe.ingredientsList.size()==0)
+                if (recipe.ingredientsList.size() == 0)
                     notice.append("- Your ingredient list is empty.\n");
-                if(recipe.cookingStepsList.size()==0)
+                if (recipe.cookingStepsList.size() == 0)
                     notice.append("- Your step list is empty.\n");
-                if(summary.getText().toString().equals(""))
+                if (summary.getText().toString().equals(""))
                     notice.append("- Your summary is empty.\n");
-                notice.append("Do you wish to save this recipe?");
-                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case DialogInterface.BUTTON_POSITIVE:
-                                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which){
-                                            case DialogInterface.BUTTON_POSITIVE:
-
-                                                Recipe newRecipe = new Recipe();
-                                                newRecipe.title=recipeName.getText().toString();
-                                                newRecipe.extendedIngredients=new ArrayList<>();
-                                                newRecipe.analyzedInstructions=new ArrayList<>();
-                                                newRecipe.analyzedInstructions.add(new AnalyzedInstruction());
-                                                newRecipe.analyzedInstructions.get(0).steps= new ArrayList<>();
-                                                for(int i = 0; i<= recipe.cookingStepsList.size()-1;i++)
-                                                {
-                                                    newRecipe.analyzedInstructions.get(0).steps.add(new Step(i, recipe.cookingStepsList.get(i).stepIntruction, new Length(recipe.cookingStepsList.get(i).timerBySecond, "second")));
-                                                }
-                                                for(int i = 0; i<=recipe.ingredientsList.size()-1;i++)
-                                                {
-                                                    newRecipe.extendedIngredients.add(new ExtendedIngredient(recipe.ingredientsList.get(i)));
-                                                }
-                                                newRecipe.dishTypes=new ArrayList<>();
-                                                for(int i=0; i<=tagList.size()-1; i++)
-                                                {
-                                                    newRecipe.dishTypes.add(tagList.get(i).getName());
-                                                }
-                                                newRecipe.aggregateLikes=0;
-                                                if(!readyTime.getText().toString().equals(""))
-                                                    newRecipe.readyInMinutes = Integer.parseInt(readyTime.getText().toString());
-                                                else
-                                                    newRecipe.readyInMinutes=0;
-
-                                                if(!price.getText().toString().equals(""))
-                                                    newRecipe.pricePerServing = Double.parseDouble(price.getText().toString());
-                                                else
-                                                    newRecipe.pricePerServing=0;
-
-                                                if(!serving.getText().toString().equals(""))
-                                                    newRecipe.servings=Integer.parseInt(serving.getText().toString());
-                                                else
-                                                    newRecipe.servings=0;
-                                                newRecipe.userID=user.getUid();
-                                                newRecipe.userName = user.getDisplayName();
-                                                newRecipe.id=currentRecipeQuantity;
-                                                newRecipe.summary=summary.getText().toString();
-                                                storageRef=storage.getReference("images/"+newRecipe.id);
-                                                storageRef.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                                    @Override
-                                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                            @Override
-                                                            public void onSuccess(Uri uri) {
-                                                                newRecipe.image=uri.toString();
-                                                                db.collection("recipes").add(newRecipe).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                                    @Override
-                                                                    public void onSuccess(DocumentReference documentReference) {
-                                                                        Toast.makeText(RecipeCreater.this, "Save recipe successfully!", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                });
-                                                            }
-                                                        });
-
-
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(RecipeCreater.this, "Failed to save recipe.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-
-                                                break;
-
-                                            case DialogInterface.BUTTON_NEGATIVE:
-                                                break;
-                                        }
-                                    }
-                                };
-
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeCreater.this);
-                                builder.setMessage("Do you want the name "+recipeName.getText().toString()+"?").setPositiveButton("Yes", dialogClickListener)
-                                        .setNegativeButton("No", dialogClickListener).show();
-                                break;
-
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                //No button clicked
-                                break;
-                        }
+                if (imageURI == null)
+                    notice.append("- Your haven't choose image yet.\n");
+                int totalTime = 0;
+                for (int i = 0; i <= recipe.cookingStepsList.size() - 1; i++)
+                    totalTime += recipe.cookingStepsList.get(i).timerBySecond;
+                if (Integer.parseInt(readyTime.getText().toString()) * 60 < totalTime)
+                    Toast.makeText(RecipeCreater.this, "Ready time must bigger than the total time taken by every single step.\nYour total time is "+totalTime%60+" minute(s) and "+(totalTime-(totalTime%60)*60)+" second(s)", Toast.LENGTH_SHORT).show();
+                else if (notice.length() > 5) {
+                    Toast.makeText(RecipeCreater.this, notice.toString()+"\nPlease fill in all required information before saving.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Recipe newRecipe = new Recipe();
+                    newRecipe.title = recipeName.getText().toString();
+                    newRecipe.extendedIngredients = new ArrayList<>();
+                    newRecipe.analyzedInstructions = new ArrayList<>();
+                    newRecipe.analyzedInstructions.add(new AnalyzedInstruction());
+                    newRecipe.analyzedInstructions.get(0).steps = new ArrayList<>();
+                    for (int i = 0; i <= recipe.cookingStepsList.size() - 1; i++) {
+                        newRecipe.analyzedInstructions.get(0).steps.add(new Step(i, recipe.cookingStepsList.get(i).stepIntruction, new Length(recipe.cookingStepsList.get(i).timerBySecond, "second")));
                     }
-                };
+                    for (int i = 0; i <= recipe.ingredientsList.size() - 1; i++) {
+                        newRecipe.extendedIngredients.add(new ExtendedIngredient(recipe.ingredientsList.get(i)));
+                    }
+                    newRecipe.dishTypes = new ArrayList<>();
+                    for (int i = 0; i <= tagList.size() - 1; i++) {
+                        newRecipe.dishTypes.add(tagList.get(i).getName());
+                    }
+                    newRecipe.aggregateLikes = 0;
+                    if (!readyTime.getText().toString().equals(""))
+                        newRecipe.readyInMinutes = Integer.parseInt(readyTime.getText().toString());
+                    else
+                        newRecipe.readyInMinutes = 0;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeCreater.this);
-                builder.setMessage(notice.toString()).setPositiveButton("Yes", dialogClickListener)
-                        .setNegativeButton("No", dialogClickListener).show();
+                    if (!price.getText().toString().equals(""))
+                        newRecipe.pricePerServing = Double.parseDouble(price.getText().toString());
+                    else
+                        newRecipe.pricePerServing = 0;
+
+                    if (!serving.getText().toString().equals(""))
+                        newRecipe.servings = Integer.parseInt(serving.getText().toString());
+                    else
+                        newRecipe.servings = 0;
+                    newRecipe.userID = user.getUid();
+                    newRecipe.userName = user.getDisplayName();
+                    newRecipe.id = currentRecipeQuantity;
+                    newRecipe.summary = summary.getText().toString();
+                    storageRef = storage.getReference("images/" + newRecipe.id);
+                    storageRef.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    newRecipe.image = uri.toString();
+                                    db.collection("recipes").add(newRecipe).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            Toast.makeText(RecipeCreater.this, "Save recipe successfully!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            });
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RecipeCreater.this, "Failed to save recipe.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+                }
+
             }
 
         });
@@ -431,9 +396,8 @@ public class RecipeCreater extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            if(requestCode==GALLERY_REQ_CODE)
-            {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == GALLERY_REQ_CODE) {
                 assert data != null;
                 imageURI = data.getData();
                 recipeImage.setImageURI(data.getData());
