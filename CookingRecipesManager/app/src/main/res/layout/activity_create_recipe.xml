@@ -1,356 +1,599 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+<!--    =================== Nav Bar ==================   -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".recipetracker.RecipeStepPreview">
+        android:paddingTop="20dp"
+        android:id="@+id/header"
+        >
+        <LinearLayout
+            android:id="@+id/group_title"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="right"
+            android:weightSum="100"
+            >
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="40"
+                android:text="Recipe"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/text"
+                android:layout_gravity="center_vertical"
+                />
 
-        <TextView
+            <Button
+                android:id="@+id/save_recipe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="30"
+                android:text="Save"
+                android:textStyle="bold"
+                android:elevation="2dp"
+                android:layout_margin="1dp"
+                android:stateListAnimator="@null"
+                android:backgroundTint="#2D67F6"
+                >
+            </Button>
+            <Button
+                android:id="@+id/cancel_recipe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:layout_weight="30"
+                android:backgroundTint="@color/white"
+                android:textColor="#333333"
+                android:textStyle="bold"
+                android:elevation="2dp"
+                android:layout_margin="1dp"
+                android:stateListAnimator="@null"
+                >
+            </Button>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_below="@id/group_title"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey2"/>
+    </RelativeLayout>
+
+<!--    =================== Content ==================   -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:id="@+id/title"
-            android:text="RECIPE CREATER"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/recipeImage"
-            android:layout_width="200dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/recipe_book"
-            android:layout_height="200dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title" />
-        <Button
-            android:id="@+id/addImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Add Image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipeImage" />
-
-        <EditText
-            android:id="@+id/recipeName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-
-            android:text="RecipeName"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addImage" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#0f888888"
-            app:cardCornerRadius="16dp"
-            android:layout_marginTop="20dp"
-            app:cardElevation="0dp"
-            android:id="@+id/cardview3"
-            app:contentPadding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recipeName">
-
-            <LinearLayout
+            tools:context=".recipetracker.RecipeStepPreview"
+            android:orientation="vertical"
+            android:background="#0f888888"
+            >
+            <!-- =========================== Image ============================== -->
+            <RelativeLayout
+                android:id="@+id/add_image_group"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_height="200dp"
+                android:background="@drawable/background_image_2"
+                >
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#73E8E8E8"
+                    />
 
-                <TextView
-                    android:id="@+id/textView120"
+                <!-- ============ RECIPE IMAGE ============= -->
+                <ImageView
+                    android:id="@+id/recipeImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+
+                />
+                <!-- ============ BTN ADD IMAGE ============= -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Summary"
-                    android:textSize="24sp" />
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/addImage"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="8dp"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:layout_gravity="center"
+                        app:tint="@color/black"
+                        android:layout_marginRight="3dp"
+                        >
+                    </ImageView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Image"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:textSize="18sp"
+                        >
 
+                    </TextView>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp" />
+                </LinearLayout>
 
-            <EditText
-                android:id="@+id/summary"
+                <!-- ============ BTN CHANGE AND DELETE IMAGE ============= -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#C3787878"
+                    android:background="@drawable/border"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:id="@+id/group_change_image"
+                    >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/changeImage"
+                        android:layout_gravity="center"
+                        >
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            app:srcCompat="@android:drawable/ic_popup_sync"
+                            android:scaleType="centerCrop"
+                            android:layout_marginRight="2dp"
+                            app:tint="@color/white"
+                            />
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:text="Change"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_below="@id/group_title"
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/grey"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_gravity="center"
+                        />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/deleteImage"
+                        android:layout_gravity="center"
+                        >
+                        <ImageView
+                            android:id="@+id/imageViewDelete"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@drawable/delete_icon"
+                            android:scaleType="centerCrop"
+                            android:layout_marginRight="2dp"
+                            app:tint="@color/white"
+                            app:backgroundTint="@color/white"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!-- =========================== Info ============================== -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:textColor="@color/black"
-                android:layout_height="178dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="20dp"
-                android:ems="10"
-                android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:background="@color/white"
-                android:hint="Type in your summary of the recipe."/>
-                <Space
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:id="@+id/cardview3"
+                app:contentPadding="10dp"
+               >
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="8dp" />
-                <TextView
-                    android:id="@+id/textView121"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price per serving"
-                    android:textSize="24sp" />
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp" />
-                <EditText
-                    android:id="@+id/price"
-                    android:layout_width="100dp"
-                    android:textColor="@color/black"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="20dp"
-                    android:ems="10"
-                    android:paddingStart="10dp"
-                    android:inputType="numberDecimal"
-                    android:gravity="start|top"
-                    android:background="@color/white"
-                    android:hint="         $"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp" />
+                    >
 
-                <TextView
-                    android:id="@+id/textView123"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ready in minute"
-                    android:textSize="24sp" />
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp" />
-                <EditText
-                    android:id="@+id/readyTime"
-                    android:layout_width="100dp"
-                    android:textColor="@color/black"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="20dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:paddingStart="10dp"
-                    android:gravity="start|top"
-                    android:background="@color/white"
-                    android:hint="minute"/>
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp" />
+                    <!-- ================== Name ================== -->
+                    <EditText
+                        android:id="@+id/recipeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:hint="Please Fill Recipe Name"
+                        android:textColor="@color/text"
+                        android:background="@drawable/border_none"
+                        android:padding="18dp"
+                        android:gravity="center"
+                        android:backgroundTint="#0f888888"
+                        android:layout_marginTop="10dp"
+                        />
 
-                <TextView
-                    android:id="@+id/textView124"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Serving"
-                    android:textSize="24sp" />
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp" />
-                <EditText
-                    android:id="@+id/serving"
-                    android:layout_width="100dp"
-                    android:textColor="@color/black"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="20dp"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:paddingStart="10dp"
-                    android:gravity="start|top"
-                    android:background="@color/white"
-                    android:hint="people"/>
+                    <!--   =============== SUMMARY ===============  -->
+                    <TextView
+                        android:id="@+id/textView120"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Summary"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey4"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp" />
+                    <EditText
+                        android:id="@+id/summary"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/text"
+                        android:layout_height="178dp"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/border_none"
+                        android:backgroundTint="#0f888888"
+                        android:hint="Type in your summary of the recipe."
+                        android:padding="10dp"
+                        />
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    <!--   =============== PRICE ===============  -->
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/group_price"
+                        android:layout_marginTop="20dp"
+                        >
+                        <TextView
+                            android:id="@+id/textView121"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Price per serving"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/grey4"
+                            android:layout_centerVertical="true"
+                            />
+                        <EditText
+                            android:id="@+id/price"
+                            android:layout_width="150dp"
+                            android:layout_height="42dp"
+                            android:ems="10"
+                            android:background="@drawable/border_none"
+                            android:backgroundTint="#0f888888"
+                            android:textColor="@color/text"
+                            android:inputType="numberDecimal"
+                            android:hint="$"
+                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            />
+                    </RelativeLayout>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#0f888888"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:contentPadding="8dp"
-            android:id="@+id/cardview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardview3">
+                    <!--   =============== MINUTE ===============  -->
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/group_time"
+                        android:layout_marginTop="20dp"
+                        >
+                        <TextView
+                            android:id="@+id/textView123"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ready in minute"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/grey4"
+                            android:layout_centerVertical="true"
+                            />
+                        <EditText
+                            android:id="@+id/readyTime"
+                            android:layout_width="150dp"
+                            android:textColor="@color/text"
+                            android:layout_height="42dp"
+                            android:ems="10"
+                            android:inputType="number"
+                            android:background="@drawable/border_none"
+                            android:backgroundTint="#0f888888"
+                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:hint="minute"/>
+                    </RelativeLayout>
 
-            <LinearLayout
+                    <!--   =============== PEOPLE ===============  -->
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/group_serving"
+                        android:layout_marginTop="20dp"
+                        >
+                        <TextView
+                            android:id="@+id/textView124"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Serving"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/grey4"
+                            android:layout_centerVertical="true"
+                        />
+                        <EditText
+                            android:id="@+id/serving"
+                            android:layout_width="150dp"
+                            android:layout_height="42dp"
+                            android:inputType="number"
+                            android:ems="10"
+                            android:hint="people"
+                            android:background="@drawable/border_none"
+                            android:backgroundTint="#0f888888"
+                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                        />
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- =========================== Tags ============================== -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_height="wrap_content"
+                android:id="@+id/cardview"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:contentPadding="10dp"
+                android:layout_marginTop="10dp"
 
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tag list"
-                    android:textSize="24sp" />
-
-
-                <Space
+                >
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="8dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tag list"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey4"
+                        android:layout_marginBottom="10dp"
+                        />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/text_tags_hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add here"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey4"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"
+                            />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/tagList"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:fadingEdge="horizontal"
+                            android:fadingEdgeLength="16dp"
+                            android:nestedScrollingEnabled="false"
+                            android:requiresFadingEdge="horizontal"
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/tagList"
-                    android:layout_width="match_parent"
-                    android:layout_height="47dp"
-                    android:layout_marginLeft="8dp"
-                    android:fadingEdge="horizontal"
-                    android:fadingEdgeLength="16dp"
-                    android:nestedScrollingEnabled="false"
-                    android:requiresFadingEdge="horizontal" />
+                            />
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    </RelativeLayout>
+                    <Button
+                        android:id="@+id/addTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Add Tag"
+                        android:layout_gravity="center"
+                        app:icon="@android:drawable/ic_input_add"
+                        android:backgroundTint="@color/white"
+                        app:iconTint="@color/grey4"
+                        app:iconSize="20sp"
+                        android:textSize="14sp"
+                        android:textColor="@color/grey4"
+                        android:textStyle="bold"
+                        android:stateListAnimator="@null"
+                   />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/addTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Add Tag"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#0f888888"
-            app:cardCornerRadius="16dp"
-            android:layout_marginTop="20dp"
-            app:cardElevation="0dp"
-            android:id="@+id/cardview1"
-            app:contentPadding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addTag">
-
-            <LinearLayout
+            <!-- =========================== Ingredients ============================== -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ingredients List"
-                    android:textSize="24sp" />
-
-
-                <Space
+                android:layout_height="wrap_content"
+                android:id="@+id/cardview1"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:contentPadding="10dp"
+                android:layout_marginTop="10dp"
+                >
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="8dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ingredients List"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey4"
+                        android:layout_marginBottom="10dp"
+                        />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/text_ingredients_hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Please choose ingredients for food"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey4"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="42dp"
+                            android:visibility="gone"
+                            />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/ingredientsList"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            />
+                    </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/ingredientsList"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:paddingStart="20dp" />
+                    <Button
+                        android:id="@+id/addIngredients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Add Ingredients"
+                        android:layout_gravity="center"
+                        app:icon="@android:drawable/ic_input_add"
+                        android:backgroundTint="@color/white"
+                        app:iconTint="@color/grey4"
+                        app:iconSize="20sp"
+                        android:textSize="14sp"
+                        android:textColor="@color/grey4"
+                        android:textStyle="bold"
+                        android:stateListAnimator="@null"
+                        />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <Button
-            android:id="@+id/addIngredients"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Add Ingredients"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview1" />
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="#0f888888"
-            app:cardCornerRadius="16dp"
-            android:layout_marginTop="20dp"
-            app:cardElevation="0dp"
-            android:id="@+id/cardview2"
-            app:contentPadding="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addIngredients">
-
-            <LinearLayout
+            <!-- =========================== Step List ============================== -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:id="@+id/cardview2"
+                app:contentPadding="10dp"
+                android:layout_marginTop="10dp"
+                >
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Step List"
-                    android:textSize="24sp" />
-
-
-                <Space
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="8dp" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/textView6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Step List"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/grey4"
+                        android:layout_marginBottom="10dp"
+                        />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:id="@+id/text_step_hint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Please add steps for recipe"
+                            android:textSize="18sp"
+                            android:textColor="@color/grey4"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginLeft="40dp"
+                            android:visibility="gone"
+                            />
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/stepList"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp" />
+                    </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/stepList"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp" />
+                    <Button
+                        android:id="@+id/addStep"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Add Step"
+                        android:layout_gravity="center"
+                        app:icon="@android:drawable/ic_input_add"
+                        android:backgroundTint="@color/white"
+                        app:iconTint="@color/grey4"
+                        app:iconSize="20sp"
+                        android:textSize="14sp"
+                        android:textColor="@color/grey4"
+                        android:textStyle="bold"
+                        android:stateListAnimator="@null"
+                        />
+                </LinearLayout>
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
+
+            <!-- =========================== Btn Save and Cancel ============================== -->
 
 
+        </LinearLayout>
+    </ScrollView>
 
-
-        <Button
-            android:id="@+id/addStep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Add Step"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardview2" />
-
-        <Button
-            android:id="@+id/save_recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="20dp"
-            android:text="Save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addStep" />
-
-        <Button
-            android:id="@+id/cancel_recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="90dp"
-            android:layout_marginBottom="20dp"
-            android:text="Cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addStep" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+</LinearLayout>

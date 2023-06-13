@@ -52,6 +52,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
     public void onBindViewHolder(@NonNull StepListViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String stepNamePlaceHolder = "Step " + (position + 1) + ": \n" + stepList.get(position).stepIntruction;
         holder.stepName.setText(stepNamePlaceHolder);
+        holder.time_group.setVisibility(View.GONE);
         switch (stepList.get(position).stepType) {
             case "Timer":
                 holder.step.setCardBackgroundColor(ColorStateList.valueOf(0xff7709ea));
@@ -74,6 +75,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
             @Override
             public void onClick(View view) {
                 if (stepList.get(position).stepType.equals("Timer")) {
+                    holder.time_group.setVisibility(View.VISIBLE);
                     holder.checkBox.setChecked(false);
                     holder.stepName.setTextColor((ColorStateList.valueOf(0xFF605F5F)));
                     holder.checkBox.setEnabled(false);
@@ -85,7 +87,13 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
                     timeCounter = stepList.get(holder.getAdapterPosition()).timerBySecond;
                     new CountDownTimer(stepList.get(holder.getAdapterPosition()).timerBySecond * 1000L, 1000) {
                         public void onTick(long millisUntilFinished) {
-                            holder.textTimer.setText(String.valueOf(timeCounter));
+                            int hours = timeCounter / 3600;
+                            int minutes = (timeCounter % 3600) / 60;
+                            int seconds = timeCounter % 60;
+
+                            String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+                            holder.textTimer.setText(timeString);
                             timeCounter = timeCounter - 1;
 
                         }
@@ -106,6 +114,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
                                     holder.textTimer.setVisibility(View.GONE);
                                     holder.checkBox.setChecked(true);
                                     holder.stepName.setTextColor(ColorStateList.valueOf(0xFFC4C4C4));
+                                    holder.time_group.setVisibility(View.GONE);
                                 }
                             });
 
@@ -143,6 +152,7 @@ class StepListViewHolder extends RecyclerView.ViewHolder {
 
     TextView textTimer;
     CheckBox checkBox;
+    CardView time_group;
 
     public StepListViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -150,5 +160,6 @@ class StepListViewHolder extends RecyclerView.ViewHolder {
         step=itemView.findViewById(R.id.step);
         checkBox=itemView.findViewById((R.id.stepStatus));
         textTimer=itemView.findViewById(R.id.timer);
+        time_group=itemView.findViewById(R.id.time_group);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cookingrecipesmanager.recipetracker.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,14 +45,16 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
     @NonNull
     @Override
     public RecipeCreaterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.step_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.step_item_delete, parent, false);
         return new RecipeCreaterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecipeCreaterViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecipeCreaterViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
         String stepNamePlaceHolder = "Step " + (position + 1) + ": \n" + stepList.get(position).stepIntruction;
         holder.stepName.setText(stepNamePlaceHolder);
+        holder.time_group.setVisibility(View.GONE);
         switch (stepList.get(position).stepType) {
             case "Timer":
                 holder.step.setCardBackgroundColor(ColorStateList.valueOf(0xff7709ea));
@@ -73,6 +77,7 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
             @Override
             public void onClick(View view) {
                 if (stepList.get(position).stepType.equals("Timer")) {
+                    holder.time_group.setVisibility(View.VISIBLE);
                     holder.checkBox.setChecked(false);
                     holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
                     holder.checkBox.setEnabled(false);
@@ -84,7 +89,13 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                     timeCounter = stepList.get(holder.getAdapterPosition()).timerBySecond;
                     new CountDownTimer(stepList.get(holder.getAdapterPosition()).timerBySecond * 1000L, 1000) {
                         public void onTick(long millisUntilFinished) {
-                            holder.textTimer.setText(String.valueOf(timeCounter));
+                            int hours = timeCounter / 3600;
+                            int minutes = (timeCounter % 3600) / 60;
+                            int seconds = timeCounter % 60;
+
+                            String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+                            holder.textTimer.setText(timeString);
                             timeCounter = timeCounter - 1;
 
                         }
@@ -105,6 +116,7 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                                     holder.textTimer.setVisibility(View.GONE);
                                     holder.checkBox.setChecked(true);
                                     holder.stepName.setTextColor(ColorStateList.valueOf(0xff8b7e74));
+                                    holder.time_group.setVisibility(View.GONE);
                                 }
                             });
 
@@ -126,6 +138,17 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
 
             }
         });
+
+        //delete item
+        int stt = position;
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.checkBox.setChecked(false);
+                stepList.remove(stt);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -139,9 +162,10 @@ class RecipeCreaterViewHolder extends RecyclerView.ViewHolder {
 
     TextView stepName;
     CardView step;
-
     TextView textTimer;
     CheckBox checkBox;
+    ImageView delete;
+    CardView time_group;
 
     public RecipeCreaterViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -149,5 +173,7 @@ class RecipeCreaterViewHolder extends RecyclerView.ViewHolder {
         step=itemView.findViewById(R.id.step);
         checkBox=itemView.findViewById((R.id.stepStatus));
         textTimer=itemView.findViewById(R.id.timer);
+        delete= itemView.findViewById(R.id.step_item_delete);
+        time_group=itemView.findViewById(R.id.time_group);
     }
 }

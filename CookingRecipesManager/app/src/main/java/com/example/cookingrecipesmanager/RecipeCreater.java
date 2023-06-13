@@ -11,19 +11,24 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,7 +99,10 @@ public class RecipeCreater extends AppCompatActivity {
     RecyclerView ingredientsList;
     Button Save;
     Uri imageURI;
-    Button addImage;
+    LinearLayout addImage;
+    LinearLayout group_change_image;
+    LinearLayout changeImage;
+    LinearLayout deleteImage;
     ImageView recipeImage;
     EditText summary;
     List<Tag> tagList;
@@ -105,6 +113,9 @@ public class RecipeCreater extends AppCompatActivity {
     IngredientAdapter ingredientAdapter;
     RecipeCreaterAdapter recipeCreaterAdapter;
 
+    TextView textTagHint;
+    TextView textIngredientHint;
+    TextView textStepHint;
     RecipeDetail recipe;
 
     @Override
@@ -126,8 +137,29 @@ public class RecipeCreater extends AppCompatActivity {
         price = findViewById(R.id.price);
         readyTime = findViewById(R.id.readyTime);
         serving = findViewById(R.id.serving);
+        group_change_image = findViewById(R.id.group_change_image);
+        changeImage = findViewById(R.id.changeImage);
+        deleteImage = findViewById(R.id.deleteImage);
+        textTagHint = findViewById(R.id.text_tags_hint);
+        textIngredientHint = findViewById(R.id.text_ingredients_hint);
+        textStepHint = findViewById(R.id.text_step_hint);
 
+        //Set Group Image
+        group_change_image.setVisibility(View.GONE);
+
+        //Add Image
         addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent iGallery = new Intent(Intent.ACTION_PICK);
+                iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(iGallery, GALLERY_REQ_CODE);
+
+            }
+        });
+
+        //Change Image
+        changeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent iGallery = new Intent(Intent.ACTION_PICK);
@@ -136,7 +168,17 @@ public class RecipeCreater extends AppCompatActivity {
             }
         });
 
+        //Delete Image
+        deleteImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recipeImage.setImageDrawable(null);
+                addImage.setVisibility(View.VISIBLE);
+                group_change_image.setVisibility(View.GONE);
+            }
+        });
 
+        //Create id recipe
         db.collection("recipes").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -156,7 +198,7 @@ public class RecipeCreater extends AppCompatActivity {
         //End data sample creating
 
         linearLayoutManagerForTag = new LinearLayoutManager(RecipeCreater.this, LinearLayoutManager.HORIZONTAL, false);
-        tagAdapter = new TagAdapter();
+        tagAdapter = new TagAdapter(true);
         tagAdapter.setData(tagList);
         tagListView.setLayoutManager(linearLayoutManagerForTag);
         tagListView.setAdapter(tagAdapter);
@@ -171,7 +213,7 @@ public class RecipeCreater extends AppCompatActivity {
         stepList.setLayoutManager(linearLayoutManagerForStep);
         stepList.setAdapter(recipeCreaterAdapter);
 
-
+        //Add Tag
         addTag.setOnClickListener(view -> {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.popup_addtag, null);
@@ -203,7 +245,6 @@ public class RecipeCreater extends AppCompatActivity {
                 } else {
                     Toast.makeText(RecipeCreater.this, "This tag is already added.", Toast.LENGTH_SHORT).show();
                 }
-
             });
             buttonCancel.setOnClickListener(view12 -> {
                 if (popupWindow.isShowing())
@@ -211,21 +252,23 @@ public class RecipeCreater extends AppCompatActivity {
             });
             if (!popupWindow.isShowing())
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
         });
 
-
+        //Add Ingredients
         buttonAddIngredients.setOnClickListener(view -> {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.popup_addingredients, null);
 
             // Set the content view of the popup window.
-            popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT);
+            popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
 
             // Set the focusable property of the popup window to true.
             popupWindow.setFocusable(true);
 
             // Set the outside touchable property of the popup window to true.
             popupWindow.setOutsideTouchable(false);
+
             unit = popupView.findViewById(R.id.unit);
             quantity = popupView.findViewById(R.id.quantity);
             ingredient = popupView.findViewById(R.id.ingredient);
@@ -247,8 +290,19 @@ public class RecipeCreater extends AppCompatActivity {
             });
             if (!popupWindow.isShowing())
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            RelativeLayout around = popupView.findViewById(R.id.around_popup_ingredient);
+            around.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (popupWindow.isShowing())
+                        popupWindow.dismiss();
+                }
+            });
+
         });
 
+        //Add Step
         buttonAddStep.setOnClickListener(view -> {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View popupView = inflater.inflate(R.layout.popup_addstep, null);
@@ -300,6 +354,8 @@ public class RecipeCreater extends AppCompatActivity {
             if (!popupWindow.isShowing())
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         });
+
+        //Save Recipe
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -390,6 +446,12 @@ public class RecipeCreater extends AppCompatActivity {
 
         });
 
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
     }
 
@@ -401,7 +463,14 @@ public class RecipeCreater extends AppCompatActivity {
                 assert data != null;
                 imageURI = data.getData();
                 recipeImage.setImageURI(data.getData());
+                addImage.setVisibility(View.GONE);
+                group_change_image.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

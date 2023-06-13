@@ -22,12 +22,17 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     private List<Tag> tagList;
     private Context context;
 
+    private Boolean delete = false;
+
     private ItemClickListener itemClickListener;
     public interface ItemClickListener{
         void onItemClick(Tag tag, TagViewHolder holder);
     }
     public TagAdapter(){
 
+    }
+    public TagAdapter(Boolean delete){
+        this.delete = delete;
     }
     public TagAdapter(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
@@ -59,6 +64,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
             holder.name.setTextColor(context.getResources().getColor(R.color.text, null));
             holder.content.getBackground().setTint(context.getResources().getColor(R.color.white, null));
         }
+        if(delete){
+            holder.delete.setVisibility(View.VISIBLE);
+            holder.img.setVisibility(View.GONE);
+        }
+        else {
+            holder.delete.setVisibility(View.GONE);
+            holder.img.setVisibility(View.VISIBLE);
+        }
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,6 +81,13 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
                catch(Exception e){
 
                }
+            }
+        });
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tagList.remove(tag);
+                notifyDataSetChanged();
             }
         });
 //        holder.img.setImageResource(tag.getImg());
@@ -85,12 +105,14 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     public class TagViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         private ImageView img;
+        private ImageView delete;
         public LinearLayout content;
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.textName) ;
             img = itemView.findViewById(R.id.imageIcon);
             content = itemView.findViewById(R.id.tag_content);
+            delete = itemView.findViewById(R.id.imageIconDelete);
         }
     }
 }

@@ -90,6 +90,7 @@
                 android:layout_toLeftOf="@+id/imageView3"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="3dp"
+                android:visibility="gone"
                 >
             </TextView>
             <ImageView
@@ -101,6 +102,7 @@
                 android:layout_centerVertical="true"
                 app:tint="#E33A3A"
                 android:rotation="-180"
+                android:visibility="gone"
                 />
         </RelativeLayout>
 
