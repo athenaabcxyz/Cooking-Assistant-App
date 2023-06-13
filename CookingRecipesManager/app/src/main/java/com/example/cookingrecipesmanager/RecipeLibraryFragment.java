@@ -129,6 +129,7 @@ public class RecipeLibraryFragment extends Fragment {
                     assert recipe != null;
                     listMy.add(new CookingNote(recipe,recipe.id, recipe.title, user.getDisplayName(), "", recipe.image, new Float("5"), true));
                 }
+                adapter.setData(listMy);
             }
         });
 

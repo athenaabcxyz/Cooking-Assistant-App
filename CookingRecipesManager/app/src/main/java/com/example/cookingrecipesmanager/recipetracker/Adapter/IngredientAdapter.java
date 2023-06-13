@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookingrecipesmanager.R;
-import com.example.cookingrecipesmanager.database.Model.Ingredient;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapterVie
     @NonNull
     @Override
     public IngredientAdapterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_ingredient, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ingredient_delete, parent, false);
         return new IngredientAdapterViewHolder(view);
     }
 

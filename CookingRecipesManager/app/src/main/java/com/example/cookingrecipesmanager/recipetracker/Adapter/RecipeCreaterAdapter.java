@@ -55,6 +55,8 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
         String stepNamePlaceHolder = "Step " + (position + 1) + ": \n" + stepList.get(position).stepIntruction;
         holder.stepName.setText(stepNamePlaceHolder);
         holder.time_group.setVisibility(View.GONE);
+        holder.checkBox.setChecked(false);
+        holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
         switch (stepList.get(position).stepType) {
             case "Timer":
                 holder.step.setCardBackgroundColor(ColorStateList.valueOf(0xff7709ea));
@@ -145,6 +147,7 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
             @Override
             public void onClick(View view) {
                 holder.checkBox.setChecked(false);
+                holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
                 stepList.remove(stt);
                 notifyDataSetChanged();
             }

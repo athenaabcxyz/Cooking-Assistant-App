@@ -219,7 +219,7 @@ public class RecipeCreater extends AppCompatActivity {
             View popupView = inflater.inflate(R.layout.popup_addtag, null);
 
             // Set the content view of the popup window.
-            popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT);
+            popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
 
             // Set the focusable property of the popup window to true.
             popupWindow.setFocusable(true);
@@ -253,6 +253,15 @@ public class RecipeCreater extends AppCompatActivity {
             if (!popupWindow.isShowing())
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+            RelativeLayout around = popupView.findViewById(R.id.around_popup_tag);
+            around.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (popupWindow.isShowing())
+                        popupWindow.dismiss();
+                }
+            });
+
         });
 
         //Add Ingredients
@@ -274,6 +283,7 @@ public class RecipeCreater extends AppCompatActivity {
             ingredient = popupView.findViewById(R.id.ingredient);
             buttonSave = popupView.findViewById(R.id.save_edit);
             buttonCancel = popupView.findViewById(R.id.cancel_edit);
+            ingredient.requestFocus();
             buttonSave.setOnClickListener(view1 -> {
                 if (ingredient.getText().toString().equals("") || unit.getText().toString().equals("")) {
                     Toast.makeText(RecipeCreater.this, "Please input description.", Toast.LENGTH_SHORT).show();
@@ -308,7 +318,7 @@ public class RecipeCreater extends AppCompatActivity {
             View popupView = inflater.inflate(R.layout.popup_addstep, null);
 
             // Set the content view of the popup window.
-            popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT);
+            popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
 
             // Set the focusable property of the popup window to true.
             popupWindow.setFocusable(true);
@@ -320,6 +330,8 @@ public class RecipeCreater extends AppCompatActivity {
             buttonCancel = popupView.findViewById(R.id.cancel_edit);
             description = popupView.findViewById(R.id.editTextTextMultiLine);
             time = popupView.findViewById(R.id.editTextNumber);
+            LinearLayout group_time = popupView.findViewById(R.id.group_time);
+            group_time.setVisibility(View.GONE);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(RecipeCreater.this, R.array.step_type, android.R.layout.simple_spinner_item);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
             spinner.setAdapter(adapter);
@@ -344,15 +356,38 @@ public class RecipeCreater extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
+                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                        group_time.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        group_time.setVisibility(View.GONE);
+                        time.setText("");
+                    }
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
+                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                        group_time.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        group_time.setVisibility(View.GONE);
+                        time.setText("");
+                    }
                 }
             });
             if (!popupWindow.isShowing())
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+            RelativeLayout around = popupView.findViewById(R.id.around_popup_step);
+            around.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (popupWindow.isShowing())
+                        popupWindow.dismiss();
+                }
+            });
         });
 
         //Save Recipe
@@ -424,6 +459,25 @@ public class RecipeCreater extends AppCompatActivity {
                                     db.collection("recipes").add(newRecipe).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
                                         public void onSuccess(DocumentReference documentReference) {
+                                            View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_success,null);
+
+                                            TextView OK = view.findViewById(R.id.OK);
+                                            TextView description = view.findViewById(R.id.textDesCription);
+
+                                            description.setText("Save recipe successfully!");
+
+                                            final AlertDialog.Builder builder = new AlertDialog.Builder(RecipeCreater.this);
+                                            builder.setView(view);
+
+                                            AlertDialog dialog = builder.create();
+                                            dialog.show();
+
+                                            OK.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
                                             Toast.makeText(RecipeCreater.this, "Save recipe successfully!", Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -435,6 +489,25 @@ public class RecipeCreater extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_fail,null);
+
+                            TextView OK = view.findViewById(R.id.OK);
+                            TextView description = view.findViewById(R.id.textDesCription);
+
+                            description.setText("Failed to save recipe!");
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(RecipeCreater.this);
+                            builder.setView(view);
+
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                            OK.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
                             Toast.makeText(RecipeCreater.this, "Failed to save recipe.", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -449,7 +522,9 @@ public class RecipeCreater extends AppCompatActivity {
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                Intent intent = new Intent(RecipeCreater.this, MainActivity.class);
+                intent.putExtra("CREATE_RECIPE", true);
+                startActivity(intent);
             }
         });
 

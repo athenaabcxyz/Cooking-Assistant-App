@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.ListFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,11 +25,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         try {
             Recipe note = (Recipe) getIntent().getSerializableExtra("RECIPE");
+            Boolean isCreateRecipe = (Boolean) getIntent().getSerializableExtra("CREATE_RECIPE");
             if (note != null)
             {
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
                         .commitNow();
+            }
+            else if(isCreateRecipe != null){
+                replaceFragment(new RecipeLibraryFragment());
             }
             else {
 
