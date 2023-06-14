@@ -522,9 +522,7 @@ public class RecipeCreater extends AppCompatActivity {
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RecipeCreater.this, MainActivity.class);
-                intent.putExtra("CREATE_RECIPE", true);
-                startActivity(intent);
+                onBackPressed();
             }
         });
 
@@ -547,5 +545,8 @@ public class RecipeCreater extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(RecipeCreater.this, MainActivity.class);
+        intent.putExtra("CREATE_RECIPE", true);
+        startActivity(intent);
     }
 }

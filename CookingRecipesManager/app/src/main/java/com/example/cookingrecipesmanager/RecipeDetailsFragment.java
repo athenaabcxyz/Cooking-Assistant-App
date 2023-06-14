@@ -140,7 +140,7 @@ public class RecipeDetailsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
+//                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
             }
         });
     }
