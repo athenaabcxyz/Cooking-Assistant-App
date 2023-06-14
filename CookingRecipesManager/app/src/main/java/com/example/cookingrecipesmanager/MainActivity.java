@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(fragInstance != null && fragInstance.equals("RecipeDetailsFragment")){
             getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.layoutFragment)).commitNow();
+            replaceFragment(new HomeFragment());
         }
         else{
             finish();
