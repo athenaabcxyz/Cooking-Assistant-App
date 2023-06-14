@@ -34,9 +34,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-
                 android:scaleType="centerCrop"
-                android:src="@drawable/mon_1"
+                android:src="@drawable/food_type_icon"
+                />
+            <ImageView
+                android:id="@+id/imageIconDelete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@color/black"
                 />
 
         </androidx.cardview.widget.CardView>

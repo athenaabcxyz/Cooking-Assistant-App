@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.ListFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,33 +19,42 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         binding=ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         try {
-            Recipe note = (Recipe) getIntent().getSerializableExtra("RECIPE");
-            if (note != null)
+            if (FirebaseAuth.getInstance().getCurrentUser() == null)
             {
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
-                        .commitNow();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+                return;
             }
-            else {
+            else{
+                Recipe note = (Recipe) getIntent().getSerializableExtra("RECIPE");
+                Boolean isCreateRecipe = (Boolean) getIntent().getSerializableExtra("CREATE_RECIPE");
+                if (note != null)
+                {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .commitNow();
+                }
+                else if(isCreateRecipe != null){
+                    replaceFragment(new RecipeLibraryFragment());
+                }
+                else {
 
-                replaceFragment(new HomeFragment());
+                    replaceFragment(new HomeFragment());
+                }
             }
         }
         catch (Exception e)
         {
-            replaceFragment(new HomeFragment());
+
+//            replaceFragment(new HomeFragment());
         }
 //        replaceFragment(new HomeFragment());
-        if (FirebaseAuth.getInstance().getCurrentUser() == null)
-        {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            finish();
-            return;
-        }
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()){
@@ -71,5 +81,19 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.layoutFragment,fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        String fragInstance = getSupportFragmentManager().findFragmentById(R.id.layoutFragment).getClass().getSimpleName();
+
+        if(fragInstance != null && fragInstance.equals("RecipeDetailsFragment")){
+            getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.layoutFragment)).commitNow();
+            replaceFragment(new HomeFragment());
+        }
+        else{
+            finish();
+        }
     }
 }

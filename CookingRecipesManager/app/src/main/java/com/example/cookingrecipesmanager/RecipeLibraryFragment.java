@@ -2,6 +2,7 @@ package com.example.cookingrecipesmanager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
 import com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -73,7 +75,9 @@ public class RecipeLibraryFragment extends Fragment {
     private LibraryAdapter adapter;
     private Button btnMyRecipe;
     private Button btnGetAll;
+    private FloatingActionButton btn_create;
     private boolean isAllRecipe = true;
+
 
 
     public RecipeLibraryFragment() {
@@ -111,11 +115,10 @@ public class RecipeLibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
         View rootView = inflater.inflate(R.layout.fragment_recipe_library, container, false);
         thisContext = container.getContext();
 
+//      -------------------------------- Get data --------------------------------------
         db.collection("recipes").whereEqualTo("userID", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -126,6 +129,7 @@ public class RecipeLibraryFragment extends Fragment {
                     assert recipe != null;
                     listMy.add(new CookingNote(recipe,recipe.id, recipe.title, user.getDisplayName(), "", recipe.image, new Float("5"), true));
                 }
+                adapter.setData(listMy);
             }
         });
 
@@ -172,6 +176,7 @@ public class RecipeLibraryFragment extends Fragment {
                     }
                 });
 
+//      -------------------------------- Create RecycleView ------------------------------
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         rcl = rootView.findViewById(R.id.rcl_lib);
@@ -180,10 +185,10 @@ public class RecipeLibraryFragment extends Fragment {
         adapter.setData(listAll);
         rcl.setAdapter(adapter);
 
+//      -------------------------------- Load Button All and My Recipe ----------------------
         btnMyRecipe = rootView.findViewById(R.id.btn_my_recipe);
         btnGetAll = rootView.findViewById(R.id.btn_all);
         btnGetAll.performClick();
-
 
         btnMyRecipe.setOnClickListener(new View.OnClickListener() {
 
@@ -211,6 +216,7 @@ public class RecipeLibraryFragment extends Fragment {
             }
         });
 
+//      ------------------------------- Search -----------------------------------------------
         ImageView img = rootView.findViewById(R.id.sort);
         img.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("RestrictedApi")
@@ -252,6 +258,16 @@ public class RecipeLibraryFragment extends Fragment {
                 // filter recycler view when text is changed
                 filterList(query);
                 return false;
+            }
+        });
+
+//      ----------------------------- Button Create Recipe ------------------------------------------------
+        btn_create = rootView.findViewById(R.id.create_btn);
+        btn_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RecipeCreater.class);
+                startActivity(intent);
             }
         });
         return rootView;

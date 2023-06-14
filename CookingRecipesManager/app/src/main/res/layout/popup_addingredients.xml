@@ -3,123 +3,162 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/grey2">
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/around_popup_ingredient"
+        android:background="#94000000"
+        android:padding="10dp"
+        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp"
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:text="Add new ingredient"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                >
+                <!-- ============ TITLE =========== -->
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="25dp"
+                    android:text="ADD NEW INGREDIENT"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    />
+
+                <!-- ============ NAME =========== -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:layout_marginTop="45dp"
+                    >
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:textColor="@color/black"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="40"
+                        android:text="Ingredient name: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
+                    <EditText
+                        android:id="@+id/ingredient"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="60"
+                        android:background="@drawable/border_none"
+                        android:ems="10"
+                        android:hint="Name"
+                        android:inputType="text"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18dp"
+                        android:backgroundTint="#F7F6F4"
+                        />
+                </LinearLayout>
+
+                <!-- ============ QUANTITY =========== -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:layout_marginTop="45dp"
+                    >
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:textColor="@color/text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="40"
+                        android:text="Quantity: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
+                    <EditText
+                        android:id="@+id/quantity"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="60"
+                        android:background="@drawable/border_none"
+                        android:ems="10"
+                        android:hint="Quantity"
+                        android:inputType="text"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:textSize="18dp"
+                        android:backgroundTint="#F7F6F4"
+                        />
+                </LinearLayout>
 
 
+                <!-- ============ UNIT =========== -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:layout_marginTop="45dp"
+                    >
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="40"
+                        android:textColor="@color/text"
+                        android:text="Unit: "
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        />
+                    <EditText
+                        android:id="@+id/unit"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="60"
+                        android:background="@drawable/border_none"
+                        android:ems="10"
+                        android:hint="Messure unit"
+                        android:textAlignment="center"
+                        android:textColor="@color/text"
+                        android:backgroundTint="#F7F6F4"
+                        />
+                </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView8"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:text="Ingredient name: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                <!-- ============ BTN =========== -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="55dp"
+                    >
+                    <Button
+                        android:id="@+id/save_edit"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="Save" />
+                    <Button
+                        android:id="@+id/cancel_edit"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Cancel" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
 
-    <EditText
-        android:id="@+id/ingredient"
-        android:layout_width="167dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/inputborder"
-        android:ems="10"
-        android:hint="name"
-        android:inputType="text"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-    <TextView
-        android:id="@+id/textView15"
-        android:textColor="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:text="Quantity: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-    <EditText
-        android:id="@+id/quantity"
-        android:layout_width="167dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/inputborder"
-        android:ems="10"
-        android:hint="quantity"
-        android:inputType="text"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/ingredient" />
-
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:textColor="@color/black"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="50dp"
-        android:text="Unit: "
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-    <EditText
-        android:id="@+id/unit"
-        android:layout_width="167dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="115dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/inputborder"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Messure unit"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/quantity" />
-
-    <Button
-        android:id="@+id/save_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="44dp"
-        android:text="Save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unit" />
-
-    <Button
-        android:id="@+id/cancel_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="248dp"
-        android:layout_marginTop="44dp"
-        android:text="Cancel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unit" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
