@@ -60,6 +60,7 @@ public class HomeFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    public String fragmentType = "Home";
     private String mParam2;
     private RecyclerView rcl_trend;
     private RecyclerView rcl_tag;

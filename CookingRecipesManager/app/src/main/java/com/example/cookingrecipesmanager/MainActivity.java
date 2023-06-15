@@ -40,11 +40,12 @@ public class MainActivity extends AppCompatActivity {
                             .commitNow();
                 }
                 else if(isCreateRecipe != null){
-                    replaceFragment(new RecipeLibraryFragment());
+                    binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                    replaceFragment(new RecipeLibraryFragment(), "Library");
                 }
                 else {
-
-                    replaceFragment(new HomeFragment());
+                    binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
+                    replaceFragment(new HomeFragment(),"Home");
                 }
             }
         }
@@ -55,18 +56,19 @@ public class MainActivity extends AppCompatActivity {
         }
 //        replaceFragment(new HomeFragment());
 
+
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             switch (item.getItemId()){
 
                 case R.id.homepage:
-                    replaceFragment(new HomeFragment());
+                    replaceFragment(new HomeFragment(), "Home");
                     break;
                 case R.id.library:
-                    replaceFragment(new RecipeLibraryFragment());
+                    replaceFragment(new RecipeLibraryFragment(), "Library");
                     break;
                 case R.id.setting:
-                    replaceFragment(new SettingFragment());
+                    replaceFragment(new SettingFragment(), "Setting");
                     break;
             }
 
@@ -75,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void replaceFragment(Fragment fragment)
+    private void replaceFragment(Fragment fragment, String tag)
     {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.layoutFragment,fragment);
+        fragmentTransaction.replace(R.id.layoutFragment,fragment, tag);
         fragmentTransaction.commit();
     }
 
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.layoutFragment)).commitNow();
 
             if(getSupportFragmentManager().findFragmentById(R.id.layoutFragment) == null){
-                replaceFragment(new HomeFragment());
+                replaceFragment(new HomeFragment(),"Home");
             }
         }
         else{

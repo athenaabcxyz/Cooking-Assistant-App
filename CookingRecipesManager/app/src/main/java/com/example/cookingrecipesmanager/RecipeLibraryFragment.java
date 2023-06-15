@@ -74,6 +74,7 @@ public class RecipeLibraryFragment extends Fragment {
     private RecyclerView rcl;
     private LibraryAdapter adapter;
     private Button btnMyRecipe;
+    public String fragmentType = "Library";
     private Button btnGetAll;
     private FloatingActionButton btn_create;
     private boolean isAllRecipe = true;

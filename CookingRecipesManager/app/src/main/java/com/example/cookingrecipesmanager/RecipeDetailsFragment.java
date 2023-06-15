@@ -56,7 +56,7 @@ public class RecipeDetailsFragment extends Fragment {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid;
-
+    public String fragmentType = "Detail";
     {
         assert user != null;
         uid = user.getUid();

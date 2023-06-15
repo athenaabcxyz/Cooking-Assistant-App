@@ -97,7 +97,7 @@
                         android:background="@drawable/border_none"
                         android:ems="10"
                         android:hint="Quantity"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:textAlignment="center"
                         android:textColor="@color/text"
                         android:textSize="18dp"

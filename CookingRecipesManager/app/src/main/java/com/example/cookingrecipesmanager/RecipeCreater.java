@@ -183,7 +183,13 @@ public class RecipeCreater extends AppCompatActivity {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                int count = snapshotList.size();
+                int count = 0;
+                for(DocumentSnapshot snapshot:snapshotList)
+                {
+                    Recipe countRecipe = snapshot.toObject(Recipe.class);
+                    if(count<countRecipe.id)
+                        count = countRecipe.id;
+                }
                 currentRecipeQuantity = count + 1;
             }
         });
@@ -212,6 +218,7 @@ public class RecipeCreater extends AppCompatActivity {
         recipeCreaterAdapter = new RecipeCreaterAdapter(RecipeCreater.this, recipe.cookingStepsList);
         stepList.setLayoutManager(linearLayoutManagerForStep);
         stepList.setAdapter(recipeCreaterAdapter);
+
 
         //Add Tag
         addTag.setOnClickListener(view -> {

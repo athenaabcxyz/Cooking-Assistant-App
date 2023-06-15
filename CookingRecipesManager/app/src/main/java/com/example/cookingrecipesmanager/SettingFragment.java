@@ -32,6 +32,7 @@ public class SettingFragment extends Fragment {
     private String mParam2;
     private LinearLayout layoutChangePassword, layoutLogout;
     private FirebaseAuth firebaseAuth;
+    public String fragmentType = "Setting";
     private ProgressDialog progressDialog;
     public SettingFragment() {
         // Required empty public constructor

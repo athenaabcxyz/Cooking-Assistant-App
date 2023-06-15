@@ -49,27 +49,16 @@
 
                     />
 
-                <CheckBox
-                    android:id="@+id/stepStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintEnd_toEndOf="parent">
-
-                </CheckBox>
                 <ImageView
                     android:id="@+id/step_item_delete"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="34dp"
+                    android:layout_height="73dp"
                     android:layout_alignParentRight="true"
+                    android:layout_marginEnd="10dp"
                     android:src="@android:drawable/ic_delete"
-                    card_view:tint="#646562"
-                    card_view:layout_constraintTop_toTopOf="parent"
                     card_view:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginRight="10dp"
-                    >
-                </ImageView>
+                    card_view:layout_constraintTop_toTopOf="parent"
+                    card_view:tint="#646562" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

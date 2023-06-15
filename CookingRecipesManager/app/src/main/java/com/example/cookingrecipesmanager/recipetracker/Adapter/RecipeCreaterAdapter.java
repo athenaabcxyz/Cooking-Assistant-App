@@ -8,21 +8,29 @@ import android.content.res.ColorStateList;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.CookingStep;
+import com.example.cookingrecipesmanager.RecipeCreater;
+import com.example.cookingrecipesmanager.Tag;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -30,6 +38,70 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import kotlinx.coroutines.Delay;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.cookingrecipesmanager.CookingStep;
+import com.example.cookingrecipesmanager.R;
+import com.example.cookingrecipesmanager.RecipeDetail;
+import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
+import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
+import com.example.cookingrecipesmanager.database.Model.Length;
+import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.example.cookingrecipesmanager.database.Model.Step;
+import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
+import com.example.cookingrecipesmanager.recipetracker.Adapter.IngredientAdapter;
+import com.example.cookingrecipesmanager.recipetracker.Adapter.RecipeCreaterAdapter;
+import com.example.cookingrecipesmanager.recipetracker.Adapter.StepListAdapter;
+import com.example.cookingrecipesmanager.recipetracker.Adapter.TagListAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterViewHolder> {
     public int timeCounter;
@@ -55,7 +127,6 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
         String stepNamePlaceHolder = "Step " + (position + 1) + ": \n" + stepList.get(position).stepIntruction;
         holder.stepName.setText(stepNamePlaceHolder);
         holder.time_group.setVisibility(View.GONE);
-        holder.checkBox.setChecked(false);
         holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
         switch (stepList.get(position).stepType) {
             case "Timer":
@@ -75,78 +146,108 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                 holder.textTimer.setVisibility(View.GONE);
                 break;
         }
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (stepList.get(position).stepType.equals("Timer")) {
-                    holder.time_group.setVisibility(View.VISIBLE);
-                    holder.checkBox.setChecked(false);
-                    holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
-                    holder.checkBox.setEnabled(false);
-                    holder.checkBox.setVisibility(View.GONE);
-                    holder.textTimer.setEnabled(true);
-                    holder.textTimer.setVisibility(View.VISIBLE);
-                    holder.textTimer.setText(String.valueOf(stepList.get(holder.getAdapterPosition()).timerBySecond));
-                    final Handler handler = new Handler();
-                    timeCounter = stepList.get(holder.getAdapterPosition()).timerBySecond;
-                    new CountDownTimer(stepList.get(holder.getAdapterPosition()).timerBySecond * 1000L, 1000) {
-                        public void onTick(long millisUntilFinished) {
-                            int hours = timeCounter / 3600;
-                            int minutes = (timeCounter % 3600) / 60;
-                            int seconds = timeCounter % 60;
+        holder.step.setOnClickListener(view -> {
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popup_addstep, null);
 
-                            String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+            // Set the content view of the popup window.
+            PopupWindow popupWindow = new PopupWindow(popupView, ViewPager.LayoutParams.MATCH_PARENT, ViewPager.LayoutParams.MATCH_PARENT);
 
-                            holder.textTimer.setText(timeString);
-                            timeCounter = timeCounter - 1;
+            // Set the focusable property of the popup window to true.
+            popupWindow.setFocusable(true);
 
-                        }
+            // Set the outside touchable property of the popup window to true.
+            popupWindow.setOutsideTouchable(false);
+            Spinner spinner = popupView.findViewById(R.id.spinner);
+            Button buttonSave = popupView.findViewById(R.id.save_edit);
+            Button buttonCancel = popupView.findViewById(R.id.cancel_edit);
+            EditText description = popupView.findViewById(R.id.editTextTextMultiLine);
+            EditText time = popupView.findViewById(R.id.editTextNumber);
+            LinearLayout group_time = popupView.findViewById(R.id.group_time);
+            group_time.setVisibility(View.GONE);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(mContext, R.array.step_type, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+            spinner.setAdapter(adapter);
+            switch (stepList.get(position).stepType) {
+                case "Timer":
+                    spinner.setSelection(1);
 
-                        public void onFinish() {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-
-                            builder.setTitle("Timer Step Notification");
-                            builder.setMessage("Time's up! Get your dish or it will burn.");
-
-                            // add a button
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    holder.checkBox.setEnabled(true);
-                                    holder.checkBox.setVisibility(View.VISIBLE);
-                                    holder.textTimer.setEnabled(false);
-                                    holder.textTimer.setVisibility(View.GONE);
-                                    holder.checkBox.setChecked(true);
-                                    holder.stepName.setTextColor(ColorStateList.valueOf(0xff8b7e74));
-                                    holder.time_group.setVisibility(View.GONE);
-                                }
-                            });
-
-                            // create and show the alert dialog
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                    }.start();
-
-
+                    break;
+                case "Basic":
+                    spinner.setSelection(2);
+                    break;
+                case "Prepare":
+                    spinner.setSelection(0);
+                    break;
+            }
+            description.setText(stepList.get(position).stepIntruction);
+            String timerBySecond = ""+stepList.get(position).timerBySecond;
+            time.setText(timerBySecond);
+            buttonSave.setOnClickListener(view1 -> {
+                if (description.getText().toString().equals("")) {
+                    Toast.makeText(mContext, "Please input description.", Toast.LENGTH_SHORT).show();
+                } else {
+                    int timer = 0;
+                    if (!time.getText().toString().equals(""))
+                        timer = Integer.parseInt(time.getText().toString());
+                    stepList.get(position).stepType=spinner.getSelectedItem().toString();
+                    stepList.get(position).stepIntruction=description.getText().toString();
+                    int timerSave = 0;
+                    if(time.getText().toString().equals(""))
+                    stepList.get(position).timerBySecond=timerSave;
+                    else
+                        stepList.get(position).timerBySecond=Integer.parseInt(time.getText().toString());
+                    notifyDataSetChanged();
+                    popupWindow.dismiss();
                 }
-                else {
-                    if (holder.checkBox.isChecked()) {
-                        holder.stepName.setTextColor(ColorStateList.valueOf(0xff8b7e74));
-                    } else {
-                        holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
+            });
+            buttonCancel.setOnClickListener(view12 -> {
+                if (popupWindow.isShowing())
+                    popupWindow.dismiss();
+            });
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
+                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                        group_time.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        group_time.setVisibility(View.GONE);
+                        time.setText("");
                     }
                 }
 
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                    time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
+                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                        group_time.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        group_time.setVisibility(View.GONE);
+                        time.setText("");
+                    }
+                }
+            });
+            if (!popupWindow.isShowing())
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+            RelativeLayout around = popupView.findViewById(R.id.around_popup_step);
+            around.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (popupWindow.isShowing())
+                        popupWindow.dismiss();
+                }
+            });
+        });
         //delete item
         int stt = position;
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.checkBox.setChecked(false);
                 holder.stepName.setTextColor((ColorStateList.valueOf(0xFF3A3A3A)));
                 stepList.remove(stt);
                 notifyDataSetChanged();
@@ -166,7 +267,6 @@ class RecipeCreaterViewHolder extends RecyclerView.ViewHolder {
     TextView stepName;
     CardView step;
     TextView textTimer;
-    CheckBox checkBox;
     ImageView delete;
     CardView time_group;
 
@@ -174,7 +274,6 @@ class RecipeCreaterViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         stepName = itemView.findViewById(R.id.stepName);
         step=itemView.findViewById(R.id.step);
-        checkBox=itemView.findViewById((R.id.stepStatus));
         textTimer=itemView.findViewById(R.id.timer);
         delete= itemView.findViewById(R.id.step_item_delete);
         time_group=itemView.findViewById(R.id.time_group);

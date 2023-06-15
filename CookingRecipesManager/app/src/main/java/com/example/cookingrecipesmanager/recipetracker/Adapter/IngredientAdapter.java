@@ -1,16 +1,25 @@
 package com.example.cookingrecipesmanager.recipetracker.Adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.cookingrecipesmanager.R;
+import com.example.cookingrecipesmanager.RecipeCreater;
 
 import java.util.ArrayList;
 
@@ -54,10 +63,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapterVie
 class IngredientAdapterViewHolder extends RecyclerView.ViewHolder{
 
     TextView ingredient;
+    CardView ingredientCard;
     TextView number;
     ImageView delete;
     public IngredientAdapterViewHolder(@NonNull View itemView) {
         super(itemView);
+        ingredientCard=itemView.findViewById(R.id.ingredientCardView);
         ingredient=itemView.findViewById(R.id.ingredient_name);
         number = itemView.findViewById(R.id.ingredient_number);
         delete = itemView.findViewById(R.id.ingredient_delete);
