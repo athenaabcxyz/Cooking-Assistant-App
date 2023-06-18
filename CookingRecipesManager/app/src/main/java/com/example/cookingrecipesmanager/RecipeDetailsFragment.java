@@ -1,5 +1,6 @@
 package com.example.cookingrecipesmanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +49,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -194,12 +199,46 @@ public class RecipeDetailsFragment extends Fragment {
         //TODO: Opening editor activity
     }
 
-    // Removes current item from the database
+    protected void RemoveCurrentItem()
+    {
+        RecipeDetailsFragment fragment = this;
+
+        Log.d("DETAILS", String.format("removing recipe %d", mParamRecipe.id));
+        db.collection("recipes").whereEqualTo("id", mParamRecipe.id)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        queryDocumentSnapshots.forEach(new Consumer<QueryDocumentSnapshot>() {
+                            @Override
+                            public void accept(QueryDocumentSnapshot queryDocumentSnapshot) {
+                                queryDocumentSnapshot.getReference().delete();
+                            }
+                        });
+                    }
+                });
+        ((MainActivity)requireActivity()).getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
+
+        // TODO: refresh library
+    }
+
+    // Removes current item from the database (confirmation dialog)
     protected void CallRemove()
     {
-        Toast.makeText(requireContext(), "removing not implemented", Toast.LENGTH_SHORT).show();
-        //TODO: remove item from the database
-        //      consider adding 'hidden' flag (ie. trash bin)
+//        Toast.makeText(requireContext(), "removing not implemented", Toast.LENGTH_SHORT).show();
+
+        //      consider adding 'hidden' flag (ie. trash bin)?
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Removing")
+                .setMessage("Do you want to remove this recipe")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        RemoveCurrentItem();
+                    }
+                })
+                .setNegativeButton("no", null)
+                .show();
     }
 
     @Override
