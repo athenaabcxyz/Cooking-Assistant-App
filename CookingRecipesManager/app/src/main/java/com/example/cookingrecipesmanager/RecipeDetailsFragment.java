@@ -18,15 +18,14 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
 import com.example.cookingrecipesmanager.details.DetailsTagAdapter;
-import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
@@ -64,6 +63,7 @@ public class RecipeDetailsFragment extends Fragment {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private boolean bSaved = false;
+    private boolean bLiked = false;
     private GestureDetectorCompat Gesture;
 
     public class IngredientViewHolder extends RecyclerView.ViewHolder {
@@ -131,9 +131,10 @@ public class RecipeDetailsFragment extends Fragment {
 
     protected void UpdateLikeBtn()
     {
-        int color = (bSaved ? 0xffff8080 : 0xffaaaaaa);
+        int color = (bLiked ? 0xffff8080 : 0xffaaaaaa);
         binding.content.btnLike.setIconTint(ColorStateList.valueOf(color));
 
+        // set like count
         db.collection("recipes").whereEqualTo("id", mParamRecipe.id).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -147,6 +148,60 @@ public class RecipeDetailsFragment extends Fragment {
                 });
     }
 
+    protected void UpdateSaveBtn(boolean bSaved)
+    {
+        int color = (bSaved ? 0xffdddd40 : 0xffaaaaaa);
+        binding.content.btnSave.setIconTint(ColorStateList.valueOf(color));
+    }
+
+    // whether the current user created this item
+    protected boolean GetIsOwner()
+    {
+        final String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        return currentUID.equals(mParamRecipe.userID);
+    }
+
+    // Set visibility for buttons meant only for the owner of this recipe
+    protected void InitEditButtons()
+    {
+        if (!GetIsOwner())
+        {
+            binding.content.btnEdit.setVisibility(View.GONE);
+            binding.content.btnRemove.setVisibility(View.GONE);
+        }
+
+        binding.content.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CallEditor();
+            }
+        });
+        binding.content.btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CallRemove();
+            }
+        });
+    }
+
+    // Opens editor activity passing recipe id
+    protected void CallEditor()
+    {
+//        Intent intentEdit = new Intent(requireContext(), RecipeCreater.class); // ?
+//        intentEdit.putExtra("RECIPE_DATA", (Serializable)mParamRecipe);
+//        intentEdit.putExtra("RECIPE_ID", mParamRecipe.id);
+        Toast.makeText(requireContext(), "editing not implemented", Toast.LENGTH_SHORT).show();
+        //TODO: Opening editor activity
+    }
+
+    // Removes current item from the database
+    protected void CallRemove()
+    {
+        Toast.makeText(requireContext(), "removing not implemented", Toast.LENGTH_SHORT).show();
+        //TODO: remove item from the database
+        //      consider adding 'hidden' flag (ie. trash bin)
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,12 +213,14 @@ public class RecipeDetailsFragment extends Fragment {
         setEnterTransition(trans.inflateTransition(R.transition.slide_right));
         setExitTransition(trans.inflateTransition(R.transition.slide_right));
         RecipeDetailsFragment fragment = this;
-        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
+        // back navigation is handled by parent activity
+
+//        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
 //                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
-            }
-        });
+//            }
+//        });
     }
 
     @Override
@@ -218,6 +275,7 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.listIngredient.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients));
 
+        bSaved = false;
         db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -227,18 +285,16 @@ public class RecipeDetailsFragment extends Fragment {
                    for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
                        if (user.savedRecipes.get(i) == mParamRecipe.id) {
                            bSaved = true;
-                           UpdateLikeBtn();
                        }
                    }
                }
+                UpdateSaveBtn(bSaved);
             }
         });
 
-
-        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
+        binding.content.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bSaved = !bSaved;
                 db.collection("Users").whereEqualTo("uid", uid).get()
                         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
@@ -248,28 +304,41 @@ public class RecipeDetailsFragment extends Fragment {
                                 {
                                     User user = snapshot.toObject(User.class);
                                     assert user != null;
+                                    boolean bRemovedSavedItem = false;
+                                    // check if current item is in saved list, if so then remove it and set state
                                     if(user.savedRecipes!=null) {
                                         for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
                                             if (user.savedRecipes.get(i) == mParamRecipe.id) {
                                                 db.collection("Users").document(uid).update("savedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
-                                                return;
+                                                bSaved = false;
+                                                bRemovedSavedItem = true;
                                             }
-
                                         }
-                                        db.collection("Users").document(uid).update("savedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
                                     }
-                                    else
-                                    {
+                                    // current item not saved, adding it
+                                    if (!bRemovedSavedItem) {
                                         db.collection("Users").document(uid).update("savedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
+                                        bSaved = true;
                                     }
                                 }
 
-
+                                UpdateSaveBtn(bSaved);
                             }
                         });
+            }
+        });
+
+        UpdateLikeBtn();
+        // TODO: create list of liked items for user
+        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bLiked = !bLiked;
                 UpdateLikeBtn();
             }
         });
+
+        InitEditButtons();
 
         binding.appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override

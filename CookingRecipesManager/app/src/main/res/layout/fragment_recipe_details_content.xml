@@ -20,16 +20,17 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="8dp"
-            android:paddingVertical="0dp">
+            android:paddingVertical="0dp"
+            android:showDividers="middle"
+            android:divider="@drawable/divider_horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_cook_static"
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:minWidth="0px"
-                android:paddingHorizontal="24dp"
+                android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 android:textColor="?android:colorForeground"
                 android:textSize="12sp"
@@ -45,6 +46,7 @@
                 style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
                 android:text="00"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                 android:textColor="?android:colorForeground"
@@ -52,6 +54,57 @@
                 app:icon="@drawable/baseline_favorite_24"
                 app:iconSize="32dp"
                 app:iconTint="#aaaaaa"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:strokeColor="#aaaaaa" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0dp"
+                android:paddingHorizontal="8dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:textColor="?android:colorForeground"
+                android:textSize="14sp"
+                app:icon="@drawable/baseline_bookmark_add_24"
+                app:iconPadding="0dp"
+                app:iconSize="32dp"
+                app:iconTint="#aaaaaa"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:strokeColor="#aaaaaa" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0px"
+                android:paddingHorizontal="8dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:textColor="?android:colorForeground"
+                android:textSize="12sp"
+                app:icon="@drawable/baseline_edit_24"
+                app:iconPadding="0px"
+                app:iconSize="32dp"
+                app:iconTint="#00a000"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
+                app:strokeColor="#aaaaaa" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_remove"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="0px"
+                android:paddingHorizontal="8dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                android:textColor="?android:colorForeground"
+                android:textSize="12sp"
+                app:icon="@drawable/baseline_delete_forever_24"
+                app:iconPadding="0px"
+                app:iconSize="32dp"
+                app:iconTint="#d02020"
                 app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium"
                 app:strokeColor="#aaaaaa" />
 
