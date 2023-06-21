@@ -1,5 +1,7 @@
 package com.example.cookingrecipesmanager;
 
+import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
+
 import java.util.ArrayList;
 
 public class RecipeDetail {
@@ -13,7 +15,7 @@ public class RecipeDetail {
     //The tags of this recipe
     public ArrayList<String> tagList;
 
-    public ArrayList<String> ingredientsList;
+    public ArrayList<ExtendedIngredient> ingredientsList;
 
 
 

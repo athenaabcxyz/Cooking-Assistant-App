@@ -213,7 +213,7 @@ public class RecipeCreater extends AppCompatActivity {
         //Create data sample for testing
         recipe = new RecipeDetail();
         ArrayList<CookingStep> cookingSteps = new ArrayList<CookingStep>();
-        ArrayList<String> ingredients = new ArrayList<>();
+        ArrayList<ExtendedIngredient> ingredients = new ArrayList<>();
         tagList = new ArrayList<>();
 
         //LoadData
@@ -236,7 +236,7 @@ public class RecipeCreater extends AppCompatActivity {
             for (ExtendedIngredient ingredient:paramRecipe.extendedIngredients)
             {
                 prepareInstruction.append(" - ").append(ingredient.original).append("\n");
-                ingredients.add(ingredient.original);
+                ingredients.add(ingredient);
             }
             //cookingSteps.add(new CookingStep(prepareInstruction.toString(), "Prepare", 0));
             AnalyzedInstruction instruction = paramRecipe.analyzedInstructions.get(0);
@@ -368,8 +368,12 @@ public class RecipeCreater extends AppCompatActivity {
                 if (ingredient.getText().toString().equals("") || unit.getText().toString().equals("")) {
                     Toast.makeText(RecipeCreater.this, "Please input description.", Toast.LENGTH_SHORT).show();
                 } else {
-                    String ingredientString = quantity.getText().toString() + " " + unit.getText().toString() + " of " + ingredient.getText().toString();
-                    recipe.ingredientsList.add(ingredientString);
+                    ExtendedIngredient newIngredient = new ExtendedIngredient();
+                    newIngredient.unit=unit.getText().toString();
+                    newIngredient.amount=Double.parseDouble(quantity.getText().toString());
+                    newIngredient.name=ingredient.getText().toString();
+                    newIngredient.original= quantity.getText().toString()+" "+unit.getText().toString()+" of "+ingredient.getText().toString();
+                    recipe.ingredientsList.add(newIngredient);
                     ingredientAdapter.notifyItemInserted(recipe.ingredientsList.size() - 1);
                     popupWindow.dismiss();
                 }
@@ -505,7 +509,7 @@ public class RecipeCreater extends AppCompatActivity {
                         newRecipe.analyzedInstructions.get(0).steps.add(new Step(i, recipe.cookingStepsList.get(i).stepIntruction, new Length(recipe.cookingStepsList.get(i).timerBySecond, "second")));
                     }
                     for (int i = 0; i <= recipe.ingredientsList.size() - 1; i++) {
-                        newRecipe.extendedIngredients.add(new ExtendedIngredient(recipe.ingredientsList.get(i)));
+                        newRecipe.extendedIngredients.add(recipe.ingredientsList.get(i));
                     }
                     newRecipe.dishTypes = new ArrayList<>();
                     for (int i = 0; i <= tagList.size() - 1; i++) {
