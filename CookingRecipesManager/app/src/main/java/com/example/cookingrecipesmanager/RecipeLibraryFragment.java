@@ -120,19 +120,28 @@ public class RecipeLibraryFragment extends Fragment {
         thisContext = container.getContext();
 
 //      -------------------------------- Get data --------------------------------------
-        db.collection("recipes").whereEqualTo("userID", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                for(DocumentSnapshot snapshot:snapshotList)
-                {
-                   Recipe recipe = snapshot.toObject(Recipe.class);
-                    assert recipe != null;
-                    listMy.add(new CookingNote(recipe,recipe.id, recipe.title, user.getDisplayName(), "", recipe.image, new Float("5"), true));
-                }
-                adapter.setData(listMy);
-            }
-        });
+        db.collection("Users").document(uid).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User currentUser = documentSnapshot.toObject(User.class);
+                        assert currentUser != null;
+                        db.collection("recipes").whereEqualTo("userID", user.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+                                for(DocumentSnapshot snapshot:snapshotList)
+                                {
+                                    Recipe recipe = snapshot.toObject(Recipe.class);
+                                    assert recipe != null;
+                                    listMy.add(new CookingNote(recipe,recipe.id, recipe.title, currentUser.name, "", recipe.image, new Float("5"), true));
+                                }
+                                adapter.setData(listMy);
+                            }
+                        });
+                    }
+                });
+
 
         db.collection("Users").document(uid).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
