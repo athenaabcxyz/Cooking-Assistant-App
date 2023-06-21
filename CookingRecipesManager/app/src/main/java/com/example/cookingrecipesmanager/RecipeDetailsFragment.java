@@ -30,7 +30,9 @@ import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
 import com.example.cookingrecipesmanager.details.DetailsTagAdapter;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -254,12 +256,12 @@ public class RecipeDetailsFragment extends Fragment {
         RecipeDetailsFragment fragment = this;
         // back navigation is handled by parent activity
 
-//        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-//            @Override
-//            public void handleOnBackPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
 //                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
-//            }
-//        });
+            }
+        });
     }
 
     @Override
@@ -427,12 +429,87 @@ public class RecipeDetailsFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        binding.content.btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+                builder.setMessage("Do you want to delete?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                DeleteRecipe();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                // User cancelled the dialog
+                            }
+                        });
+                android.app.AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+        binding.content.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RecipeCreater.class);
+                intent.putExtra("RECIPE", (Serializable) mParamRecipe);
+                startActivity(intent);
+            }
+        });
+
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+    public void DeleteRecipe(){
+        db.collection("recipes")
+                .whereEqualTo("id", mParamRecipe.id)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (DocumentSnapshot document : task.getResult()) {
+                                db.collection("recipes").document(document.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_success,null);
+
+                                        TextView OK = view.findViewById(R.id.OK);
+                                        TextView description = view.findViewById(R.id.textDesCription);
+
+                                        description.setText("Delete recipe successfully!");
+
+                                        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                                        builder.setView(view);
+
+                                        android.app.AlertDialog dialog = builder.create();
+                                        dialog.show();
+
+                                        OK.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                onBack();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Khong co du lieu phu hop", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+    public void onBack() {
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.putExtra("DELETE_RECIPE", true);
+        startActivity(intent);
     }
 
 }

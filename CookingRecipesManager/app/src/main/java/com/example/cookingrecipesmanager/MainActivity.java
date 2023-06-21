@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-
+    Recipe recipeEdit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
             else{
                 Recipe note = (Recipe) getIntent().getSerializableExtra("RECIPE");
                 Boolean isCreateRecipe = (Boolean) getIntent().getSerializableExtra("CREATE_RECIPE");
+                Boolean isDeleteRecipe = (Boolean) getIntent().getSerializableExtra("DELETE_RECIPE");
+                recipeEdit = (Recipe) getIntent().getSerializableExtra("EDIT_RECIPE");
                 if (note != null)
                 {
                     getSupportFragmentManager().beginTransaction()
@@ -40,6 +42,18 @@ public class MainActivity extends AppCompatActivity {
                             .commitNow();
                 }
                 else if(isCreateRecipe != null){
+                    binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                    replaceFragment(new RecipeLibraryFragment(), "Library");
+                }
+                else if(recipeEdit != null){
+                    if(recipeEdit.title != null){
+                        binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(recipeEdit))
+                                .commitNow();
+                    }
+                }
+                else if(isDeleteRecipe != null){
                     binding.bottomNavigationView.setSelectedItemId(R.id.library);
                     replaceFragment(new RecipeLibraryFragment(), "Library");
                 }
@@ -94,7 +108,14 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.layoutFragment)).commitNow();
 
             if(getSupportFragmentManager().findFragmentById(R.id.layoutFragment) == null){
-                replaceFragment(new HomeFragment(),"Home");
+                if(recipeEdit != null){
+                    binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                    replaceFragment(new RecipeLibraryFragment(), "Library");
+                }
+                else {
+                    binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
+                    replaceFragment(new HomeFragment(), "Home");
+                }
             }
         }
         else{
