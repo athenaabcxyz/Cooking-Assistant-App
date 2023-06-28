@@ -177,7 +177,7 @@ public class RecipeLibraryFragment extends Fragment {
                                                     }
                                                     else{
                                                         recipe.userName = "UserName";
-                                                        listAll.add(new CookingNote(recipe,recipe.id, recipe.title, "", "", recipe.image, new Float("5"), true));
+                                                        listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
                                                     }
 
                                                 }
