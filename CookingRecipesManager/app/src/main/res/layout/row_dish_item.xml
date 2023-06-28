@@ -51,16 +51,39 @@
             android:ellipsize="end"
             android:layout_marginRight="50dp"
             />
-        <TextView
-            android:id="@+id/textAuthor"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name of author"
-            android:textSize="14dp"
-            android:textColor="#C4C4C4"
+            android:id="@+id/user_group"
+            android:layout_gravity="center"
             android:layout_below="@id/textTitle"
-            android:textStyle="bold"
-        />
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="5dp"
+            >
+            <ImageView
+                android:id="@+id/imageUser"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_avatar_default"
+                android:layout_below="@id/textTitle"
+                />
+            <TextView
+                android:id="@+id/textAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name of author"
+                android:textSize="14dp"
+                android:textColor="#C4C4C4"
+                android:lines="1"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginRight="40dp"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
@@ -74,7 +97,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textAuthor"
+            android:layout_below="@id/user_group"
             android:layout_toLeftOf="@id/imageButton"
             android:weightSum="100"
             >

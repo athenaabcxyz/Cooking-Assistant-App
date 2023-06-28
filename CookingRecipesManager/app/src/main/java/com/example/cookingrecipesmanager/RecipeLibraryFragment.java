@@ -134,6 +134,7 @@ public class RecipeLibraryFragment extends Fragment {
                                 {
                                     Recipe recipe = snapshot.toObject(Recipe.class);
                                     assert recipe != null;
+                                    recipe.userImage = currentUser.image;
                                     listMy.add(new CookingNote(recipe,recipe.id, recipe.title, currentUser.name, "", recipe.image, new Float("5"), true));
                                 }
                                 adapter.setData(listMy);
@@ -167,13 +168,15 @@ public class RecipeLibraryFragment extends Fragment {
                                                             @Override
                                                             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                                                                 String name = value.getString("name");
+                                                                String image = value.getString("image");
                                                                 recipe.userName = name;
+                                                                recipe.userImage = image;
                                                                 listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
                                                             }
                                                         });
                                                     }
                                                     else{
-                                                        recipe.userName = "";
+                                                        recipe.userName = "UserName";
                                                         listAll.add(new CookingNote(recipe,recipe.id, recipe.title, "", "", recipe.image, new Float("5"), true));
                                                     }
 
@@ -278,6 +281,7 @@ public class RecipeLibraryFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), RecipeCreater.class);
                 startActivity(intent);
+                ((MainActivity)getContext()).finish();
             }
         });
         return rootView;

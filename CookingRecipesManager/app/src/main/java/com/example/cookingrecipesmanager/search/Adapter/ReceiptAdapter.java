@@ -54,6 +54,12 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
         holder.like.setText(String.valueOf(note.aggregateLikes)+"00 like");
         holder.time.setText(String.valueOf(note.readyInMinutes)+ " min");
         Picasso.get().load(note.image).into(holder.img);
+        if(note.userImage != null){
+            Picasso.get().load(note.userImage).into(holder.userImage);
+        }
+        else {
+            holder.userImage.setImageResource(R.drawable.ic_avatar_default);
+        }
 
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +80,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("RECIPE", note);
                     context.startActivity(intent);
-
+                    ((Search)context).finish();
                 }
             });
 
@@ -99,6 +105,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
         private TextView like;
         private TextView time;
         private ImageView iFavorites;
+        private ImageView userImage;
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
@@ -108,6 +115,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.TrendVie
             iFavorites = itemView.findViewById(R.id.imageButton);
             like = itemView.findViewById(R.id.like) ;
             time = itemView.findViewById(R.id.time);
+            userImage = itemView.findViewById(R.id.imageUser);
         }
     }
 

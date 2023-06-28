@@ -53,7 +53,12 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         holder.like.setText(String.valueOf(note.recipe.aggregateLikes)+ " like");
         holder.time.setText(String.valueOf(note.recipe.readyInMinutes)+ " min");
         Picasso.get().load(note.img).into(holder.img);
-
+        if(note.recipe.userImage != null){
+            Picasso.get().load(note.recipe.userImage).into(holder.userImage);
+        }
+        else {
+            holder.userImage.setImageResource(R.drawable.ic_avatar_default);
+        }
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,7 +95,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe, "LIBRARY"))
                             .commitNow();
                 }
             });
@@ -116,6 +121,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         private TextView like;
         private TextView time;
         private ImageView iFavorites;
+        private ImageView userImage;
         public LibraryViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
@@ -125,6 +131,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
             iFavorites = itemView.findViewById(R.id.imageButton);
             like = itemView.findViewById(R.id.like) ;
             time = itemView.findViewById(R.id.time);
+            userImage = itemView.findViewById(R.id.imageUser);
         }
     }
     public void sortAsc(){

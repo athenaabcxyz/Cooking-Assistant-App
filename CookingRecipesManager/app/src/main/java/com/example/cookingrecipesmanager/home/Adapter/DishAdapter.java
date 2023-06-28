@@ -51,7 +51,12 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         holder.like.setText(String.valueOf(note.aggregateLikes)+ " like");
         holder.time.setText(String.valueOf(note.readyInMinutes)+" min");
         Picasso.get().load(note.image).into(holder.img);
-
+        if(note.userImage != null){
+            Picasso.get().load(note.image).into(holder.userImage);
+        }
+        else {
+            holder.userImage.setImageResource(R.drawable.ic_avatar_default);
+        }
         try {
             holder.iFavorites.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,7 +87,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, "HOME"))
                             .commitNow();
                 }
             });
@@ -107,6 +112,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         private TextView like;
         private TextView time;
         private ImageView img;
+        private ImageView userImage;
         private ImageView iFavorites;
         public DishViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -117,6 +123,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
             time = itemView.findViewById(R.id.time);
             img = itemView.findViewById(R.id.imageView);
             iFavorites = itemView.findViewById(R.id.imageButton);
+            userImage = itemView.findViewById(R.id.imageUser);
         }
     }
 
