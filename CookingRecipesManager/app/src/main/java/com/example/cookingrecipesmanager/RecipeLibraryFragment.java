@@ -172,16 +172,20 @@ public class RecipeLibraryFragment extends Fragment {
                                                                 recipe.userName = name;
                                                                 recipe.userImage = image;
                                                                 listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
+                                                                adapter.setData(listAll);
+                                                                adapter.notifyDataSetChanged();
                                                             }
                                                         });
                                                     }
                                                     else{
                                                         recipe.userName = "UserName";
-                                                        listAll.add(new CookingNote(recipe,recipe.id, recipe.title, "", "", recipe.image, new Float("5"), true));
+                                                        listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
+                                                        adapter.setData(listAll);
+                                                        adapter.notifyDataSetChanged();
                                                     }
 
                                                 }
-                                                adapter.setData(listAll);
+
                                             }
                                         });
                             }
