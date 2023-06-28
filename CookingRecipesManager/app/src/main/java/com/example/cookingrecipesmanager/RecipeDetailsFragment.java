@@ -514,11 +514,13 @@ public class RecipeDetailsFragment extends Fragment {
                 });
     }
     public void onBack() {
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.putExtra("DELETE_RECIPE", true);
-        intent.putExtra("BEFORE_SCREEN", beforeScreen);
-        startActivity(intent);
-        ((MainActivity)getContext()).finish();
+        if(getContext() != null){
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra("DELETE_RECIPE", true);
+            intent.putExtra("BEFORE_SCREEN", beforeScreen);
+            startActivity(intent);
+            ((MainActivity)getContext()).finish();
+        }
     }
 
 }
