@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
     Button btnChange;
 
     ProgressDialog progressDialog;
-
+    ImageView backIcon;
     float v= 0;
 
     @Override
@@ -43,18 +44,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        textToolbar = findViewById(R.id.textTollbar);
-        textToolbar.setText("Change password");
 
         progressDialog = new ProgressDialog(ChangePasswordActivity.this);
-
+        backIcon = findViewById(R.id.user_back);
         textCurrentPassword = findViewById(R.id.textPasswordCurrent);
         textNewPassword = findViewById(R.id.textPasswordNew);
         textConfirmPassword = findViewById(R.id.textPasswordConfirm);
@@ -135,7 +127,12 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
             }
         });
-
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         //____________________________________________________________________
     }
 

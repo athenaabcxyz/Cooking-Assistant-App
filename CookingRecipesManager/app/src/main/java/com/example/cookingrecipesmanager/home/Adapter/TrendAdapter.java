@@ -19,6 +19,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cookingrecipesmanager.Common.Constants;
 import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
@@ -111,7 +112,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, "HOME"))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
                 }
             });

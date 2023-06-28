@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cookingrecipesmanager.Common.Constants;
 import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
@@ -87,7 +88,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, "HOME"))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
                 }
             });

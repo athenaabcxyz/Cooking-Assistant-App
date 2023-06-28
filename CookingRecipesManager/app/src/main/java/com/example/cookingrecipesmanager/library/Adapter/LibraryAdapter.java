@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cookingrecipesmanager.Common.Constants;
 import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
@@ -95,7 +96,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe, "LIBRARY"))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe,  Constants.LIBRARY_NAME))
                             .commitNow();
                 }
             });

@@ -9,6 +9,7 @@ import androidx.fragment.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.cookingrecipesmanager.Common.Constants;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.ActivityMainBinding;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note,"HOME"))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
                 }
                 else if (backToHome != null){
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(recipeEdit != null){
                     if(recipeEdit.title != null){
-                        if(before_screen.equals("LIBRARY")){
+                        if(before_screen.equals( Constants.LIBRARY_NAME)){
                             binding.bottomNavigationView.setSelectedItemId(R.id.library);
                         }
                         else {
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new RecipeLibraryFragment(), "Library");
                 }
                 else if(isDeleteRecipe != null){
-                    if(before_screen.equals("LIBRARY")){
+                    if(before_screen.equals( Constants.LIBRARY_NAME)){
                         binding.bottomNavigationView.setSelectedItemId(R.id.library);
                         replaceFragment(new RecipeLibraryFragment(), "Library");
                     }
