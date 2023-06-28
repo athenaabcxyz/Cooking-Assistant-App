@@ -167,6 +167,7 @@ public class HomeFragment extends Fragment {
 //                intent.putExtra("recipes", (Serializable) listTrend);
                 intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
+                ((MainActivity)getContext()).finish();
             }
         });
         searchView.setOnSearchClickListener(new View.OnClickListener() {
@@ -185,6 +186,7 @@ public class HomeFragment extends Fragment {
                 intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
                 searchView.setIconified(true);
+                ((MainActivity)getContext()).finish();
             }
         });
         return rootView;
@@ -211,13 +213,15 @@ public class HomeFragment extends Fragment {
                                 @Override
                                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                                     String name = value.getString("name");
+                                    String image = value.getString("image");
                                     recipe.userName = name;
+                                    recipe.userImage = image;
                                     listRecipe.add(recipe);
                                 }
                             });
                         }
                         else{
-                            recipe.userName = "";
+                            recipe.userName = "UserName";
                             listRecipe.add(recipe);
                         }
                     }

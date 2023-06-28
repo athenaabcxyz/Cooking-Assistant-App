@@ -122,6 +122,7 @@ public class RecipeCreater extends AppCompatActivity {
     RecipeDetail recipe;
     Recipe paramRecipe;
     Recipe newRecipe;
+    String before_screen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,7 @@ public class RecipeCreater extends AppCompatActivity {
         if(extras != null){
             try{
                 paramRecipe = (Recipe) extras.getSerializable("RECIPE");
+                before_screen = (String) extras.getSerializable("BEFORE_SCREEN");
                 Toast.makeText(this, "Name recipe: "+ paramRecipe.title, Toast.LENGTH_SHORT).show();
             }
             catch (Exception e){
@@ -624,6 +626,7 @@ public class RecipeCreater extends AppCompatActivity {
             }
             Intent intent = new Intent(RecipeCreater.this, MainActivity.class);
             intent.putExtra("EDIT_RECIPE", newRecipe);
+            intent.putExtra("BEFORE_SCREEN", before_screen);
             startActivity(intent);
         }
         else{

@@ -19,6 +19,7 @@ import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cookingrecipesmanager.Common.Constants;
 import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
@@ -55,6 +56,12 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
         holder.like.setText(String.valueOf(note.aggregateLikes)+ " like");
         holder.time.setText(String.valueOf(note.readyInMinutes)+" min");
         Picasso.get().load(note.image).into(holder.img);
+        if(note.userImage != null){
+            Picasso.get().load(note.image).into(holder.userImage);
+        }
+        else {
+            holder.userImage.setImageResource(R.drawable.ic_avatar_default);
+        }
 //        holder.evaluate.setText(note.getEvaluate().toString());
         try {
             holder.icon_more.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +112,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                 @Override
                 public void onClick(View v) {
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
                 }
             });
@@ -130,6 +137,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
         private TextView like;
         private TextView time;
         private ImageView img;
+        private ImageView userImage;
         private ImageView icon_more;
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -140,6 +148,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
             time = itemView.findViewById(R.id.time);
             img = itemView.findViewById(R.id.imageView);
             icon_more = itemView.findViewById(R.id.imageButton);
+            userImage = itemView.findViewById(R.id.imageUser);
         }
     }
 }

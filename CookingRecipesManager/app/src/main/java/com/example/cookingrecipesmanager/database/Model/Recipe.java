@@ -21,5 +21,6 @@ public class Recipe implements Serializable {
     public String instructions;
     public String userID;
     public String userName;
+    public String userImage;
     public ArrayList<AnalyzedInstruction> analyzedInstructions;
 }

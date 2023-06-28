@@ -124,14 +124,17 @@ public class RecipeDetailsFragment extends Fragment {
 
     private Recipe mParamRecipe;
 
+    private String beforeScreen, idUserRecipe;
+
     public RecipeDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(Recipe recipe) {
+    public static RecipeDetailsFragment newInstance(Recipe recipe, String beforeScreen) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putSerializable("RECIPE", recipe);
+        args.putSerializable("BEFORE_SCREEN", beforeScreen);
         fragment.setArguments(args);
         return fragment;
     }
@@ -249,6 +252,7 @@ public class RecipeDetailsFragment extends Fragment {
 
         if (getArguments() != null) {
             mParamRecipe = (Recipe) getArguments().getSerializable("RECIPE");
+            beforeScreen = (String) getArguments().getSerializable("BEFORE_SCREEN");
         }
         TransitionInflater trans = TransitionInflater.from(requireContext());
         setEnterTransition(trans.inflateTransition(R.transition.slide_right));
@@ -259,6 +263,7 @@ public class RecipeDetailsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                onBack();
 //                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
             }
         });
@@ -455,7 +460,9 @@ public class RecipeDetailsFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), RecipeCreater.class);
                 intent.putExtra("RECIPE", (Serializable) mParamRecipe);
+                intent.putExtra("BEFORE_SCREEN", beforeScreen);
                 startActivity(intent);
+                ((MainActivity)getContext()).finish();
             }
         });
 
@@ -509,7 +516,9 @@ public class RecipeDetailsFragment extends Fragment {
     public void onBack() {
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.putExtra("DELETE_RECIPE", true);
+        intent.putExtra("BEFORE_SCREEN", beforeScreen);
         startActivity(intent);
+        ((MainActivity)getContext()).finish();
     }
 
 }
