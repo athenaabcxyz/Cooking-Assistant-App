@@ -2,6 +2,7 @@ package com.example.cookingrecipesmanager.home.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
+import com.example.cookingrecipesmanager.UserRecipe;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.squareup.picasso.Picasso;
 
@@ -114,6 +116,16 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                     ((MainActivity)context).getSupportFragmentManager().beginTransaction()
                             .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
+                }
+            });
+
+            holder.userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, UserRecipe.class);
+                    intent.putExtra("userID", note.userID);
+                    context.startActivity(intent);
+                    ((MainActivity)context).finish();
                 }
             });
         } catch (Exception e) {

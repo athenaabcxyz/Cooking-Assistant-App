@@ -46,6 +46,9 @@
             android:name=".ChangeUserActivity"
             android:exported="false" />
         <activity
+            android:name=".UserRecipe"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -275,7 +275,7 @@ public class RecipeDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
         Picasso.get().load(mParamRecipe.image).into( binding.appBarImage);
-        
+
         binding.content.authorName.setText("Foodista");
         binding.content.textDescription.setText(Jsoup.parse(mParamRecipe.summary).text());
 //        binding.appBarImage.setImageDrawable(getResources().getDrawable(R.drawable.img_recipe1, getContext().getTheme()));
@@ -325,15 +325,15 @@ public class RecipeDetailsFragment extends Fragment {
         db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-               User user = documentSnapshot.toObject(User.class);
-               assert user != null;
-               if(user.savedRecipes!=null) {
-                   for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
-                       if (user.savedRecipes.get(i) == mParamRecipe.id) {
-                           bSaved = true;
-                       }
-                   }
-               }
+                User user = documentSnapshot.toObject(User.class);
+                assert user != null;
+                if(user.savedRecipes!=null) {
+                    for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
+                        if (user.savedRecipes.get(i) == mParamRecipe.id) {
+                            bSaved = true;
+                        }
+                    }
+                }
                 UpdateSaveBtn(bSaved);
             }
         });
@@ -465,7 +465,9 @@ public class RecipeDetailsFragment extends Fragment {
                 ((MainActivity)getContext()).finish();
             }
         });
-
+        if(mParamRecipe.userID != null){
+            idUserRecipe = mParamRecipe.userID;
+        }
         return binding.getRoot();
     }
 
@@ -518,6 +520,7 @@ public class RecipeDetailsFragment extends Fragment {
             Intent intent = new Intent(getContext(), MainActivity.class);
             intent.putExtra("DELETE_RECIPE", true);
             intent.putExtra("BEFORE_SCREEN", beforeScreen);
+            intent.putExtra("ID_USER_RECIPE", idUserRecipe);
             startActivity(intent);
             ((MainActivity)getContext()).finish();
         }
