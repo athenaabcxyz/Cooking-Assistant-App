@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
         String fragInstance = getSupportFragmentManager().findFragmentById(R.id.layoutFragment).getClass().getSimpleName();
 
         if(fragInstance != null && fragInstance.equals("RecipeDetailsFragment")){
