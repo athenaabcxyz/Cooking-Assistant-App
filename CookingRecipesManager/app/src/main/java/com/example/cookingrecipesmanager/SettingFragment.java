@@ -30,7 +30,7 @@ public class SettingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private LinearLayout layoutChangePassword, layoutLogout;
+    private LinearLayout layoutChangePassword, layoutLogout, layoutUser;
     private FirebaseAuth firebaseAuth;
     public String fragmentType = "Setting";
     private ProgressDialog progressDialog;
@@ -74,6 +74,7 @@ public class SettingFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(getActivity());
         layoutChangePassword = view.findViewById(R.id.layoutChangePassword);
+        layoutUser = view.findViewById(R.id.layoutUser);
 
         layoutChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +113,12 @@ public class SettingFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
+            }
+        });
+        layoutUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(), ChangeUserActivity.class));
             }
         });
         return view;

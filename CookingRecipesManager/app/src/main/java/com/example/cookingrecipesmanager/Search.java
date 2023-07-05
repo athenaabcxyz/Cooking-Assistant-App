@@ -2,6 +2,7 @@ package com.example.cookingrecipesmanager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.MenuItem;
@@ -243,14 +244,16 @@ public class Search extends AppCompatActivity {
                                     @Override
                                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                                         String name = value.getString("name");
+                                        String image = value.getString("image");
                                         recipe.userName = name;
+                                        recipe.userImage = image;
                                         listRecipe.add(recipe);
 
                                     }
                                 });
                             }
                             else{
-                                recipe.userName = "";
+                                recipe.userName = "UserName";
                                 listRecipe.add(recipe);
                             }
                         }
@@ -268,6 +271,9 @@ public class Search extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(Search.this, MainActivity.class);
+        intent.putExtra("BACK_HOME", true);
+        startActivity(intent);
     }
 
 

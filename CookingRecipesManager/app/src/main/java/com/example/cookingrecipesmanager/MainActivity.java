@@ -9,6 +9,7 @@ import androidx.fragment.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.cookingrecipesmanager.Common.Constants;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.databinding.ActivityMainBinding;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
@@ -32,34 +33,77 @@ public class MainActivity extends AppCompatActivity {
             }
             else{
                 Recipe note = (Recipe) getIntent().getSerializableExtra("RECIPE");
+                Boolean backToHome = (Boolean) getIntent().getSerializableExtra("BACK_HOME");
+                Recipe recipeEdit = (Recipe) getIntent().getSerializableExtra("EDIT_RECIPE");
+                Recipe recipeUser = (Recipe) getIntent().getSerializableExtra("USER_RECIPE");
+                Boolean backToUser = (Boolean) getIntent().getSerializableExtra("BACK_USER");
                 Boolean isCreateRecipe = (Boolean) getIntent().getSerializableExtra("CREATE_RECIPE");
                 Boolean isDeleteRecipe = (Boolean) getIntent().getSerializableExtra("DELETE_RECIPE");
-                recipeEdit = (Recipe) getIntent().getSerializableExtra("EDIT_RECIPE");
+                String before_screen = (String) getIntent().getSerializableExtra("BEFORE_SCREEN");
+                String id_user_recipe = (String) getIntent().getSerializableExtra("ID_USER_RECIPE");
                 if (note != null)
                 {
+                    binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
                     getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note))
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
+                }
+                else if (backToHome != null){
+                    binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
+                    replaceFragment(new HomeFragment(), "Home");
+                }
+                else if(recipeUser != null){
+                    binding.bottomNavigationView.setSelectedItemId(R.id.user);
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(recipeUser, Constants.USER_NAME))
+                            .commitNow();
+
+                }
+                else if (backToUser != null){
+                    binding.bottomNavigationView.setSelectedItemId(R.id.user);
+                    replaceFragment(new UserFragment(),"User");
+                }
+                else if(recipeEdit != null){
+                    if(recipeEdit.title != null){
+                        if(before_screen.equals( Constants.LIBRARY_NAME)){
+                            binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                        }
+                        else if (before_screen.equals(Constants.USER_NAME)){
+                            binding.bottomNavigationView.setSelectedItemId(R.id.user);
+                        }
+                        else {
+                            binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
+                        }
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(recipeEdit,before_screen))
+                                .commitNow();
+
+                    }
                 }
                 else if(isCreateRecipe != null){
                     binding.bottomNavigationView.setSelectedItemId(R.id.library);
                     replaceFragment(new RecipeLibraryFragment(), "Library");
                 }
-                else if(recipeEdit != null){
-                    if(recipeEdit.title != null){
-                        binding.bottomNavigationView.setSelectedItemId(R.id.library);
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(recipeEdit))
-                                .commitNow();
-                    }
-                }
                 else if(isDeleteRecipe != null){
-                    binding.bottomNavigationView.setSelectedItemId(R.id.library);
-                    replaceFragment(new RecipeLibraryFragment(), "Library");
+                    if(before_screen.equals( Constants.LIBRARY_NAME)){
+                        binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                        replaceFragment(new RecipeLibraryFragment(), "Library");
+                    }
+                    else if (before_screen.equals(Constants.USER_NAME)){
+                        binding.bottomNavigationView.setSelectedItemId(R.id.user);
+                        Intent intent = new Intent(this, UserRecipe.class);
+                        intent.putExtra("userID", id_user_recipe);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else {
+                        binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
+                        replaceFragment(new HomeFragment(), "Home");
+                    }
                 }
                 else {
                     binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
-                    replaceFragment(new HomeFragment(),"Home");
+                    replaceFragment(new HomeFragment(), "Home");
                 }
             }
         }
@@ -80,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.library:
                     replaceFragment(new RecipeLibraryFragment(), "Library");
+                    break;
+                case R.id.user:
+                    replaceFragment(new UserFragment(),"User");
                     break;
                 case R.id.setting:
                     replaceFragment(new SettingFragment(), "Setting");
@@ -108,11 +155,13 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager().findFragmentById(R.id.layoutFragment)).commitNow();
 
             if(getSupportFragmentManager().findFragmentById(R.id.layoutFragment) == null){
-                if(recipeEdit != null){
-                    binding.bottomNavigationView.setSelectedItemId(R.id.library);
+                if(binding.bottomNavigationView.getSelectedItemId() == R.id.library){
                     replaceFragment(new RecipeLibraryFragment(), "Library");
                 }
-                else {
+                else if(binding.bottomNavigationView.getSelectedItemId() == R.id.user){
+                    finish();
+                }
+                else{
                     binding.bottomNavigationView.setSelectedItemId(R.id.homepage);
                     replaceFragment(new HomeFragment(), "Home");
                 }

@@ -133,14 +133,17 @@ public class RecipeDetailsFragment extends Fragment {
 
     State mState = new State();
 
+    private String beforeScreen, idUserRecipe;
+
     public RecipeDetailsFragment() {
         // Required empty public constructor
     }
 
-    public static RecipeDetailsFragment newInstance(Recipe recipe) {
+    public static RecipeDetailsFragment newInstance(Recipe recipe, String beforeScreen) {
         RecipeDetailsFragment fragment = new RecipeDetailsFragment();
         Bundle args = new Bundle();
         args.putSerializable("RECIPE", recipe);
+        args.putSerializable("BEFORE_SCREEN", beforeScreen);
         fragment.setArguments(args);
         return fragment;
     }
@@ -264,6 +267,7 @@ public class RecipeDetailsFragment extends Fragment {
 
         if (getArguments() != null) {
             mParamRecipe = (Recipe) getArguments().getSerializable("RECIPE");
+            beforeScreen = (String) getArguments().getSerializable("BEFORE_SCREEN");
         }
         TransitionInflater trans = TransitionInflater.from(requireContext());
         setEnterTransition(trans.inflateTransition(R.transition.slide_right));
@@ -274,6 +278,7 @@ public class RecipeDetailsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                onBack();
 //                requireActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
             }
         });
@@ -285,7 +290,7 @@ public class RecipeDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
         Picasso.get().load(mParamRecipe.image).into( binding.appBarImage);
-        
+
         binding.content.authorName.setText("Foodista");
         binding.content.textDescription.setText(Jsoup.parse(mParamRecipe.summary).text());
 //        binding.appBarImage.setImageDrawable(getResources().getDrawable(R.drawable.img_recipe1, getContext().getTheme()));
@@ -355,15 +360,15 @@ public class RecipeDetailsFragment extends Fragment {
         db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-               User user = documentSnapshot.toObject(User.class);
-               assert user != null;
-               if(user.savedRecipes!=null) {
-                   for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
-                       if (user.savedRecipes.get(i) == mParamRecipe.id) {
-                           bSaved = true;
-                       }
-                   }
-               }
+                User user = documentSnapshot.toObject(User.class);
+                assert user != null;
+                if(user.savedRecipes!=null) {
+                    for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
+                        if (user.savedRecipes.get(i) == mParamRecipe.id) {
+                            bSaved = true;
+                        }
+                    }
+                }
                 UpdateSaveBtn(bSaved);
             }
         });
@@ -490,9 +495,16 @@ public class RecipeDetailsFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), RecipeCreater.class);
                 intent.putExtra("RECIPE", (Serializable) mParamRecipe);
+                intent.putExtra("BEFORE_SCREEN", beforeScreen);
                 startActivity(intent);
+                ((MainActivity)getContext()).finish();
             }
         });
+
+        if(mParamRecipe.userID != null){
+            idUserRecipe = mParamRecipe.userID;
+        }
+
         UpdateDescription();
         View.OnClickListener listenerDescToggle = (new View.OnClickListener() {
             @Override
@@ -556,9 +568,14 @@ public class RecipeDetailsFragment extends Fragment {
                 });
     }
     public void onBack() {
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.putExtra("DELETE_RECIPE", true);
-        startActivity(intent);
+        if(getContext() != null){
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra("DELETE_RECIPE", true);
+            intent.putExtra("BEFORE_SCREEN", beforeScreen);
+            intent.putExtra("ID_USER_RECIPE", idUserRecipe);
+            startActivity(intent);
+            ((MainActivity)getContext()).finish();
+        }
     }
 
 }
