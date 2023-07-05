@@ -435,18 +435,18 @@ public class RecipeDetailsFragment extends Fragment {
         });
 
         binding.viewStepRecipe.hide();
-        binding.scrollContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY != 0)
-                {
-                    binding.viewStepRecipe.show();
-                }
-                else {
-                    binding.viewStepRecipe.hide();
-                }
-            }
-        });
+//        binding.scrollContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if (scrollY != 0)
+//                {
+//                    binding.viewStepRecipe.show();
+//                }
+//                else {
+//                    binding.viewStepRecipe.hide();
+//                }
+//            }
+//        });
 
         binding.viewStepRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
