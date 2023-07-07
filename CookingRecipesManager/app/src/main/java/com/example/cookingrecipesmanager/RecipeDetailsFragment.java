@@ -155,6 +155,62 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.textDescFull.setVisibility(mState.descriptionExpand ? View.VISIBLE : View.GONE);
     }
 
+    protected void InitLikeBtn()
+    {
+        bLiked = false;
+        db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                assert user != null;
+                if(user.likedRecipes!=null) {
+                    user.likedRecipes.forEach(new Consumer<Integer>() {
+                        @Override
+                        public void accept(Integer integer) {
+                            if (integer == mParamRecipe.id)
+                            {
+                                bLiked = true;
+                            }
+                        }
+                    });
+                }
+                UpdateLikeBtn();
+            }
+        });
+
+        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("Users").document(uid).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                    User user = snapshot.toObject(User.class);
+                                    assert user != null;
+                                    boolean bRemovingItem = false;
+                                    // check if current item is in saved list, if so then remove it and set state
+                                    if(user.likedRecipes!=null) {
+                                        for (int i = 0; i <= user.likedRecipes.size()-1; i++) {
+                                            if (user.likedRecipes.get(i) == mParamRecipe.id) {
+                                                db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
+                                                bLiked = false;
+                                                bRemovingItem = true;
+                                            }
+                                        }
+                                    }
+                                    // current item not saved, adding it
+                                    if (!bRemovingItem) {
+                                        db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
+                                        bLiked = true;
+                                    }
+
+                                UpdateLikeBtn();
+                            }
+                        });
+            }
+        });
+    }
+
     protected void UpdateLikeBtn()
     {
         int color = (bLiked ? 0xffff8080 : 0xffaaaaaa);
@@ -410,15 +466,7 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
 
-        UpdateLikeBtn();
-        // TODO: create list of liked items for user
-        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bLiked = !bLiked;
-                UpdateLikeBtn();
-            }
-        });
+        InitLikeBtn();
 
         InitEditButtons();
 
