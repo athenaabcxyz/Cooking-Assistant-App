@@ -121,5 +121,16 @@ public class CommentsManager
             });
         }
     }
+
+    public void removeComment(Comments comment)
+    {
+        commentSection.commentList.remove(comment);
+        collectionRef.document(mRecipeId).set(commentSection).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                fetchComments();
+            }
+        });
+    }
 }
 

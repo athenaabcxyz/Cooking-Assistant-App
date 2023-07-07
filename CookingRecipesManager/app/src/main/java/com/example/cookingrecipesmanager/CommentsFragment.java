@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,12 +62,14 @@ public class CommentsFragment extends Fragment implements CommentsManager.IListe
         public TextView username;
         public TextView text;
         public ImageView img;
+        public ImageButton btnDelete;
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
             root = itemView;
             username = itemView.findViewById(R.id.username);
             text = itemView.findViewById(R.id.text_comment);
             img = itemView.findViewById(R.id.user_image);
+            btnDelete = itemView.findViewById(R.id.btn_deleteComment);
         }
     }
 
@@ -116,6 +119,7 @@ public class CommentsFragment extends Fragment implements CommentsManager.IListe
             Comments comment = data.get(position);
             holder.username.setText("Anon");
             holder.img.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.user));
+            holder.btnDelete.setVisibility(View.GONE);
             db.collection("Users").whereEqualTo("uid", comment.userId).get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
@@ -123,6 +127,16 @@ public class CommentsFragment extends Fragment implements CommentsManager.IListe
                             if (queryDocumentSnapshots.isEmpty()) return;
                             User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
                             holder.username.setText(user.name);
+                            if (comment.userId.equals(user.uid))
+                            {
+                                holder.btnDelete.setVisibility(View.VISIBLE);
+                                holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mComments.removeComment(comment);
+                                    }
+                                });
+                            }
                             if (user.image != null && !user.image.isEmpty()) {
                                 Picasso.get().load(user.image).into(holder.img);
                             }
@@ -221,6 +235,7 @@ public class CommentsFragment extends Fragment implements CommentsManager.IListe
             @Override
             public void onClick(View v) {
                 if (mComments == null) return;
+                if (binding.editTextComment.getText().toString().isEmpty()) return;
 
                 String uid = FirebaseAuth.getInstance().getUid();
 
