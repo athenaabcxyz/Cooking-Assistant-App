@@ -9,11 +9,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CommentsManager
@@ -109,11 +111,11 @@ public class CommentsManager
     public void addComment(String username, String text)
     {
         Comments comment = new Comments();
+        comment.commentId = UUID.randomUUID().toString();
         comment.userId = username;
         comment.comment = text;
         if (commentSection != null) {
-            commentSection.commentList.add(comment);
-            collectionRef.document(mRecipeId).set(commentSection).addOnSuccessListener(new OnSuccessListener<Void>() {
+            collectionRef.document(mRecipeId).update("commentList", FieldValue.arrayUnion(comment)).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
                     fetchComments();
@@ -124,8 +126,7 @@ public class CommentsManager
 
     public void removeComment(Comments comment)
     {
-        commentSection.commentList.remove(comment);
-        collectionRef.document(mRecipeId).set(commentSection).addOnSuccessListener(new OnSuccessListener<Void>() {
+        collectionRef.document(mRecipeId).update("commentList", FieldValue.arrayRemove(comment)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 fetchComments();
