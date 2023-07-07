@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -514,9 +515,10 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
         binding.content.textDescFull.setOnClickListener(listenerDescToggle);
+        binding.content.textDescFull.setMovementMethod(LinkMovementMethod.getInstance());
         binding.content.textDescription.setOnClickListener(listenerDescToggle);
 
-        getChildFragmentManager().beginTransaction().add(R.id.fragment_comments, CommentsFragment.newInstance()).commitNow();
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_comments, CommentsFragment.newInstance(String.valueOf(mParamRecipe.id))).commitNow();
 
         return binding.getRoot();
     }

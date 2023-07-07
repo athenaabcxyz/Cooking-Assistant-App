@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,55 +16,45 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.cookingrecipesmanager.database.Model.CommentSection;
+import com.example.cookingrecipesmanager.database.Model.Comments;
+import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.databinding.FragmentCommentsBinding;
+import com.example.cookingrecipesmanager.details.CommentsManager;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CommentsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CommentsFragment extends Fragment {
+public class CommentsFragment extends Fragment implements CommentsManager.IListener {
 
     private FragmentCommentsBinding binding;
+    private String mRecipeId;
 
-    public class CommentsManager
-    {
-        public class Comment implements Serializable
-        {
-            public String username;
-            public String text;
-            public Comment(String username, String text)
-            {
-                this.username = username;
-                this.text = text;
-            }
-        }
-        protected ArrayList<Comment> comments;
-
-        public CommentsManager() {
-            comments = new ArrayList<>(Arrays.asList(new Comment("john", "aaaaaaaa"), new Comment("doe", "aaaaaaaaa")));
-        }
-
-        public void fetchComments()
-        {
-            //TODO
-//            comments = ;
-        }
-
-        public ArrayList<Comment> getComments() {
-            return comments;
-        }
-
-        public void addComment(String username, String text)
-        {
-            comments.add(new Comment(username, text));
-        }
-    }
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
         public View root;
@@ -80,15 +71,36 @@ public class CommentsFragment extends Fragment {
     }
 
     public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
-        protected List<CommentsManager.Comment> data;
+        protected List<Comments> data;
+        protected Map<String, User> userMap = new HashMap<>();
 
-        public CommentAdapter(List<CommentsManager.Comment> data)
+        public CommentAdapter(List<Comments> data)
         {
             this.data = data;
         }
 
-        public void setData(List<CommentsManager.Comment> data) {
+        public void setData(List<Comments> data) {
             this.data = data;
+//            ArrayList<String> uids = new ArrayList<>();
+//            data.forEach(new Consumer<Comments>() {
+//                @Override
+//                public void accept(Comments comment) {
+//                    uids.add(comment.userId);
+//                }
+//            });
+//            FirebaseFirestore.getInstance().collection("Users").whereIn("uid", uids).get()
+//                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                    queryDocumentSnapshots.forEach(new Consumer<QueryDocumentSnapshot>() {
+//                                        @Override
+//                                        public void accept(QueryDocumentSnapshot queryDocumentSnapshot) {
+//                                            User user = queryDocumentSnapshot.toObject(User.class);
+//                                            userMap.put(user.uid, user);
+//                                        }
+//                                    });
+//                                }
+//                            });
             notifyDataSetChanged();
         }
 
@@ -101,10 +113,22 @@ public class CommentsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-            CommentsManager.Comment comment = data.get(position);
-            holder.username.setText(comment.username);
-            holder.text.setText(comment.text);
-            holder.img.setImageDrawable(requireContext().getDrawable(R.drawable.img_recipe1));
+            Comments comment = data.get(position);
+            holder.username.setText("Anon");
+            holder.img.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.user));
+            db.collection("Users").whereEqualTo("uid", comment.userId).get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (queryDocumentSnapshots.isEmpty()) return;
+                            User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
+                            holder.username.setText(user.name);
+                            if (user.image != null && !user.image.isEmpty()) {
+                                Picasso.get().load(user.image).into(holder.img);
+                            }
+                        }
+                    });
+            holder.text.setText(comment.comment);
         }
 
         @Override
@@ -113,15 +137,16 @@ public class CommentsFragment extends Fragment {
         }
     }
 
-    CommentsManager comments = new CommentsManager();
+    CommentsManager mComments;
 
     public CommentsFragment() {
         // Required empty public constructor
     }
 
-    public static CommentsFragment newInstance() {
+    public static CommentsFragment newInstance(String recipeId) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle args = new Bundle();
+        args.putString("RECIPE_ID", recipeId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -151,11 +176,19 @@ public class CommentsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onUpdateComments(CommentsManager commentsManager) {
+        ((CommentAdapter)binding.comments.getAdapter()).setData(commentsManager.getComments());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mRecipeId = getArguments().getString("RECIPE_ID");
+
+            mComments = new CommentsManager(mRecipeId);
+            mComments.addListener(this);
         }
     }
 
@@ -164,7 +197,9 @@ public class CommentsFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentCommentsBinding.inflate(inflater, container, false);
         binding.comments.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.comments.setAdapter(new CommentAdapter(comments.getComments()));
+        if (mComments != null) {
+            binding.comments.setAdapter(new CommentAdapter(mComments.getComments()));
+        }
 
         binding.btnAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,8 +220,12 @@ public class CommentsFragment extends Fragment {
         binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                comments.addComment("Anon", String.valueOf(binding.editTextComment.getText()));
-                ((CommentAdapter)binding.comments.getAdapter()).setData(comments.getComments());
+                if (mComments == null) return;
+
+                String uid = FirebaseAuth.getInstance().getUid();
+
+                mComments.addComment(uid, String.valueOf(binding.editTextComment.getText()));
+                ((CommentAdapter)binding.comments.getAdapter()).setData(mComments.getComments());
                 mState.submitFormVisible = false;
                 updateSubmitForm();
             }
