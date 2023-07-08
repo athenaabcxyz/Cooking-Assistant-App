@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:animateLayoutChanges="true">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -240,16 +241,19 @@
         app:contentPadding="8dp">
 
         <LinearLayout
+            android:id="@+id/cardChild_desc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:animateLayoutChanges="true">
 
             <TextView
                 android:id="@+id/author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Author"
+
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
                 android:textStyle="bold" />
 
@@ -264,13 +268,57 @@
                 android:layout_width="match_parent"
                 android:layout_height="12dp" />
 
-            <TextView
-                android:id="@+id/text_description"
+            <FrameLayout
+                android:id="@+id/container_textDescShort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recipe Description"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+                android:orientation="vertical">
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="80sp"
+                    android:nestedScrollingEnabled="false"
+                    android:requiresFadingEdge="vertical"
+                    android:fadingEdgeLength="128dp"
+                    android:fadingEdge="vertical"
+                    android:scrollbars="none">
+
+                    <TextView
+                        android:id="@+id/text_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Recipe Description\naaaaa\naaaaa\naaaaa\naaaaa"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
+                </ScrollView>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom"
+                    app:srcCompat="@drawable/baseline_keyboard_arrow_down_24"
+                    app:tint="?android:colorForeground"
+                    android:alpha="0.75"></ImageView>
+
+            </FrameLayout>
+            <TextView
+                android:id="@+id/text_descFull"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                android:text="Description\naaaaa\naaaaa\naaaaa\naaaaa"
+                />
         </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:visibility="gone"
+            android:id="@+id/btn_descExpd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:text="Show more/less"
+            android:background="@drawable/alpha_gradient_bottomtop"
+            android:minHeight="0dp"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            app:backgroundTint="#ffffffff"
+            android:textColor="#505050"/>
     </androidx.cardview.widget.CardView>
 
     <Space
@@ -287,9 +335,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:paddingHorizontal="8dp"
+            android:paddingTop="8dp"
+            android:animateLayoutChanges="true">
 
             <TextView
                 android:id="@+id/text_ingredients"
@@ -306,8 +356,18 @@
                 android:id="@+id/list_ingredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false"
+                />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_ingredientsExpand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expand/Collapse"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:minHeight="44dip"
+                android:minWidth="0dp"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -316,28 +376,47 @@
         android:layout_width="match_parent"
         android:layout_height="8dp" />
 
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:visibility="gone"-->
+<!--        app:cardBackgroundColor="#0c000000"-->
+<!--        app:cardCornerRadius="16dp"-->
+<!--        app:cardElevation="0dp"-->
+<!--        app:contentPadding="8dp">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:padding="8dp">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/text_nutrition"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Nutrition Facts"-->
+<!--                android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />-->
+<!--        </LinearLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:cardBackgroundColor="#0c000000"
+        app:cardBackgroundColor="#0f888888"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:contentPadding="8dp">
-
-        <LinearLayout
+        app:contentPadding="8dp"
+        >
+        <FrameLayout
+            android:id="@+id/fragment_comments"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/text_nutrition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nutrition Facts"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            />
     </androidx.cardview.widget.CardView>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
 </LinearLayout>

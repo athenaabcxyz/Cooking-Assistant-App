@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.TransitionInflater;
 
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,12 +92,12 @@ public class RecipeDetailsFragment extends Fragment {
 
     public class IngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder>
     {
-        private ArrayList<ExtendedIngredient> mData;
+        private List<ExtendedIngredient> mData;
 
-        public IngredientAdapter(ArrayList<ExtendedIngredient> data)
+        public IngredientAdapter(List<ExtendedIngredient> data)
         {
             mData = data;
-            mData.trimToSize();
+//            mData.trimToSize();
         }
 
         @NonNull
@@ -124,6 +127,13 @@ public class RecipeDetailsFragment extends Fragment {
 
     private Recipe mParamRecipe;
 
+    protected class State implements Serializable {
+        public boolean ingredientsExpanded = false;
+        public boolean descriptionExpand = false;
+    };
+
+    State mState = new State();
+
     private String beforeScreen, idUserRecipe;
 
     public RecipeDetailsFragment() {
@@ -137,6 +147,68 @@ public class RecipeDetailsFragment extends Fragment {
         args.putSerializable("BEFORE_SCREEN", beforeScreen);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    protected void UpdateDescription()
+    {
+        binding.content.containerTextDescShort.setVisibility(mState.descriptionExpand ? View.GONE : View.VISIBLE);
+        binding.content.textDescFull.setVisibility(mState.descriptionExpand ? View.VISIBLE : View.GONE);
+    }
+
+    protected void InitLikeBtn()
+    {
+        bLiked = false;
+        db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                assert user != null;
+                if(user.likedRecipes!=null) {
+                    user.likedRecipes.forEach(new Consumer<Integer>() {
+                        @Override
+                        public void accept(Integer integer) {
+                            if (integer == mParamRecipe.id)
+                            {
+                                bLiked = true;
+                            }
+                        }
+                    });
+                }
+                UpdateLikeBtn();
+            }
+        });
+
+        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("Users").document(uid).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot snapshot) {
+                                    User user = snapshot.toObject(User.class);
+                                    assert user != null;
+                                    boolean bRemovingItem = false;
+                                    // check if current item is in saved list, if so then remove it and set state
+                                    if(user.likedRecipes!=null) {
+                                        for (int i = 0; i <= user.likedRecipes.size()-1; i++) {
+                                            if (user.likedRecipes.get(i) == mParamRecipe.id) {
+                                                db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
+                                                bLiked = false;
+                                                bRemovingItem = true;
+                                            }
+                                        }
+                                    }
+                                    // current item not saved, adding it
+                                    if (!bRemovingItem) {
+                                        db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
+                                        bLiked = true;
+                                    }
+
+                                UpdateLikeBtn();
+                            }
+                        });
+            }
+        });
     }
 
     protected void UpdateLikeBtn()
@@ -294,6 +366,7 @@ public class RecipeDetailsFragment extends Fragment {
             binding.content.authorName.setText(requireContext().getResources().getString(R.string.username_anon));
         }
         binding.content.textDescription.setText(Html.fromHtml(mParamRecipe.summary, 0));
+        binding.content.textDescFull.setText(Html.fromHtml(mParamRecipe.summary, 0));
 
         DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
         df.setMaximumFractionDigits(2);
@@ -319,7 +392,26 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.listTags.setAdapter(adapter);
 
         binding.content.listIngredient.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients));
+        binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients.subList(0, 3)));
+
+        binding.content.btnIngredientsExpand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mState.ingredientsExpanded = !mState.ingredientsExpanded;
+                if (mState.ingredientsExpanded)
+                {
+                    binding.content.btnIngredientsExpand.setText("Collapse");
+                    binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients));
+                }
+                else
+                {
+                    binding.content.btnIngredientsExpand.setText("Expand");
+                    binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients.subList(0, 3)));
+                }
+            }
+        });
+        binding.content.btnIngredientsExpand.setVisibility(mParamRecipe.extendedIngredients.size() > 3 ? View.VISIBLE : View.GONE);
+        binding.content.btnIngredientsExpand.setText("Expand");
 
         bSaved = false;
         db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -374,15 +466,7 @@ public class RecipeDetailsFragment extends Fragment {
             }
         });
 
-        UpdateLikeBtn();
-        // TODO: create list of liked items for user
-        binding.content.btnLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bLiked = !bLiked;
-                UpdateLikeBtn();
-            }
-        });
+        InitLikeBtn();
 
         InitEditButtons();
 
@@ -405,18 +489,18 @@ public class RecipeDetailsFragment extends Fragment {
         });
 
         binding.viewStepRecipe.hide();
-        binding.scrollContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY != 0)
-                {
-                    binding.viewStepRecipe.show();
-                }
-                else {
-                    binding.viewStepRecipe.hide();
-                }
-            }
-        });
+//        binding.scrollContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                if (scrollY != 0)
+//                {
+//                    binding.viewStepRecipe.show();
+//                }
+//                else {
+//                    binding.viewStepRecipe.hide();
+//                }
+//            }
+//        });
 
         binding.viewStepRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -465,15 +549,33 @@ public class RecipeDetailsFragment extends Fragment {
                 ((MainActivity)getContext()).finish();
             }
         });
+
         if(mParamRecipe.userID != null){
             idUserRecipe = mParamRecipe.userID;
         }
+
+        UpdateDescription();
+        View.OnClickListener listenerDescToggle = (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mState.descriptionExpand = !mState.descriptionExpand;
+                UpdateDescription();
+            }
+        });
+        binding.content.textDescFull.setOnClickListener(listenerDescToggle);
+        binding.content.textDescFull.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.content.textDescription.setOnClickListener(listenerDescToggle);
+
+        getChildFragmentManager().beginTransaction().add(R.id.fragment_comments, CommentsFragment.newInstance(String.valueOf(mParamRecipe.id))).commitNow();
+
         return binding.getRoot();
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
     public void DeleteRecipe(){
         db.collection("recipes")

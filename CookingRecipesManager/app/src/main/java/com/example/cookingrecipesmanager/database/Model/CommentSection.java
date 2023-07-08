@@ -5,5 +5,5 @@ import java.util.ArrayList;
 
 public class CommentSection implements Serializable {
     public String recipeId;
-    ArrayList<Comments> commentList;
+    public ArrayList<Comments> commentList;
 }
