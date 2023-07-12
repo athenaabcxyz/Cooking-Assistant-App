@@ -126,8 +126,10 @@ public class CommentsFragment extends Fragment implements CommentsManager.IListe
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             if (queryDocumentSnapshots.isEmpty()) return;
                             User user = queryDocumentSnapshots.getDocuments().get(0).toObject(User.class);
+                            String uid = FirebaseAuth.getInstance().getUid();
+                            assert user != null;
                             holder.username.setText(user.name);
-                            if (comment.userId.equals(user.uid))
+                            if (comment.userId.equals(uid))
                             {
                                 holder.btnDelete.setVisibility(View.VISIBLE);
                                 holder.btnDelete.setOnClickListener(new View.OnClickListener() {

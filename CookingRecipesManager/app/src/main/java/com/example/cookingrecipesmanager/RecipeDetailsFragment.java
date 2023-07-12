@@ -195,6 +195,22 @@ public class RecipeDetailsFragment extends Fragment {
                                                 db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
                                                 bLiked = false;
                                                 bRemovingItem = true;
+                                                db.collection("recipes").whereEqualTo("id",mParamRecipe.id).get()
+                                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                                if (queryDocumentSnapshots.isEmpty()) return;
+                                                                String id = queryDocumentSnapshots.getDocuments().get(0).getId();
+                                                                db.collection("recipes").document(id).update(
+                                                                        "aggregateLikes", FieldValue.increment(-1)
+                                                                ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void unused) {
+                                                                        UpdateLikeBtn();
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
                                             }
                                         }
                                     }
@@ -202,9 +218,24 @@ public class RecipeDetailsFragment extends Fragment {
                                     if (!bRemovingItem) {
                                         db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
                                         bLiked = true;
+                                        db.collection("recipes").whereEqualTo("id",mParamRecipe.id).get()
+                                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                        if (queryDocumentSnapshots.isEmpty()) return;
+                                                        String id = queryDocumentSnapshots.getDocuments().get(0).getId();
+                                                        db.collection("recipes").document(id).update(
+                                                                "aggregateLikes", FieldValue.increment(1)
+                                                        ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void unused) {
+                                                                UpdateLikeBtn();
+                                                            }
+                                                        });
+                                                    }
+                                                });
                                     }
-
-                                UpdateLikeBtn();
+                                    
                             }
                         });
             }
