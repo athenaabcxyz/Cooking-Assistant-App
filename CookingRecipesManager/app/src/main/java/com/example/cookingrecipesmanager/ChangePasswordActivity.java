@@ -37,7 +37,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     ProgressDialog progressDialog;
     ImageView backIcon;
-    float v= 0;
+    float v = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,56 +65,49 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 String newPassword = textNewPassword.getEditText().getText().toString().trim();
                 String confirmPassword = textConfirmPassword.getEditText().getText().toString().trim();
 
-                if (TextUtils.isEmpty(currentPassword))
-                {
+                if (TextUtils.isEmpty(currentPassword)) {
                     textCurrentPassword.setError("Please enter your current password");
                     textCurrentPassword.setFocusable(true);
                     textCurrentPassword.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (currentPassword.length() < 6)
-                {
+                if (currentPassword.length() < 6) {
                     textCurrentPassword.setError("Password length at least 6 characters");
                     textCurrentPassword.setFocusable(true);
                     textCurrentPassword.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (TextUtils.isEmpty(newPassword))
-                {
+                if (TextUtils.isEmpty(newPassword)) {
                     textNewPassword.setError("Please enter your new password");
                     textNewPassword.setFocusable(true);
                     textNewPassword.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (newPassword.length() < 6)
-                {
+                if (newPassword.length() < 6) {
                     textNewPassword.setError("Password length at least 6 characters");
                     textNewPassword.setFocusable(true);
                     textNewPassword.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (TextUtils.isEmpty(confirmPassword))
-                {
+                if (TextUtils.isEmpty(confirmPassword)) {
                     textConfirmPassword.setError("Please enter your confirm password");
                     textConfirmPassword.setFocusable(true);
                     textConfirmPassword.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (newPassword.equals(currentPassword))
-                {
+                if (newPassword.equals(currentPassword)) {
                     textNewPassword.setError("New password must be different from current password");
                     textNewPassword.setFocusable(true);
                     textNewPassword.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (!newPassword.equals(confirmPassword))
-                {
+                if (!newPassword.equals(confirmPassword)) {
                     textConfirmPassword.setError("Confirm password does not match");
                     textConfirmPassword.setFocusable(true);
                     textConfirmPassword.setErrorIconDrawable(null);
@@ -123,7 +116,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
                 progressDialog.setMessage("Changing...");
                 progressDialog.show();
-                updatePassword(currentPassword,newPassword);
+                updatePassword(currentPassword, newPassword);
 
             }
         });
@@ -138,7 +131,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
     private void updatePassword(String currentPassword, String newPassword) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        AuthCredential authCredential = EmailAuthProvider.getCredential(user.getEmail(),currentPassword);
+        AuthCredential authCredential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
         user.reauthenticate(authCredential)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -150,7 +143,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                         progressDialog.dismiss();
                                         //Toast.makeText(ChangePasswordActivity.this,"Password Updated...",Toast.LENGTH_SHORT).show();
                                         //Hiện bảng báo thành công
-                                        View view = LayoutInflater.from(ChangePasswordActivity.this).inflate(R.layout.dialog_success,null);
+                                        View view = LayoutInflater.from(ChangePasswordActivity.this).inflate(R.layout.dialog_success, null);
 
                                         TextView OK = view.findViewById(R.id.OK);
                                         TextView description = view.findViewById(R.id.textDesCription);
@@ -182,7 +175,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                                     public void onFailure(@NonNull Exception e) {
                                         progressDialog.dismiss();
                                         //Toast.makeText(ChangePasswordActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
-                                        View view = LayoutInflater.from(ChangePasswordActivity.this).inflate(R.layout.dialog_fail,null);
+                                        View view = LayoutInflater.from(ChangePasswordActivity.this).inflate(R.layout.dialog_fail, null);
 
                                         TextView OK = view.findViewById(R.id.OK);
                                         TextView description = view.findViewById(R.id.textDesCription);
@@ -211,7 +204,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
                         //Toast.makeText(ChangePasswordActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
-                        View view = LayoutInflater.from(ChangePasswordActivity.this).inflate(R.layout.dialog_fail,null);
+                        View view = LayoutInflater.from(ChangePasswordActivity.this).inflate(R.layout.dialog_fail, null);
 
                         TextView OK = view.findViewById(R.id.OK);
                         TextView description = view.findViewById(R.id.textDesCription);
@@ -244,20 +237,21 @@ public class ChangePasswordActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
     @Override
     public void onResume() {
         super.onResume();
         CheckInternet();
     }
+
     private void CheckInternet() {
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-    protected void unregistorNetwork(){
+    protected void unregistorNetwork() {
         try {
             unregisterReceiver(broadcastReceiver);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

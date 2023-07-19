@@ -26,10 +26,12 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LibraryViewHolder> {
     private Context context;
     private List<User> userList;
-    public void setData( List<User> list){
+
+    public void setData(List<User> list) {
         this.userList = list;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public LibraryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,24 +43,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LibraryViewHol
     @Override
     public void onBindViewHolder(@NonNull LibraryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User note = userList.get(position);
-        if(note == null){
+        if (note == null) {
             return;
         }
         holder.title.setText(note.name);
         holder.email.setText(note.email);
-        if(note.image != null){
+        if (note.image != null) {
             Picasso.get().load(note.image).into(holder.image);
         }
 
         try {
 
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, UserRecipe.class);
                     intent.putExtra("userID", note.uid);
                     context.startActivity(intent);
-                    ((MainActivity)context).finish();
+                    ((MainActivity) context).finish();
 
                 }
             });
@@ -70,26 +72,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LibraryViewHol
 
     @Override
     public int getItemCount() {
-        if(userList!= null){
+        if (userList != null) {
             return userList.size();
         }
         return 0;
     }
 
-    public class LibraryViewHolder extends RecyclerView.ViewHolder {
-        private View rootView;
-        private TextView title;
-        private TextView email;
-        private ImageView image;
-        public LibraryViewHolder(@NonNull View itemView) {
-            super(itemView);
-            rootView = itemView;
-            title = itemView.findViewById(R.id.textName) ;
-            email = itemView.findViewById(R.id.textEmail);
-            image = itemView.findViewById(R.id.imageUser);
-        }
-    }
-    public void sortAsc(){
+    public void sortAsc() {
         Collections.sort(userList, new Comparator<User>() {
             @Override
             public int compare(User i0, User i1) {
@@ -98,7 +87,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LibraryViewHol
         });
         notifyDataSetChanged();
     }
-    public void sortDes(){
+
+    public void sortDes() {
         Collections.sort(userList, new Comparator<User>() {
             @Override
             public int compare(User i0, User i1) {
@@ -107,5 +97,20 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.LibraryViewHol
         });
         Collections.reverse(userList);
         notifyDataSetChanged();
+    }
+
+    public class LibraryViewHolder extends RecyclerView.ViewHolder {
+        private View rootView;
+        private TextView title;
+        private TextView email;
+        private ImageView image;
+
+        public LibraryViewHolder(@NonNull View itemView) {
+            super(itemView);
+            rootView = itemView;
+            title = itemView.findViewById(R.id.textName);
+            email = itemView.findViewById(R.id.textEmail);
+            image = itemView.findViewById(R.id.imageUser);
+        }
     }
 }

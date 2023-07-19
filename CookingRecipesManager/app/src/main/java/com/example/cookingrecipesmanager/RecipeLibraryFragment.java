@@ -5,13 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,10 +16,13 @@ import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.database.Model.User;
-import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
-import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
 import com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,37 +44,31 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class RecipeLibraryFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    public String fragmentType = "Library";
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid;
+    List<CookingNote> listAll = new ArrayList<>();
+    List<CookingNote> listMy = new ArrayList<>();
+    Context thisContext;
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private RecyclerView rcl;
+    private LibraryAdapter adapter;
+    private Button btnMyRecipe;
+    private Button btnGetAll;
+    private FloatingActionButton btn_create;
+    private boolean isAllRecipe = true;
 
     {
         assert user != null;
         uid = user.getUid();
     }
-
-    List<CookingNote> listAll = new ArrayList<>();
-    List<CookingNote> listMy = new ArrayList<>();
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-    Context thisContext;
-    private RecyclerView rcl;
-    private LibraryAdapter adapter;
-    private Button btnMyRecipe;
-    public String fragmentType = "Library";
-    private Button btnGetAll;
-    private FloatingActionButton btn_create;
-    private boolean isAllRecipe = true;
-
 
 
     public RecipeLibraryFragment() {
@@ -130,12 +120,11 @@ public class RecipeLibraryFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                                for(DocumentSnapshot snapshot:snapshotList)
-                                {
+                                for (DocumentSnapshot snapshot : snapshotList) {
                                     Recipe recipe = snapshot.toObject(Recipe.class);
                                     assert recipe != null;
                                     recipe.userImage = currentUser.image;
-                                    listMy.add(new CookingNote(recipe,recipe.id, recipe.title, currentUser.name, "", recipe.image, new Float("5"), true));
+                                    listMy.add(new CookingNote(recipe, recipe.id, recipe.title, currentUser.name, "", recipe.image, new Float("5"), true));
                                 }
                                 adapter.setData(listMy);
                             }
@@ -162,7 +151,7 @@ public class RecipeLibraryFragment extends Fragment {
                                                     Recipe recipe = snapshot.toObject(Recipe.class);
                                                     assert recipe != null;
 
-                                                    if(recipe.userID != null){
+                                                    if (recipe.userID != null) {
                                                         DocumentReference dr = db.collection("Users").document(recipe.userID);
                                                         dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                                             @Override
@@ -171,15 +160,14 @@ public class RecipeLibraryFragment extends Fragment {
                                                                 String image = value.getString("image");
                                                                 recipe.userName = name;
                                                                 recipe.userImage = image;
-                                                                listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
+                                                                listAll.add(new CookingNote(recipe, recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
                                                                 adapter.setData(listAll);
                                                                 adapter.notifyDataSetChanged();
                                                             }
                                                         });
-                                                    }
-                                                    else{
+                                                    } else {
                                                         recipe.userName = "UserName";
-                                                        listAll.add(new CookingNote(recipe,recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
+                                                        listAll.add(new CookingNote(recipe, recipe.id, recipe.title, recipe.userName, "", recipe.image, new Float("5"), true));
                                                         adapter.setData(listAll);
                                                         adapter.notifyDataSetChanged();
                                                     }
@@ -285,7 +273,7 @@ public class RecipeLibraryFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), RecipeCreater.class);
                 startActivity(intent);
-                ((MainActivity)getContext()).finish();
+                ((MainActivity) getContext()).finish();
             }
         });
         return rootView;

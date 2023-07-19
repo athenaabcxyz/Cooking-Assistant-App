@@ -32,21 +32,21 @@ import java.util.List;
 public class UserRecipe extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private UserRecipeAdapter adapter;
-    private RecyclerView rcl;
     List<CookingNote> listMy = new ArrayList<>();
     TextView userName, email;
     ImageView userImage, backIcon;
     String uid;
+    private UserRecipeAdapter adapter;
+    private RecyclerView rcl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            try{
-               uid = (String) extras.getSerializable("userID");
-            }
-            catch (Exception e){
+        if (extras != null) {
+            try {
+                uid = (String) extras.getSerializable("userID");
+            } catch (Exception e) {
 
             }
         }
@@ -57,7 +57,7 @@ public class UserRecipe extends AppCompatActivity {
         userImage = findViewById(R.id.imageUser);
         backIcon = findViewById(R.id.back);
 
-        if(uid != null){
+        if (uid != null) {
             db.collection("Users").document(uid).get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -65,28 +65,26 @@ public class UserRecipe extends AppCompatActivity {
                             User currentUser = documentSnapshot.toObject(User.class);
                             assert currentUser != null;
                             try {
-                                if(currentUser.name != null){
+                                if (currentUser.name != null) {
                                     userName.setText(currentUser.name);
                                     email.setText(currentUser.email);
                                 }
-                                if(currentUser.image != null){
+                                if (currentUser.image != null) {
                                     Picasso.get().load(currentUser.image).into(userImage);
                                 }
 
-                            }
-                            catch (Exception e){
+                            } catch (Exception e) {
 
                             }
                             db.collection("recipes").whereEqualTo("userID", currentUser.uid).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                                    for(DocumentSnapshot snapshot:snapshotList)
-                                    {
+                                    for (DocumentSnapshot snapshot : snapshotList) {
                                         Recipe recipe = snapshot.toObject(Recipe.class);
                                         assert recipe != null;
                                         recipe.userImage = currentUser.image;
-                                        listMy.add(new CookingNote(recipe,recipe.id, recipe.title, currentUser.name, "", recipe.image, new Float("5"), true));
+                                        listMy.add(new CookingNote(recipe, recipe.id, recipe.title, currentUser.name, "", recipe.image, new Float("5"), true));
                                     }
                                     adapter.setData(listMy);
                                 }
@@ -173,6 +171,7 @@ public class UserRecipe extends AppCompatActivity {
             adapter.setData(filterList);
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

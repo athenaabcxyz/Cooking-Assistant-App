@@ -1,10 +1,13 @@
 package com.example.cookingrecipesmanager;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,31 +16,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.SearchView;
-import android.widget.Toast;
-
-import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
-import com.example.cookingrecipesmanager.database.Model.Step;
-import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.home.Adapter.DishAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.home.Adapter.TrendAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
@@ -57,10 +47,16 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public String fragmentType = "Home";
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    List<DocumentSnapshot> snapshotList;
+    List<Recipe> listRecipe = new ArrayList<>();
+    List<Tag> listTag = new ArrayList<>();
+    List<Tag> tagListClicked = new ArrayList<>();
+    Context thiscontext;
+    ProgressDialog progressDialog;
     // TODO: Rename and change types of parameters
     private String mParam1;
-    public String fragmentType = "Home";
     private String mParam2;
     private RecyclerView rcl_trend;
     private RecyclerView rcl_tag;
@@ -68,14 +64,6 @@ public class HomeFragment extends Fragment {
     private TrendAdapter trendAdapter;
     private TagAdapter tagAdapter;
     private DishAdapter dishAdapter;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    List<DocumentSnapshot> snapshotList;
-    List<Recipe> listRecipe = new ArrayList<>();
-    List<Tag> listTag = new ArrayList<>();
-
-    List<Tag> tagListClicked = new ArrayList<>();
-    Context thiscontext;
-    ProgressDialog progressDialog;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -123,11 +111,10 @@ public class HomeFragment extends Fragment {
         progressDialog.show();
 
 //      ------------------ Load list recipe --------------------
-        if(listRecipe.size()>0){
+        if (listRecipe.size() > 0) {
             listRecipe.clear();
             getListData();
-        }
-        else {
+        } else {
             getListData();
         }
 
@@ -154,12 +141,12 @@ public class HomeFragment extends Fragment {
 //                Tag firstTag = new Tag("All", false);
 //                newListTag.add(firstTag);
                 List<Recipe> listTrend = new ArrayList<>();
-                if(listRecipe.size()>0){
-                    for(int i=0; i< 5;  i++){
+                if (listRecipe.size() > 0) {
+                    for (int i = 0; i < 5; i++) {
                         listTrend.add(listRecipe.get(i));
                     }
                 }
-                for (Tag tag: listTag){
+                for (Tag tag : listTag) {
                     Tag newTag = tag;
                     newTag.setClicked(false);
                     newListTag.add(newTag);
@@ -167,7 +154,7 @@ public class HomeFragment extends Fragment {
 //                intent.putExtra("recipes", (Serializable) listTrend);
                 intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
-                ((MainActivity)getContext()).finish();
+                ((MainActivity) getContext()).finish();
             }
         });
         searchView.setOnSearchClickListener(new View.OnClickListener() {
@@ -177,7 +164,7 @@ public class HomeFragment extends Fragment {
                 List<Tag> newListTag = new ArrayList<>();
 //                Tag firstTag = new Tag("All", false);
 //                newListTag.add(firstTag);
-                for (Tag tag: listTag){
+                for (Tag tag : listTag) {
                     Tag newTag = tag;
                     newTag.setClicked(false);
                     newListTag.add(newTag);
@@ -186,49 +173,47 @@ public class HomeFragment extends Fragment {
                 intent.putExtra("tags", (Serializable) newListTag);
                 startActivity(intent);
                 searchView.setIconified(true);
-                ((MainActivity)getContext()).finish();
+                ((MainActivity) getContext()).finish();
             }
         });
         return rootView;
     }
 
-    public void getListData(){
+    public void getListData() {
         db.collection("recipes")
-            //Use query to find specific document
-            .orderBy("aggregateLikes", Query.Direction.DESCENDING).get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    //Create a list of result. The number of result can be 1
+                //Use query to find specific document
+                .orderBy("aggregateLikes", Query.Direction.DESCENDING).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        //Create a list of result. The number of result can be 1
 
-                    snapshotList = queryDocumentSnapshots.getDocuments();
-                    //Convert the result to class Object for easier processing.
-                    for(DocumentSnapshot snapshot:snapshotList)
-                    {
-                        Recipe recipe = snapshot.toObject(Recipe.class);
-                        assert recipe != null;
-                        if(recipe.userID != null){
-                            DocumentReference dr = db.collection("Users").document(recipe.userID);
-                            dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                    String name = value.getString("name");
-                                    String image = value.getString("image");
-                                    recipe.userName = name;
-                                    recipe.userImage = image;
-                                    listRecipe.add(recipe);
-                                }
-                            });
+                        snapshotList = queryDocumentSnapshots.getDocuments();
+                        //Convert the result to class Object for easier processing.
+                        for (DocumentSnapshot snapshot : snapshotList) {
+                            Recipe recipe = snapshot.toObject(Recipe.class);
+                            assert recipe != null;
+                            if (recipe.userID != null) {
+                                DocumentReference dr = db.collection("Users").document(recipe.userID);
+                                dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        String name = value.getString("name");
+                                        String image = value.getString("image");
+                                        recipe.userName = name;
+                                        recipe.userImage = image;
+                                        listRecipe.add(recipe);
+                                    }
+                                });
+                            } else {
+                                recipe.userName = "UserName";
+                                listRecipe.add(recipe);
+                            }
                         }
-                        else{
-                            recipe.userName = "UserName";
-                            listRecipe.add(recipe);
-                        }
-                    }
 
-                    tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
-                        @Override
-                        public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
+                        tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
+                            @Override
+                            public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
 //                                if(holder.name.getTextColors().getDefaultColor() == getResources().getColor(R.color.text, null)){
 //                                    holder.name.setTextColor(getResources().getColor(R.color.white, null));
 //                                    holder.content.getBackground().setTint(getResources().getColor(R.color.blue, null));
@@ -256,41 +241,40 @@ public class HomeFragment extends Fragment {
 //                                else{
 //                                    tag.setClicked(false);
 //                                }
-                            if(tag.getClicked()==false){
-                                tag.setClicked(true);
+                                if (tag.getClicked() == false) {
+                                    tag.setClicked(true);
 
+                                } else {
+                                    tag.setClicked(false);
+                                }
+                                tagAdapter.setData(listTag);
+                                tagAdapter.notifyDataSetChanged();
+                                loadDishList();
                             }
-                            else{
-                                tag.setClicked(false);
-                            }
-                            tagAdapter.setData(listTag);
-                            tagAdapter.notifyDataSetChanged();
-                            loadDishList();
-                        }
-                    });
+                        });
 
-                    rcl_tag.setAdapter(tagAdapter);
-                    dishAdapter = new DishAdapter();
-                    rcl_dish.setAdapter(dishAdapter);
-                    loadTrendList();
-                    loadTagList();
-                    loadDishList();
-                    progressDialog.dismiss();
+                        rcl_tag.setAdapter(tagAdapter);
+                        dishAdapter = new DishAdapter();
+                        rcl_dish.setAdapter(dishAdapter);
+                        loadTrendList();
+                        loadTagList();
+                        loadDishList();
+                        progressDialog.dismiss();
 
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
 
-                }
-            });
+                    }
+                });
     }
 
-    public void loadTrendList(){
+    public void loadTrendList() {
         List<Recipe> listTrend = new ArrayList<>();
-        if(listRecipe.size()>5){
-            for(int i=0; i< 5;  i++){
+        if (listRecipe.size() > 5) {
+            for (int i = 0; i < 5; i++) {
                 listTrend.add(listRecipe.get(i));
             }
         }
@@ -299,12 +283,12 @@ public class HomeFragment extends Fragment {
         rcl_trend.setAdapter(trendAdapter);
     }
 
-    public void loadTagList(){
+    public void loadTagList() {
         listTag.clear();
         List<String> listStringTag = new ArrayList<>();
-        if(listRecipe.size()>0){
-            for(Recipe recipe: listRecipe){
-                if(recipe.dishTypes.size()>0){
+        if (listRecipe.size() > 0) {
+            for (Recipe recipe : listRecipe) {
+                if (recipe.dishTypes.size() > 0) {
                     listStringTag.addAll(recipe.dishTypes);
                 }
             }
@@ -312,47 +296,45 @@ public class HomeFragment extends Fragment {
         Set<String> set = new LinkedHashSet<String>(listStringTag);
         List<String> listWithoutDuplicateElements = new ArrayList<String>(set);
 
-        for(String item: listWithoutDuplicateElements){
+        for (String item : listWithoutDuplicateElements) {
 
             Tag tag = new Tag(item, false);
             listTag.add(tag);
         }
-        if(listTag.size()>0){
+        if (listTag.size() > 0) {
             listTag.get(0).setClicked(true);
         }
         tagAdapter.setData(listTag);
 
     }
 
-    public void loadDishList(){
+    public void loadDishList() {
         List<Recipe> listDish = new ArrayList<>();
-        if(listRecipe.size()>0){
+        if (listRecipe.size() > 0) {
 //           if(listTag.size()>0 && listTag.get(0).getClicked()==true){
 //               listDish = listRecipe;
 //           }
-            if(listTag == null || listTag.size()<0){
+            if (listTag == null || listTag.size() < 0) {
 
+            } else {
+                List<String> tags = new ArrayList<>();
+                for (Tag item : listTag) {
+                    if (item.getClicked() == true) {
+                        tags.add(item.getName());
+                    }
+                }
+                if (tags.size() > 0) {
+                    for (Recipe item : listRecipe) {
+                        if (item.dishTypes.containsAll(tags)) {
+                            listDish.add(item);
+                        }
+                    }
+                }
             }
-           else{
-               List<String> tags= new ArrayList<>();
-               for (Tag item: listTag){
-                   if(item.getClicked() == true){
-                     tags.add(item.getName());
-                   }
-               }
-               if (tags.size()>0) {
-                   for (Recipe item : listRecipe) {
-                       if (item.dishTypes.containsAll(tags)) {
-                           listDish.add(item);
-                       }
-                   }
-               }
-           }
         }
-        if(listDish.size()<=0){
+        if (listDish.size() <= 0) {
             rcl_dish.setBackgroundResource(R.drawable.not_found);
-        }
-        else {
+        } else {
             rcl_dish.setBackground(null);
         }
         dishAdapter.setData(listDish);

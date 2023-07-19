@@ -3,14 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:background="@color/white"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,26 +18,26 @@
 
             <TextView
                 android:id="@+id/textTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="Log out !"
+                android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textDesCription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="Are you sure?"
-                android:textSize="16sp"
-                android:textColor="@color/sub"/>
+                android:textColor="@color/sub"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,32 +52,32 @@
 
                 <TextView
                     android:id="@+id/CANCEL"
-                    android:textColor="@color/sub"
-                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CANCEL"
-                    android:textSize="16sp"
+                    android:layout_weight="0.5"
                     android:gravity="right"
-                    android:layout_weight="0.5"/>
+                    android:text="CANCEL"
+                    android:textColor="@color/sub"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/OK"
-                    android:textColor="@color/sub"
-                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OK"
+                    android:layout_weight="0.5"
                     android:gravity="center"
+                    android:text="OK"
+                    android:textColor="@color/sub"
                     android:textSize="16sp"
-                    android:layout_weight="0.5"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="10dp"/>
+                android:layout_height="10dp" />
 
         </LinearLayout>
 

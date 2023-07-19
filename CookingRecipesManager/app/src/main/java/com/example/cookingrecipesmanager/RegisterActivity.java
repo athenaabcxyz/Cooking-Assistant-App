@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.example.cookingrecipesmanager.database.Model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,20 +26,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-
 public class RegisterActivity extends AppCompatActivity {
 
     BroadcastReceiver broadcastReceiver = null;
 
-    Button  btnRegister;
+    Button btnRegister;
     TextView btnLoginActivity;
     ProgressDialog progressDialog;
     TextInputLayout textEmail, textFullName, textPassword, textConPassword;
 
     FirebaseAuth firebaseAuth;
 
-    float v= 0;
+    float v = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +59,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         //____________________________________________________________________
 
-        btnLoginActivity.setOnClickListener((view)->{
+        btnLoginActivity.setOnClickListener((view) -> {
             onBackPressed();
         });
 
-        btnRegister.setOnClickListener((view)->{
+        btnRegister.setOnClickListener((view) -> {
 
             textFullName.setErrorEnabled(false);
             textEmail.setErrorEnabled(false);
@@ -78,56 +75,49 @@ public class RegisterActivity extends AppCompatActivity {
             String password = textPassword.getEditText().getText().toString().trim();
             String conpassword = textConPassword.getEditText().getText().toString().trim();
 
-            if (TextUtils.isEmpty(fullname))
-            {
+            if (TextUtils.isEmpty(fullname)) {
                 textFullName.setError("Please enter your name");
                 textFullName.setFocusable(true);
                 textFullName.setErrorIconDrawable(null);
                 return;
             }
 
-            if (TextUtils.isEmpty(email))
-            {
+            if (TextUtils.isEmpty(email)) {
                 textEmail.setError("Please enter your email");
                 textEmail.setFocusable(true);
                 textEmail.setErrorIconDrawable(null);
                 return;
             }
 
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            {
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 textEmail.setError("Invalid email");
                 textEmail.setFocusable(true);
                 textEmail.setErrorIconDrawable(null);
                 return;
             }
 
-            if (TextUtils.isEmpty(password))
-            {
+            if (TextUtils.isEmpty(password)) {
                 textPassword.setError("Please enter your password");
                 textPassword.setFocusable(true);
                 textPassword.setErrorIconDrawable(null);
                 return;
             }
 
-            if (password.length() < 6)
-            {
+            if (password.length() < 6) {
                 textPassword.setError("Password length at least 6 characters");
                 textPassword.setFocusable(true);
                 textPassword.setErrorIconDrawable(null);
                 return;
             }
 
-            if (TextUtils.isEmpty(conpassword))
-            {
+            if (TextUtils.isEmpty(conpassword)) {
                 textConPassword.setError("Please confirm password");
                 textConPassword.setFocusable(true);
                 textConPassword.setErrorIconDrawable(null);
                 return;
             }
 
-            if (!password.equals(conpassword))
-            {
+            if (!password.equals(conpassword)) {
                 textConPassword.setError("Confirm password does not match");
                 textConPassword.setFocusable(true);
                 textConPassword.setErrorIconDrawable(null);
@@ -136,13 +126,12 @@ public class RegisterActivity extends AppCompatActivity {
 
             progressDialog.show();
 
-            firebaseAuth.createUserWithEmailAndPassword(email,password)
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful())
-                            {
-                                String userID ;
+                            if (task.isSuccessful()) {
+                                String userID;
                                 progressDialog.dismiss();
                                 FirebaseUser user = firebaseAuth.getCurrentUser();
                                 User data = new User();
@@ -165,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 });
 
                                 //Hiện bảng báo thành công
-                                View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.dialog_success,null);
+                                View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.dialog_success, null);
 
                                 TextView OK = view.findViewById(R.id.OK);
                                 TextView description = view.findViewById(R.id.textDesCription);
@@ -190,12 +179,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 textFullName.getEditText().setText(null);
                                 textPassword.getEditText().setText(null);
                                 textConPassword.getEditText().setText(null);
-                            }
-                            else
-                            {
+                            } else {
                                 progressDialog.dismiss();
 
-                                View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.dialog_fail,null);
+                                View view = LayoutInflater.from(RegisterActivity.this).inflate(R.layout.dialog_fail, null);
 
                                 TextView OK = view.findViewById(R.id.OK);
                                 TextView description = view.findViewById(R.id.textDesCription);
@@ -224,21 +211,22 @@ public class RegisterActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+
     @Override
     public void onResume() {
 
         super.onResume();
         CheckInternet();
     }
+
     private void CheckInternet() {
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-    protected void unregistorNetwork(){
+    protected void unregistorNetwork() {
         try {
             unregisterReceiver(broadcastReceiver);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

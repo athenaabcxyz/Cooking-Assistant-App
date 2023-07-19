@@ -9,14 +9,6 @@ public class ExtendedIngredient implements Serializable {
     public String image;
     public String consistency;
     public String name;
-
-    public ExtendedIngredient(String original) {
-        this.original = original;
-    }
-    public ExtendedIngredient(){
-
-    }
-
     public String nameClean;
     public String original;
     public String originalName;
@@ -24,4 +16,10 @@ public class ExtendedIngredient implements Serializable {
     public String unit;
     public ArrayList<String> meta;
     public Measures measures;
+    public ExtendedIngredient(String original) {
+        this.original = original;
+    }
+    public ExtendedIngredient() {
+
+    }
 }

@@ -30,9 +30,9 @@
                 android:id="@+id/user_image"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                tools:srcCompat="@drawable/img_recipe1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                tools:srcCompat="@drawable/img_recipe1" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.Tag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
@@ -25,22 +24,24 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     private Boolean delete = false;
 
     private ItemClickListener itemClickListener;
-    public interface ItemClickListener{
-        void onItemClick(Tag tag, TagViewHolder holder);
-    }
-    public TagAdapter(){
+
+    public TagAdapter() {
 
     }
-    public TagAdapter(Boolean delete){
+
+    public TagAdapter(Boolean delete) {
         this.delete = delete;
     }
+
     public TagAdapter(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
-    public void setData( List<Tag> list){
+
+    public void setData(List<Tag> list) {
         this.tagList = list;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public TagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,35 +53,32 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
         Tag tag = tagList.get(position);
-        if(tag == null){
+        if (tag == null) {
             return;
         }
         holder.name.setText(tag.getName());
-        if(tag.getClicked() == true){
+        if (tag.getClicked() == true) {
             holder.name.setTextColor(context.getResources().getColor(R.color.white, null));
             holder.content.getBackground().setTint(context.getResources().getColor(R.color.blue, null));
-        }
-        else {
+        } else {
             holder.name.setTextColor(context.getResources().getColor(R.color.text, null));
             holder.content.getBackground().setTint(context.getResources().getColor(R.color.white, null));
         }
-        if(delete){
+        if (delete) {
             holder.delete.setVisibility(View.VISIBLE);
             holder.img.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             holder.delete.setVisibility(View.GONE);
             holder.img.setVisibility(View.VISIBLE);
         }
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               try{
-                   itemClickListener.onItemClick(tag, holder);
-               }
-               catch(Exception e){
+                try {
+                    itemClickListener.onItemClick(tag, holder);
+                } catch (Exception e) {
 
-               }
+                }
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -96,20 +94,25 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     @Override
     public int getItemCount() {
-        if(tagList!= null){
+        if (tagList != null) {
             return tagList.size();
         }
         return 0;
     }
 
+    public interface ItemClickListener {
+        void onItemClick(Tag tag, TagViewHolder holder);
+    }
+
     public class TagViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
+        public LinearLayout content;
         private ImageView img;
         private ImageView delete;
-        public LinearLayout content;
+
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.textName) ;
+            name = itemView.findViewById(R.id.textName);
             img = itemView.findViewById(R.id.imageIcon);
             content = itemView.findViewById(R.id.tag_content);
             delete = itemView.findViewById(R.id.imageIconDelete);

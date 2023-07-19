@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.cookingrecipesmanager.database.Model.Recipe;
-import com.example.cookingrecipesmanager.home.Adapter.DishAdapter;
-import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.search.Adapter.ReceiptAdapter;
 import com.example.cookingrecipesmanager.search.Adapter.TagSearchAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Search extends AppCompatActivity {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    List<DocumentSnapshot> snapshotList;
     private ReceiptAdapter receiptApdapter;
     private TagSearchAdapter tagAdapter;
     private RecyclerView rcl;
@@ -46,25 +45,22 @@ public class Search extends AppCompatActivity {
     private ImageView icon_sort;
     private ImageView icon_back;
     private ImageView img_not_found;
-    private List<Recipe> listRecipe= new ArrayList<>();
-    private List<Recipe> listRecipeSearch= new ArrayList<>();
-    private String textSearch="";
+    private List<Recipe> listRecipe = new ArrayList<>();
+    private List<Recipe> listRecipeSearch = new ArrayList<>();
+    private String textSearch = "";
     private List<Tag> listTag = new ArrayList<>();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    List<DocumentSnapshot> snapshotList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            try{
+        if (extras != null) {
+            try {
 //                listRecipe = (List<Recipe>) extras.getSerializable("recipes");
                 listRecipeSearch = listRecipe;
                 listTag = (List<Tag>) extras.getSerializable("tags");
-            }
-            catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
@@ -107,10 +103,9 @@ public class Search extends AppCompatActivity {
 //                else{
 //                    tag.setClicked(false);
 //                }
-                if (tag.getClicked()==false){
+                if (tag.getClicked() == false) {
                     tag.setClicked(true);
-                }
-                else{
+                } else {
                     tag.setClicked(false);
                 }
                 tagAdapter.setData(listTag);
@@ -129,6 +124,7 @@ public class Search extends AppCompatActivity {
                 filterList(query);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String query) {
                 // filter recycler view when text is changed
@@ -149,7 +145,7 @@ public class Search extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.Asc:
                                 receiptApdapter.sortAsc();
                                 break;
@@ -175,17 +171,17 @@ public class Search extends AppCompatActivity {
 
     }
 
-    public void filterList(String text){
+    public void filterList(String text) {
         textSearch = text;
         List<Recipe> filterList = new ArrayList<>();
         img_not_found.setVisibility(View.GONE);
-        if(text.isEmpty() == false){
-            for(Recipe item : listRecipeSearch){
-                if(item.title.toLowerCase().contains(text.toLowerCase())){
+        if (text.isEmpty() == false) {
+            for (Recipe item : listRecipeSearch) {
+                if (item.title.toLowerCase().contains(text.toLowerCase())) {
                     filterList.add(item);
                 }
             }
-            if(filterList.isEmpty()){
+            if (filterList.isEmpty()) {
                 img_not_found.setVisibility(View.VISIBLE);
             }
         }
@@ -193,38 +189,36 @@ public class Search extends AppCompatActivity {
         receiptApdapter.notifyDataSetChanged();
     }
 
-    public void filterListByTag(){
+    public void filterListByTag() {
         List<Recipe> listDish = new ArrayList<>();
-        if(listRecipe.size()>0){
-            if(listTag == null || listTag.size()<0){
+        if (listRecipe.size() > 0) {
+            if (listTag == null || listTag.size() < 0) {
 
-            }
-            else{
-                List<String> tags= new ArrayList<>();
-                for (Tag item: listTag){
-                    if(item.getClicked() == true){
+            } else {
+                List<String> tags = new ArrayList<>();
+                for (Tag item : listTag) {
+                    if (item.getClicked() == true) {
                         tags.add(item.getName());
                     }
                 }
-                if (tags.size()>0) {
+                if (tags.size() > 0) {
                     for (Recipe item : listRecipe) {
                         if (item.dishTypes.containsAll(tags)) {
                             listDish.add(item);
                         }
                     }
-                }
-                else {
+                } else {
                     listDish = listRecipe;
 
-                }            }
+                }
+            }
         }
         listRecipeSearch = listDish;
         filterList(textSearch);
     }
 
 
-
-    public void getListData(){
+    public void getListData() {
         db.collection("recipes")
                 //Use query to find specific document
                 .orderBy("aggregateLikes", Query.Direction.DESCENDING).get()
@@ -234,11 +228,10 @@ public class Search extends AppCompatActivity {
                         //Create a list of result. The number of result can be 1
                         snapshotList = queryDocumentSnapshots.getDocuments();
                         //Convert the result to class Object for easier processing.
-                        for(DocumentSnapshot snapshot:snapshotList)
-                        {
+                        for (DocumentSnapshot snapshot : snapshotList) {
                             Recipe recipe = snapshot.toObject(Recipe.class);
                             assert recipe != null;
-                            if(recipe.userID != null){
+                            if (recipe.userID != null) {
                                 DocumentReference dr = db.collection("Users").document(recipe.userID);
                                 dr.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                                     @Override
@@ -251,13 +244,12 @@ public class Search extends AppCompatActivity {
 
                                     }
                                 });
-                            }
-                            else{
+                            } else {
                                 recipe.userName = "UserName";
                                 listRecipe.add(recipe);
                             }
                         }
-                        listRecipeSearch= listRecipe;
+                        listRecipeSearch = listRecipe;
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

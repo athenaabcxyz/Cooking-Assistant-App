@@ -3,7 +3,6 @@ package com.example.cookingrecipesmanager.home.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
@@ -34,10 +32,12 @@ import java.util.List;
 public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHolder> {
     private Context context;
     private List<Recipe> cookingNoteList;
-    public void setData( List<Recipe> list){
+
+    public void setData(List<Recipe> list) {
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public TrendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,19 +49,18 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
     @Override
     public void onBindViewHolder(@NonNull TrendViewHolder holder, int position) {
         Recipe note = cookingNoteList.get(position);
-        if(note == null){
+        if (note == null) {
             return;
         }
 
         holder.title.setText(note.title);
         holder.author.setText(note.userName);
-        holder.like.setText(String.valueOf(note.aggregateLikes)+ " like");
-        holder.time.setText(String.valueOf(note.readyInMinutes)+" min");
+        holder.like.setText(String.valueOf(note.aggregateLikes) + " like");
+        holder.time.setText(String.valueOf(note.readyInMinutes) + " min");
         Picasso.get().load(note.image).into(holder.img);
-        if(note.userImage != null){
+        if (note.userImage != null) {
             Picasso.get().load(note.image).into(holder.userImage);
-        }
-        else {
+        } else {
             holder.userImage.setImageResource(R.drawable.ic_avatar_default);
         }
 //        holder.evaluate.setText(note.getEvaluate().toString());
@@ -108,12 +107,12 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                     });
                 }
             });
-            CookingNote note1 = new CookingNote(note, note.id,note.title, "Nguyen Hoang Nam", "", note.image, new Float("4.5"), true);
+            CookingNote note1 = new CookingNote(note, note.id, note.title, "Nguyen Hoang Nam", "", note.image, new Float("4.5"), true);
 
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction()
                             .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
                 }
@@ -125,7 +124,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
                     Intent intent = new Intent(context, UserRecipe.class);
                     intent.putExtra("userID", note.userID);
                     context.startActivity(intent);
-                    ((MainActivity)context).finish();
+                    ((MainActivity) context).finish();
                 }
             });
         } catch (Exception e) {
@@ -136,7 +135,7 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
 
     @Override
     public int getItemCount() {
-        if(cookingNoteList!= null){
+        if (cookingNoteList != null) {
             return cookingNoteList.size();
         }
         return 0;
@@ -151,12 +150,13 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.TrendViewHol
         private ImageView img;
         private ImageView userImage;
         private ImageView icon_more;
+
         public TrendViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
-            title = itemView.findViewById(R.id.textTitle) ;
+            title = itemView.findViewById(R.id.textTitle);
             author = itemView.findViewById(R.id.textAuthor);
-            like = itemView.findViewById(R.id.like) ;
+            like = itemView.findViewById(R.id.like);
             time = itemView.findViewById(R.id.time);
             img = itemView.findViewById(R.id.imageView);
             icon_more = itemView.findViewById(R.id.imageButton);

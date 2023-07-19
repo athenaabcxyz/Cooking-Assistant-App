@@ -10,25 +10,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UselessParent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <RelativeLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
             android:paddingLeft="10dp"
+            android:paddingTop="20dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp"
-            android:id="@+id/header"
-            >
+            android:paddingBottom="10dp">
+
             <RelativeLayout
+                android:id="@+id/search_view_border"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border_none"
-                android:id="@+id/search_view_border"
-                android:backgroundTint="#FFFFFF"
-                >
+                android:backgroundTint="#FFFFFF">
+
                 <SearchView
                     android:id="@+id/search_view"
                     android:layout_width="match_parent"
@@ -45,79 +45,81 @@
                     android:iconifiedByDefault="false"
                     android:queryBackground="@android:color/transparent"
                     android:queryHint="Search here" />
+
                 <ImageView
                     android:id="@+id/sort"
                     android:layout_width="23dp"
                     android:layout_height="23dp"
-                    android:src="@drawable/icons_sort"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    />
+                    android:src="@drawable/icons_sort" />
             </RelativeLayout>
-            <LinearLayout android:layout_height="wrap_content"
+
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/search_view_border"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:weightSum="100"
-                >
+                android:weightSum="100">
+
                 <Button
                     android:id="@+id/btn_all"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="50"
-                    android:text="All Recipe"
-                    android:textStyle="bold"
-                    android:elevation="2dp"
                     android:layout_margin="1dp"
-                    android:stateListAnimator="@null"
+                    android:layout_weight="50"
                     android:backgroundTint="#2D67F6"
-                    >
+                    android:elevation="2dp"
+                    android:stateListAnimator="@null"
+                    android:text="All Recipe"
+                    android:textStyle="bold">
 
                 </Button>
+
                 <Button
                     android:id="@+id/btn_my_recipe"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="My Recipe"
+                    android:layout_margin="1dp"
                     android:layout_weight="50"
                     android:backgroundTint="@color/white"
-                    android:textColor="#333333"
-                    android:textStyle="bold"
                     android:elevation="2dp"
-                    android:layout_margin="1dp"
                     android:stateListAnimator="@null"
-                    >
-                </Button>
+                    android:text="My Recipe"
+                    android:textColor="#333333"
+                    android:textStyle="bold"></Button>
             </LinearLayout>
         </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#F1F0F0"/>
+            android:background="#F1F0F0" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcl_lib"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="25dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="15dp"
             android:clipToPadding="false"
-            />
+            android:orientation="horizontal"
+            android:paddingLeft="15dp"
+            android:paddingTop="25dp"
+            android:paddingBottom="5dp" />
 
     </LinearLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/create_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
         android:layout_marginRight="5dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#2D67F6"
         android:src="@android:drawable/ic_input_add"
         app:maxImageSize="35dp"
-        android:backgroundTint="#2D67F6"
         app:tint="@color/white"
 
         />

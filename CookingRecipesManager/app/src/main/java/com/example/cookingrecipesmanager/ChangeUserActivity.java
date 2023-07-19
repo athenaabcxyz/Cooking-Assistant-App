@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 
 public class ChangeUserActivity extends AppCompatActivity {
 
+    final int GALLERY_REQ_CODE = 1000;
     TextView email;
     EditText userName;
     ImageView userImage, backIcon;
@@ -42,7 +43,6 @@ public class ChangeUserActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     User currentUser;
     Uri imageURI;
-    final int GALLERY_REQ_CODE = 1000;
     ProgressDialog progressDialog;
     StorageReference storageRef;
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -107,10 +107,9 @@ public class ChangeUserActivity extends AppCompatActivity {
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(userName.getText().toString().equals("")){
+                if (userName.getText().toString().equals("")) {
                     Toast.makeText(ChangeUserActivity.this, "Please fill in UserName", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     progressDialog.setMessage("Changing...");
                     progressDialog.show();
                     updateUser();
@@ -127,7 +126,8 @@ public class ChangeUserActivity extends AppCompatActivity {
         });
         //____________________________________________________________________
     }
-    private void getUser(){
+
+    private void getUser() {
         db.collection("Users").document(user.getUid()).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -135,11 +135,11 @@ public class ChangeUserActivity extends AppCompatActivity {
                         currentUser = documentSnapshot.toObject(User.class);
                         assert currentUser != null;
                         try {
-                            if(currentUser.name != null){
+                            if (currentUser.name != null) {
                                 userName.setText(currentUser.name);
                                 email.setText(currentUser.email);
                             }
-                            if(currentUser.image != null){
+                            if (currentUser.image != null) {
                                 Picasso.get().load(currentUser.image).into(userImage);
                                 imageURI = Uri.parse(currentUser.image);
                                 group_change_image.setVisibility(View.VISIBLE);
@@ -147,18 +147,18 @@ public class ChangeUserActivity extends AppCompatActivity {
                             }
                             progressDialog.dismiss();
 
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                     }
                 });
     }
+
     private void updateUser() {
         String newPath = null;
-        if(imageURI!= null) newPath = imageURI.toString();
+        if (imageURI != null) newPath = imageURI.toString();
         currentUser.name = userName.getText().toString();
-        if(newPath != currentUser.image && newPath != null){
+        if (newPath != currentUser.image && newPath != null) {
             storageRef = storage.getReference("images/" + user.getUid());
             storageRef.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -173,7 +173,7 @@ public class ChangeUserActivity extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             progressDialog.dismiss();
-                                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_success,null);
+                                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_success, null);
 
                                             TextView OK = view.findViewById(R.id.OK);
                                             TextView description = view.findViewById(R.id.textDesCription);
@@ -199,7 +199,7 @@ public class ChangeUserActivity extends AppCompatActivity {
                                         public void onFailure(@NonNull Exception e) {
                                             progressDialog.dismiss();
                                             //Toast.makeText(ChangePasswordActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
-                                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_fail,null);
+                                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_fail, null);
 
                                             TextView OK = view.findViewById(R.id.OK);
                                             TextView description = view.findViewById(R.id.textDesCription);
@@ -229,7 +229,7 @@ public class ChangeUserActivity extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_fail,null);
+                    View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_fail, null);
 
                     TextView OK = view.findViewById(R.id.OK);
                     TextView description = view.findViewById(R.id.textDesCription);
@@ -252,8 +252,7 @@ public class ChangeUserActivity extends AppCompatActivity {
                 }
             });
 
-        }
-        else{
+        } else {
             currentUser.image = newPath;
             db.collection("Users")
                     .document(user.getUid()).set(currentUser)
@@ -261,7 +260,7 @@ public class ChangeUserActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void unused) {
                             progressDialog.dismiss();
-                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_success,null);
+                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_success, null);
 
                             TextView OK = view.findViewById(R.id.OK);
                             TextView description = view.findViewById(R.id.textDesCription);
@@ -287,7 +286,7 @@ public class ChangeUserActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
                             //Toast.makeText(ChangePasswordActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
-                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_fail,null);
+                            View view = LayoutInflater.from(ChangeUserActivity.this).inflate(R.layout.dialog_fail, null);
 
                             TextView OK = view.findViewById(R.id.OK);
                             TextView description = view.findViewById(R.id.textDesCription);

@@ -4,14 +4,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -26,14 +25,14 @@ public class SettingFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public String fragmentType = "Setting";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private LinearLayout layoutChangePassword, layoutLogout, layoutUser;
     private FirebaseAuth firebaseAuth;
-    public String fragmentType = "Setting";
     private ProgressDialog progressDialog;
+
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -79,13 +78,13 @@ public class SettingFragment extends Fragment {
         layoutChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().startActivity(new Intent(getActivity(),ChangePasswordActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
             }
         });
         layoutLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_logout,null);
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_logout, null);
 
                 TextView OK = view.findViewById(R.id.OK);
                 TextView CANCEL = view.findViewById(R.id.CANCEL);
@@ -102,7 +101,7 @@ public class SettingFragment extends Fragment {
                     public void onClick(View v) {
                         dialog.dismiss();
                         firebaseAuth.signOut();
-                        getActivity().startActivity(new Intent(getActivity(),LoginActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                         getActivity().finish();
                     }
                 });

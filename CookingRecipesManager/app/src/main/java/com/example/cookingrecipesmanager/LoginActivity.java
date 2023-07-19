@@ -30,14 +30,14 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin;
 
-    TextView btnRegister,btnForgetPassword;
+    TextView btnRegister, btnForgetPassword;
 
     TextInputLayout textEmail, textPassword;
 
 
     ProgressDialog progressDialog;
 
-    float v= 0;
+    float v = 0;
 
     FirebaseAuth firebaseAuth;
 
@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        btnLogin  =findViewById(R.id.btnLogin);
+        btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
         btnForgetPassword = findViewById(R.id.btnForgetPassword);
 
@@ -61,45 +61,41 @@ public class LoginActivity extends AppCompatActivity {
 
         //____________________________________________________________________
 
-        btnRegister.setOnClickListener((view)->{
-            Intent intent = new Intent( this,RegisterActivity.class);
+        btnRegister.setOnClickListener((view) -> {
+            Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
         });
 
-        btnLogin.setOnClickListener((view)->{
+        btnLogin.setOnClickListener((view) -> {
 
             textEmail.setErrorEnabled(false);
             textPassword.setErrorEnabled(false);
 
             String email = textEmail.getEditText().getText().toString().trim();
-            String password  =textPassword.getEditText().getText().toString().trim();
+            String password = textPassword.getEditText().getText().toString().trim();
 
-            if (TextUtils.isEmpty(email))
-            {
+            if (TextUtils.isEmpty(email)) {
                 textEmail.setError("Please enter your email");
                 textEmail.setFocusable(true);
                 textEmail.setErrorIconDrawable(null);
                 return;
             }
 
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            {
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 textEmail.setError("Invalid email");
                 textEmail.setFocusable(true);
                 textEmail.setErrorIconDrawable(null);
                 return;
             }
 
-            if (TextUtils.isEmpty(password))
-            {
+            if (TextUtils.isEmpty(password)) {
                 textPassword.setError("Please enter your password");
                 textPassword.setFocusable(true);
                 textPassword.setErrorIconDrawable(null);
                 return;
             }
 
-            if (password.length() < 6)
-            {
+            if (password.length() < 6) {
                 textPassword.setError("Password length at least 6 characters");
                 textPassword.setFocusable(true);
                 textPassword.setErrorIconDrawable(null);
@@ -108,11 +104,10 @@ public class LoginActivity extends AppCompatActivity {
 
             progressDialog.show();
 
-            firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful())
-                    {
+                    if (task.isSuccessful()) {
                         progressDialog.dismiss();
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -131,11 +126,9 @@ public class LoginActivity extends AppCompatActivity {
 //                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
 //                        Toast.makeText(LoginActivity.this, "Thanh cong", Toast.LENGTH_SHORT).show();
                         finish();
-                    }
-                    else
-                    {
+                    } else {
                         progressDialog.dismiss();
-                        Toast.makeText(LoginActivity.this,"Email or Password is incorrect!",Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Email or Password is incorrect!", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -144,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         btnForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,ForgetPasswordActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
                 startActivity(intent);
 
             }
@@ -164,11 +157,10 @@ public class LoginActivity extends AppCompatActivity {
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-    protected void unregistorNetwork(){
+    protected void unregistorNetwork() {
         try {
             unregisterReceiver(broadcastReceiver);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

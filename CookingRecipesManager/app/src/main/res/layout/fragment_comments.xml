@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
     android:orientation="vertical"
-    tools:context=".CommentsFragment"
-    android:animateLayoutChanges="true">
+    tools:context=".CommentsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"/>
+        android:nestedScrollingEnabled="false" />
 
     <Button
         android:id="@+id/btn_addComment"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Comment"
+        android:layout_gravity="center_horizontal"
         android:drawableLeft="@drawable/baseline_add_24"
         android:drawablePadding="4dp"
         android:drawableTint="?attr/colorPrimary"
-        android:layout_gravity="center_horizontal"
-        />
+        android:text="Add Comment" />
 
     <Button
         android:id="@+id/btn_cancelComment"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:layout_gravity="center_horizontal"
         android:drawableLeft="@drawable/baseline_delete_forever_24"
         android:drawablePadding="4dp"
         android:drawableTint="?attr/colorPrimary"
-        android:layout_gravity="center_horizontal"
-        />
+        android:text="Cancel" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_addComment"

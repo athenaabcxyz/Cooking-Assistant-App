@@ -31,10 +31,12 @@ import java.util.List;
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder> {
     private Context context;
     private List<Recipe> cookingNoteList;
-    public void setData( List<Recipe> list){
+
+    public void setData(List<Recipe> list) {
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public DishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,18 +48,17 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
     @Override
     public void onBindViewHolder(@NonNull DishViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Recipe note = cookingNoteList.get(position);
-        if(note == null){
+        if (note == null) {
             return;
         }
         holder.title.setText(note.title);
         holder.author.setText(note.userName);
-        holder.like.setText(String.valueOf(note.aggregateLikes)+ " like");
-        holder.time.setText(String.valueOf(note.readyInMinutes)+" min");
+        holder.like.setText(String.valueOf(note.aggregateLikes) + " like");
+        holder.time.setText(String.valueOf(note.readyInMinutes) + " min");
         Picasso.get().load(note.image).into(holder.img);
-        if(note.userImage != null){
+        if (note.userImage != null) {
             Picasso.get().load(note.image).into(holder.userImage);
-        }
-        else {
+        } else {
             holder.userImage.setImageResource(R.drawable.ic_avatar_default);
         }
         try {
@@ -86,10 +87,10 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
             CookingNote note1 = new CookingNote(note, note.id, note.title, "Nguyen Hoang Nam", "", note.image, new Float("4.5"), true);
 
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction()
                             .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note, Constants.HOME_NAME))
                             .commitNow();
                 }
@@ -101,7 +102,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
                     Intent intent = new Intent(context, UserRecipe.class);
                     intent.putExtra("userID", note.userID);
                     context.startActivity(intent);
-                    ((MainActivity)context).finish();
+                    ((MainActivity) context).finish();
                 }
             });
         } catch (Exception e) {
@@ -112,10 +113,31 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
 
     @Override
     public int getItemCount() {
-        if(cookingNoteList!= null){
+        if (cookingNoteList != null) {
             return cookingNoteList.size();
         }
         return 0;
+    }
+
+    public void sortAsc() {
+        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
+            @Override
+            public int compare(Recipe i0, Recipe i1) {
+                return i0.title.compareToIgnoreCase(i1.title);
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDes() {
+        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
+            @Override
+            public int compare(Recipe i0, Recipe i1) {
+                return i0.title.compareToIgnoreCase(i1.title);
+            }
+        });
+        Collections.reverse(cookingNoteList);
+        notifyDataSetChanged();
     }
 
     public class DishViewHolder extends RecyclerView.ViewHolder {
@@ -127,36 +149,17 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.DishViewHolder
         private ImageView img;
         private ImageView userImage;
         private ImageView iFavorites;
+
         public DishViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
-            title = itemView.findViewById(R.id.textTitle) ;
+            title = itemView.findViewById(R.id.textTitle);
             author = itemView.findViewById(R.id.textAuthor);
-            like = itemView.findViewById(R.id.like) ;
+            like = itemView.findViewById(R.id.like);
             time = itemView.findViewById(R.id.time);
             img = itemView.findViewById(R.id.imageView);
             iFavorites = itemView.findViewById(R.id.imageButton);
             userImage = itemView.findViewById(R.id.imageUser);
         }
-    }
-
-    public void sortAsc(){
-        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
-            @Override
-            public int compare(Recipe i0, Recipe i1) {
-                return i0.title.compareToIgnoreCase(i1.title);
-            }
-        });
-        notifyDataSetChanged();
-    }
-    public void sortDes(){
-        Collections.sort(cookingNoteList, new Comparator<Recipe>() {
-            @Override
-            public int compare(Recipe i0, Recipe i1) {
-                return i0.title.compareToIgnoreCase(i1.title);
-            }
-        });
-        Collections.reverse(cookingNoteList);
-        notifyDataSetChanged();
     }
 }
