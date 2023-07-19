@@ -7,10 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="prepare_step">#09ea77</color>
-    <color name="timer_step">#7709ea</color>
-    <color name="tag">#FFBB86FC</color>
-    <color name="basic_step">#338ffd</color>
     <color name="text">#FF333333</color>
     <color name="grey">#F6F7FB</color>
     <color name="grey2">#FFC4C4C4</color>

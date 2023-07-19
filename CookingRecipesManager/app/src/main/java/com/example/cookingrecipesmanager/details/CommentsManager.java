@@ -12,34 +12,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class CommentsManager
-{
+public class CommentsManager {
     protected String mRecipeId;
-
-    public interface IListener {
-        void onUpdateComments(CommentsManager commentsManager);
-    }
-    ArrayList<IListener> listeners = new ArrayList<>();
-
-    protected void broadcastEvents()
-    {
-        listeners.forEach(new Consumer<IListener>() {
-            @Override
-            public void accept(IListener listener) {
-                listener.onUpdateComments(CommentsManager.this);
-            }
-        });
-    }
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CollectionReference collectionRef = db.collection("CommentSection");
-//    public class Comment implements Serializable
+    //    public class Comment implements Serializable
 //    {
 //        public String username;
 //        public String text;
@@ -51,15 +30,25 @@ public class CommentsManager
 //    }
     protected CommentSection commentSection;
     protected ArrayList<Comments> comments;
-
+    ArrayList<IListener> listeners = new ArrayList<>();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    CollectionReference collectionRef = db.collection("CommentSection");
     public CommentsManager(String recipeId) {
         mRecipeId = recipeId;
         fetchComments();
 //        comments = new ArrayList<>(Arrays.asList(new Comment("john", "aaaaaaaa"), new Comment("doe", "aaaaaaaaa")));
     }
 
-    protected void fetchComments()
-    {
+    protected void broadcastEvents() {
+        listeners.forEach(new Consumer<IListener>() {
+            @Override
+            public void accept(IListener listener) {
+                listener.onUpdateComments(CommentsManager.this);
+            }
+        });
+    }
+
+    protected void fetchComments() {
         collectionRef.document(mRecipeId).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -68,13 +57,10 @@ public class CommentsManager
                         if (!success) return;
 
                         boolean exists = task.getResult().exists();
-                        if (exists)
-                        {
+                        if (exists) {
                             commentSection = task.getResult().toObject(CommentSection.class);
                             broadcastEvents();
-                        }
-                        else
-                        {
+                        } else {
                             commentSection = new CommentSection();
                             commentSection.recipeId = mRecipeId;
                             commentSection.commentList = new ArrayList<>();
@@ -91,13 +77,11 @@ public class CommentsManager
                 });
     }
 
-    public void addListener(IListener listener)
-    {
+    public void addListener(IListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(IListener listener)
-    {
+    public void removeListener(IListener listener) {
         listeners.remove(listener);
     }
 
@@ -108,8 +92,7 @@ public class CommentsManager
         return new ArrayList<>();
     }
 
-    public void addComment(String username, String text)
-    {
+    public void addComment(String username, String text) {
         Comments comment = new Comments();
         comment.commentId = UUID.randomUUID().toString();
         comment.userId = username;
@@ -124,14 +107,17 @@ public class CommentsManager
         }
     }
 
-    public void removeComment(Comments comment)
-    {
+    public void removeComment(Comments comment) {
         collectionRef.document(mRecipeId).update("commentList", FieldValue.arrayRemove(comment)).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 fetchComments();
             }
         });
+    }
+
+    public interface IListener {
+        void onUpdateComments(CommentsManager commentsManager);
     }
 }
 

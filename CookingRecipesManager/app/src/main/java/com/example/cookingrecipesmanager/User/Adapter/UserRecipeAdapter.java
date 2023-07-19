@@ -28,10 +28,12 @@ import java.util.List;
 public class UserRecipeAdapter extends RecyclerView.Adapter<UserRecipeAdapter.UserRecipeViewHolder> {
     private Context context;
     private List<CookingNote> cookingNoteList;
-    public void setData( List<CookingNote> list){
+
+    public void setData(List<CookingNote> list) {
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public UserRecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,18 +45,17 @@ public class UserRecipeAdapter extends RecyclerView.Adapter<UserRecipeAdapter.Us
     @Override
     public void onBindViewHolder(@NonNull UserRecipeViewHolder holder, @SuppressLint("RecyclerView") int position) {
         CookingNote note = cookingNoteList.get(position);
-        if(note == null){
+        if (note == null) {
             return;
         }
         holder.title.setText(note.getTitle());
         holder.author.setText(note.getAuthor());
-        holder.like.setText(String.valueOf(note.recipe.aggregateLikes)+ " like");
-        holder.time.setText(String.valueOf(note.recipe.readyInMinutes)+ " min");
+        holder.like.setText(String.valueOf(note.recipe.aggregateLikes) + " like");
+        holder.time.setText(String.valueOf(note.recipe.readyInMinutes) + " min");
         Picasso.get().load(note.img).into(holder.img);
-        if(note.recipe.userImage != null){
+        if (note.recipe.userImage != null) {
             Picasso.get().load(note.recipe.userImage).into(holder.userImage);
-        }
-        else {
+        } else {
             holder.userImage.setImageResource(R.drawable.ic_avatar_default);
         }
         try {
@@ -65,7 +66,7 @@ public class UserRecipeAdapter extends RecyclerView.Adapter<UserRecipeAdapter.Us
                     PopupMenu popup = new PopupMenu(context, v);
                     popup.getMenuInflater().inflate(R.menu.menu_popup,
                             popup.getMenu());
-                    if(note.getiFavorites()){
+                    if (note.getiFavorites()) {
                         popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
                     }
 
@@ -81,13 +82,13 @@ public class UserRecipeAdapter extends RecyclerView.Adapter<UserRecipeAdapter.Us
                 }
             });
 
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, MainActivity.class);
                     intent.putExtra("USER_RECIPE", note.recipe);
                     context.startActivity(intent);
-                    ((UserRecipe)context).finish();
+                    ((UserRecipe) context).finish();
                 }
             });
         } catch (Exception e) {
@@ -98,10 +99,31 @@ public class UserRecipeAdapter extends RecyclerView.Adapter<UserRecipeAdapter.Us
 
     @Override
     public int getItemCount() {
-        if(cookingNoteList!= null){
+        if (cookingNoteList != null) {
             return cookingNoteList.size();
         }
         return 0;
+    }
+
+    public void sortAsc() {
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDes() {
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        Collections.reverse(cookingNoteList);
+        notifyDataSetChanged();
     }
 
     public class UserRecipeViewHolder extends RecyclerView.ViewHolder {
@@ -112,35 +134,17 @@ public class UserRecipeAdapter extends RecyclerView.Adapter<UserRecipeAdapter.Us
         private TextView like;
         private TextView time;
         private ImageView iFavorites;
+
         public UserRecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
-            title = itemView.findViewById(R.id.textTitle) ;
+            title = itemView.findViewById(R.id.textTitle);
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
             iFavorites = itemView.findViewById(R.id.imageButton);
-            like = itemView.findViewById(R.id.like) ;
+            like = itemView.findViewById(R.id.like);
             time = itemView.findViewById(R.id.time);
             userImage = itemView.findViewById(R.id.imageUser);
         }
-    }
-    public void sortAsc(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
-            @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
-            }
-        });
-        notifyDataSetChanged();
-    }
-    public void sortDes(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
-            @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
-            }
-        });
-        Collections.reverse(cookingNoteList);
-        notifyDataSetChanged();
     }
 }

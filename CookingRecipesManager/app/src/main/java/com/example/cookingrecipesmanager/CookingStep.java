@@ -9,7 +9,7 @@ public class CookingStep {
     public int timerBySecond;
 
     public CookingStep(String stepIntruction, String stepType, int timerBySecond) {
-        this.stepIntruction=stepIntruction;
+        this.stepIntruction = stepIntruction;
         this.stepType = stepType;
         if (!stepType.equals("Timer")) {
             timerBySecond = 0;

@@ -4,18 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.view.GestureDetectorCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.TransitionInflater;
-
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -23,15 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cookingrecipesmanager.database.Model.User;
-import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.transition.TransitionInflater;
+
 import com.example.cookingrecipesmanager.database.Model.Recipe;
+import com.example.cookingrecipesmanager.database.Model.User;
 import com.example.cookingrecipesmanager.databinding.FragmentRecipeDetailsBinding;
 import com.example.cookingrecipesmanager.details.DetailsTagAdapter;
+import com.example.cookingrecipesmanager.details.IngredientAdapter;
 import com.example.cookingrecipesmanager.recipetracker.RecipeStepPreview;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,75 +61,21 @@ public class RecipeDetailsFragment extends Fragment {
 
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String uid;
-    public String fragmentType = "Detail";
+
     {
         assert user != null;
         uid = user.getUid();
     }
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    State mState = new State();
     private boolean bSaved = false;
     private boolean bLiked = false;
     private GestureDetectorCompat Gesture;
-
-    public class IngredientViewHolder extends RecyclerView.ViewHolder {
-        private final TextView mTextView;
-
-        public IngredientViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mTextView = itemView.findViewById(R.id.ingredient_name);
-        }
-
-        public TextView getViewIngredientName()
-        {
-            return mTextView;
-        }
-    }
-
-    public class IngredientAdapter extends RecyclerView.Adapter<IngredientViewHolder>
-    {
-        private List<ExtendedIngredient> mData;
-
-        public IngredientAdapter(List<ExtendedIngredient> data)
-        {
-            mData = data;
-//            mData.trimToSize();
-        }
-
-        @NonNull
-        @Override
-        public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new IngredientViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ingredient, parent, false));
-        }
-
-        protected String formatIngredient(ExtendedIngredient item)
-        {
-
-            return item.original;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
-            holder.mTextView.setText(formatIngredient(mData.get(position)));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mData.size();
-        }
-    }
-
     private FragmentRecipeDetailsBinding binding;
-
     private Recipe mParamRecipe;
 
-    protected class State implements Serializable {
-        public boolean ingredientsExpanded = false;
-        public boolean descriptionExpand = false;
-    };
-
-    State mState = new State();
-
+    ;
     private String beforeScreen, idUserRecipe;
 
     public RecipeDetailsFragment() {
@@ -149,26 +91,23 @@ public class RecipeDetailsFragment extends Fragment {
         return fragment;
     }
 
-    protected void UpdateDescription()
-    {
+    protected void UpdateDescription() {
         binding.content.containerTextDescShort.setVisibility(mState.descriptionExpand ? View.GONE : View.VISIBLE);
         binding.content.textDescFull.setVisibility(mState.descriptionExpand ? View.VISIBLE : View.GONE);
     }
 
-    protected void InitLikeBtn()
-    {
+    protected void InitLikeBtn() {
         bLiked = false;
         db.collection("Users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
                 assert user != null;
-                if(user.likedRecipes!=null) {
+                if (user.likedRecipes != null) {
                     user.likedRecipes.forEach(new Consumer<Integer>() {
                         @Override
                         public void accept(Integer integer) {
-                            if (integer == mParamRecipe.id)
-                            {
+                            if (integer == mParamRecipe.id) {
                                 bLiked = true;
                             }
                         }
@@ -185,34 +124,65 @@ public class RecipeDetailsFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot snapshot) {
-                                    User user = snapshot.toObject(User.class);
-                                    assert user != null;
-                                    boolean bRemovingItem = false;
-                                    // check if current item is in saved list, if so then remove it and set state
-                                    if(user.likedRecipes!=null) {
-                                        for (int i = 0; i <= user.likedRecipes.size()-1; i++) {
-                                            if (user.likedRecipes.get(i) == mParamRecipe.id) {
-                                                db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
-                                                bLiked = false;
-                                                bRemovingItem = true;
-                                            }
+                                User user = snapshot.toObject(User.class);
+                                assert user != null;
+                                boolean bRemovingItem = false;
+                                // check if current item is in saved list, if so then remove it and set state
+                                if (user.likedRecipes != null) {
+                                    for (int i = 0; i <= user.likedRecipes.size() - 1; i++) {
+                                        if (user.likedRecipes.get(i) == mParamRecipe.id) {
+                                            db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
+                                            bLiked = false;
+                                            bRemovingItem = true;
+                                            db.collection("recipes").whereEqualTo("id", mParamRecipe.id).get()
+                                                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                            if (queryDocumentSnapshots.isEmpty())
+                                                                return;
+                                                            String id = queryDocumentSnapshots.getDocuments().get(0).getId();
+                                                            db.collection("recipes").document(id).update(
+                                                                    "aggregateLikes", FieldValue.increment(-1)
+                                                            ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    UpdateLikeBtn();
+                                                                }
+                                                            });
+                                                        }
+                                                    });
                                         }
                                     }
-                                    // current item not saved, adding it
-                                    if (!bRemovingItem) {
-                                        db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
-                                        bLiked = true;
-                                    }
+                                }
+                                // current item not saved, adding it
+                                if (!bRemovingItem) {
+                                    db.collection("Users").document(uid).update("likedRecipes", FieldValue.arrayUnion(mParamRecipe.id));
+                                    bLiked = true;
+                                    db.collection("recipes").whereEqualTo("id", mParamRecipe.id).get()
+                                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                                    if (queryDocumentSnapshots.isEmpty()) return;
+                                                    String id = queryDocumentSnapshots.getDocuments().get(0).getId();
+                                                    db.collection("recipes").document(id).update(
+                                                            "aggregateLikes", FieldValue.increment(1)
+                                                    ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            UpdateLikeBtn();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                }
 
-                                UpdateLikeBtn();
                             }
                         });
             }
         });
     }
 
-    protected void UpdateLikeBtn()
-    {
+    protected void UpdateLikeBtn() {
         int color = (bLiked ? 0xffff8080 : 0xffaaaaaa);
         binding.content.btnLike.setIconTint(ColorStateList.valueOf(color));
 
@@ -222,32 +192,27 @@ public class RecipeDetailsFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         Recipe recipe = queryDocumentSnapshots.getDocuments().get(0).toObject(Recipe.class);
-                        if (recipe != null)
-                        {
+                        if (recipe != null) {
                             binding.content.btnLike.setText(String.format("%d", recipe.aggregateLikes));
                         }
                     }
                 });
     }
 
-    protected void UpdateSaveBtn(boolean bSaved)
-    {
+    protected void UpdateSaveBtn(boolean bSaved) {
         int color = (bSaved ? 0xffdddd40 : 0xffaaaaaa);
         binding.content.btnSave.setIconTint(ColorStateList.valueOf(color));
     }
 
     // whether the current user created this item
-    protected boolean GetIsOwner()
-    {
+    protected boolean GetIsOwner() {
         final String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         return currentUID.equals(mParamRecipe.userID);
     }
 
     // Set visibility for buttons meant only for the owner of this recipe
-    protected void InitEditButtons()
-    {
-        if (!GetIsOwner())
-        {
+    protected void InitEditButtons() {
+        if (!GetIsOwner()) {
             binding.content.btnEdit.setVisibility(View.GONE);
             binding.content.btnRemove.setVisibility(View.GONE);
         }
@@ -267,8 +232,7 @@ public class RecipeDetailsFragment extends Fragment {
     }
 
     // Opens editor activity passing recipe id
-    protected void CallEditor()
-    {
+    protected void CallEditor() {
 //        Intent intentEdit = new Intent(requireContext(), RecipeCreater.class); // ?
 //        intentEdit.putExtra("RECIPE_DATA", (Serializable)mParamRecipe);
 //        intentEdit.putExtra("RECIPE_ID", mParamRecipe.id);
@@ -276,8 +240,7 @@ public class RecipeDetailsFragment extends Fragment {
         //TODO: Opening editor activity
     }
 
-    protected void RemoveCurrentItem()
-    {
+    protected void RemoveCurrentItem() {
         RecipeDetailsFragment fragment = this;
 
         Log.d("DETAILS", String.format("removing recipe %d", mParamRecipe.id));
@@ -294,14 +257,13 @@ public class RecipeDetailsFragment extends Fragment {
                         });
                     }
                 });
-        ((MainActivity)requireActivity()).getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
+        ((MainActivity) requireActivity()).getSupportFragmentManager().beginTransaction().remove(fragment).commitNow();
 
         // TODO: refresh library
     }
 
     // Removes current item from the database (confirmation dialog)
-    protected void CallRemove()
-    {
+    protected void CallRemove() {
 //        Toast.makeText(requireContext(), "removing not implemented", Toast.LENGTH_SHORT).show();
 
         //      consider adding 'hidden' flag (ie. trash bin)?
@@ -346,7 +308,7 @@ public class RecipeDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentRecipeDetailsBinding.inflate(inflater, container, false);
-        Picasso.get().load(mParamRecipe.image).into( binding.appBarImage);
+        Picasso.get().load(mParamRecipe.image).into(binding.appBarImage);
 
         binding.content.authorName.setText("Foodista");
         binding.content.textDescription.setText(Jsoup.parse(mParamRecipe.summary).text());
@@ -357,12 +319,9 @@ public class RecipeDetailsFragment extends Fragment {
         binding.toolbarTitleEx.setText(mParamRecipe.title);
         binding.toolbarTitleEx.setSelected(true);
         binding.toolbarTitle.setText(mParamRecipe.title);
-        if (mParamRecipe.userName != null && mParamRecipe.userName.length() > 0)
-        {
+        if (mParamRecipe.userName != null && mParamRecipe.userName.length() > 0) {
             binding.content.authorName.setText(mParamRecipe.userName);
-        }
-        else
-        {
+        } else {
             binding.content.authorName.setText(requireContext().getResources().getString(R.string.username_anon));
         }
         binding.content.textDescription.setText(Html.fromHtml(mParamRecipe.summary, 0));
@@ -376,14 +335,12 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.valueCost.setText(String.format("$%s", df.format(mParamRecipe.pricePerServing)));
 
         ArrayList<String> ingredients = new ArrayList<String>();
-        for(int i =0; i<=mParamRecipe.extendedIngredients.size()-1;i++)
-        {
+        for (int i = 0; i <= mParamRecipe.extendedIngredients.size() - 1; i++) {
             ingredients.add(mParamRecipe.extendedIngredients.get(i).original);
         }
 
         ArrayList<Tag> tags = new ArrayList<>();
-        for(int i =0; i<=mParamRecipe.dishTypes.size()-1;i++)
-        {
+        for (int i = 0; i <= mParamRecipe.dishTypes.size() - 1; i++) {
             tags.add(new Tag(mParamRecipe.dishTypes.get(i), false));
         }
         binding.content.listTags.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -398,13 +355,10 @@ public class RecipeDetailsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mState.ingredientsExpanded = !mState.ingredientsExpanded;
-                if (mState.ingredientsExpanded)
-                {
+                if (mState.ingredientsExpanded) {
                     binding.content.btnIngredientsExpand.setText("Collapse");
                     binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients));
-                }
-                else
-                {
+                } else {
                     binding.content.btnIngredientsExpand.setText("Expand");
                     binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients.subList(0, 3)));
                 }
@@ -419,8 +373,8 @@ public class RecipeDetailsFragment extends Fragment {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
                 assert user != null;
-                if(user.savedRecipes!=null) {
-                    for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
+                if (user.savedRecipes != null) {
+                    for (int i = 0; i <= user.savedRecipes.size() - 1; i++) {
                         if (user.savedRecipes.get(i) == mParamRecipe.id) {
                             bSaved = true;
                         }
@@ -438,14 +392,13 @@ public class RecipeDetailsFragment extends Fragment {
                             @Override
                             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                                for(DocumentSnapshot snapshot:snapshotList)
-                                {
+                                for (DocumentSnapshot snapshot : snapshotList) {
                                     User user = snapshot.toObject(User.class);
                                     assert user != null;
                                     boolean bRemovedSavedItem = false;
                                     // check if current item is in saved list, if so then remove it and set state
-                                    if(user.savedRecipes!=null) {
-                                        for (int i = 0; i <= user.savedRecipes.size()-1; i++) {
+                                    if (user.savedRecipes != null) {
+                                        for (int i = 0; i <= user.savedRecipes.size() - 1; i++) {
                                             if (user.savedRecipes.get(i) == mParamRecipe.id) {
                                                 db.collection("Users").document(uid).update("savedRecipes", FieldValue.arrayRemove(mParamRecipe.id));
                                                 bSaved = false;
@@ -473,14 +426,14 @@ public class RecipeDetailsFragment extends Fragment {
         binding.appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                binding.appBarImage.setTranslationY(-verticalOffset/2);
+                binding.appBarImage.setTranslationY(-verticalOffset / 2);
                 float baseRadius = getResources().getDisplayMetrics().density * 12.f;
-                binding.appbarCard.setRadius(baseRadius + verticalOffset/16);
-                float hPadding = (8 * getResources().getDisplayMetrics().density + verticalOffset/16);
+                binding.appbarCard.setRadius(baseRadius + verticalOffset / 16);
+                float hPadding = (8 * getResources().getDisplayMetrics().density + verticalOffset / 16);
                 hPadding = hPadding < 0 ? 0 : hPadding;
-                binding.toolbarParent.setPadding((int)hPadding, (int) (8 * getResources().getDisplayMetrics().density), (int)hPadding, 0);
+                binding.toolbarParent.setPadding((int) hPadding, (int) (8 * getResources().getDisplayMetrics().density), (int) hPadding, 0);
 
-                float titleAlpha = 1.f - (float)Math.abs(verticalOffset) / 200;
+                float titleAlpha = 1.f - (float) Math.abs(verticalOffset) / 200;
                 titleAlpha = Math.max(0.f, Math.min(1.f, titleAlpha));
                 binding.toolbarTitleEx.setAlpha(titleAlpha);
                 binding.toolbarTitleEx.setSelected(titleAlpha == 1.f);
@@ -546,11 +499,11 @@ public class RecipeDetailsFragment extends Fragment {
                 intent.putExtra("RECIPE", (Serializable) mParamRecipe);
                 intent.putExtra("BEFORE_SCREEN", beforeScreen);
                 startActivity(intent);
-                ((MainActivity)getContext()).finish();
+                ((MainActivity) getContext()).finish();
             }
         });
 
-        if(mParamRecipe.userID != null){
+        if (mParamRecipe.userID != null) {
             idUserRecipe = mParamRecipe.userID;
         }
 
@@ -571,24 +524,24 @@ public class RecipeDetailsFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
-    public void DeleteRecipe(){
+
+    public void DeleteRecipe() {
         db.collection("recipes")
                 .whereEqualTo("id", mParamRecipe.id)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             for (DocumentSnapshot document : task.getResult()) {
                                 db.collection("recipes").document(document.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void unused) {
-                                        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_success,null);
+                                        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_success, null);
 
                                         TextView OK = view.findViewById(R.id.OK);
                                         TextView description = view.findViewById(R.id.textDesCription);
@@ -610,22 +563,27 @@ public class RecipeDetailsFragment extends Fragment {
                                     }
                                 });
                             }
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getContext(), "Khong co du lieu phu hop", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
     public void onBack() {
-        if(getContext() != null){
+        if (getContext() != null) {
             Intent intent = new Intent(getContext(), MainActivity.class);
             intent.putExtra("DELETE_RECIPE", true);
             intent.putExtra("BEFORE_SCREEN", beforeScreen);
             intent.putExtra("ID_USER_RECIPE", idUserRecipe);
             startActivity(intent);
-            ((MainActivity)getContext()).finish();
+            ((MainActivity) getContext()).finish();
         }
+    }
+
+    protected class State implements Serializable {
+        public boolean ingredientsExpanded = false;
+        public boolean descriptionExpand = false;
     }
 
 }

@@ -10,7 +10,8 @@ public class Length implements Serializable {
         this.number = number;
         this.unit = unit;
     }
-    public Length(){
+
+    public Length() {
 
     }
 }

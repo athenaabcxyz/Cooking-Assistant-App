@@ -7,28 +7,20 @@ import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.CookingStep;
+import com.example.cookingrecipesmanager.R;
 
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import kotlinx.coroutines.Delay;
 
 public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
     public int timeCounter;
@@ -125,8 +117,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListViewHolder> {
                     }.start();
 
 
-                }
-                else {
+                } else {
                     if (holder.checkBox.isChecked()) {
                         holder.stepName.setTextColor(ColorStateList.valueOf(0xFFC4C4C4));
                     } else {
@@ -157,9 +148,9 @@ class StepListViewHolder extends RecyclerView.ViewHolder {
     public StepListViewHolder(@NonNull View itemView) {
         super(itemView);
         stepName = itemView.findViewById(R.id.stepName);
-        step=itemView.findViewById(R.id.step);
-        checkBox=itemView.findViewById((R.id.stepStatus));
-        textTimer=itemView.findViewById(R.id.timer);
-        time_group=itemView.findViewById(R.id.time_group);
+        step = itemView.findViewById(R.id.step);
+        checkBox = itemView.findViewById((R.id.stepStatus));
+        textTimer = itemView.findViewById(R.id.timer);
+        time_group = itemView.findViewById(R.id.time_group);
     }
 }

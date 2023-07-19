@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,7 +12,9 @@
         app:elevation="8dp"
 
         >
+
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="0dp"
@@ -21,11 +22,9 @@
             android:paddingTop="8dp"
             android:paddingRight="8dp"
             android:paddingBottom="0dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:id="@+id/collapsingToolbar"
-            app:expandedTitleGravity="bottom|center_horizontal"
             app:collapsedTitleGravity="center"
-            >
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -39,11 +38,11 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     android:src="@drawable/mon3" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/background_gradiant2"
-                    >
+                    android:background="@drawable/background_gradiant2">
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
@@ -54,26 +53,24 @@
                 android:layout_height="?attr/actionBarSize"
                 app:title="RecipeName"
 
-                >
-            </androidx.appcompat.widget.Toolbar>
+                ></androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        >
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/stepList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                />
+                android:layout_marginTop="10dp" />
 
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

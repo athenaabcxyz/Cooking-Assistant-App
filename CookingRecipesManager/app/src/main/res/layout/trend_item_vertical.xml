@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
     android:layout_marginRight="5dp"
-    >
+    android:layout_marginBottom="20dp">
+
     <androidx.cardview.widget.CardView
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        app:cardCornerRadius="8dp"
-        android:id="@+id/header"
-        android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        >
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="8dp">
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
@@ -23,67 +23,67 @@
             app:cardCornerRadius="10dp"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
+
     <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/header"
-        android:id="@+id/container"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="3dp"
-        >
+        android:paddingRight="3dp">
+
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title of cooking note"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:textColor="#333333"
+            android:layout_marginRight="40dp"
             android:layout_marginBottom="5dp"
+            android:ellipsize="end"
             android:lines="1"
             android:singleLine="true"
-            android:ellipsize="end"
-            android:layout_marginRight="40dp"
-            />
+            android:text="Title of cooking note"
+            android:textColor="#333333"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
         <LinearLayout
+            android:id="@+id/user_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/user_group"
-            android:layout_gravity="center"
             android:layout_below="@id/textTitle"
+            android:layout_gravity="center"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="5dp"
-            >
+            android:layout_marginBottom="5dp">
+
             <androidx.cardview.widget.CardView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginRight="10dp"
-                app:cardCornerRadius="14dp"
-                >
+                app:cardCornerRadius="14dp">
+
                 <ImageView
                     android:id="@+id/imageUser"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_avatar_default"
                     android:layout_below="@id/textTitle"
-                    />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_avatar_default" />
             </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/textAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name of author"
-                android:textSize="14dp"
-                android:textColor="#C4C4C4"
-                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginRight="40dp"
+                android:ellipsize="end"
                 android:lines="1"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:layout_marginRight="40dp"
-                android:layout_gravity="center"
-                />
+                android:text="Name of author"
+                android:textColor="#C4C4C4"
+                android:textSize="14dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -97,83 +97,82 @@
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/home_popup_menu_icon"
-            android:backgroundTint="#00FFFFFF"
             android:layout_alignParentRight="true"
+            android:backgroundTint="#00FFFFFF"
             android:padding="0dp"
             android:visibility="gone"
-            />
+            app:srcCompat="@drawable/home_popup_menu_icon" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/user_group"
-            android:weightSum="100"
-            >
+            android:weightSum="100">
+
             <LinearLayout
+                android:id="@+id/like_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:paddingTop="8dp"
-                android:id="@+id/like_group"
                 android:layout_weight="50"
-                >
+                android:paddingTop="8dp">
+
                 <ImageView
                     android:id="@+id/imageView2"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    app:srcCompat="@drawable/heart_icon_2"
-                    android:scaleType="centerCrop"
-                    android:layout_marginRight="2dp"
-                    app:tint="#EF7456"
                     android:layout_gravity="center_vertical"
-                    />
+                    android:layout_marginRight="2dp"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/heart_icon_2"
+                    app:tint="#EF7456" />
+
                 <TextView
                     android:id="@+id/like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:text="4.500"
-                    android:textSize="14sp"
-                    android:textColor="@color/grey3"
-                    android:textStyle="bold"
                     android:lines="1"
                     android:singleLine="true"
-                    android:ellipsize="end"
-                    android:layout_marginRight="10dp"
-                    />
+                    android:text="4.500"
+                    android:textColor="@color/grey3"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
+
             <LinearLayout
+                android:id="@+id/time_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:paddingTop="8dp"
-                android:id="@+id/time_group"
                 android:layout_weight="50"
-                >
+                android:paddingTop="8dp">
+
                 <ImageView
                     android:id="@+id/imageView4"
                     android:layout_width="21dp"
                     android:layout_height="21dp"
-                    app:srcCompat="@android:drawable/ic_menu_recent_history"
-                    android:scaleType="centerCrop"
                     android:layout_marginRight="2dp"
-                    app:tint="@color/blue"
-                    />
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@android:drawable/ic_menu_recent_history"
+                    app:tint="@color/blue" />
+
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:ellipsize="end"
                     android:gravity="center"
-                    android:text="45 min"
-                    android:textSize="14sp"
-                    android:textColor="@color/grey3"
-                    android:textStyle="bold"
                     android:lines="1"
                     android:singleLine="true"
-                    android:ellipsize="end"
-                    android:layout_marginRight="10dp"
-                    />
+                    android:text="45 min"
+                    android:textColor="@color/grey3"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </LinearLayout>

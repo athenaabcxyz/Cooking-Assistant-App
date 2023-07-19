@@ -20,7 +20,6 @@ import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.RecipeDetailsFragment;
 import com.example.cookingrecipesmanager.UserRecipe;
-import com.example.cookingrecipesmanager.database.Model.Recipe;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -28,15 +27,15 @@ import java.util.Comparator;
 import java.util.List;
 
 
-
-
 public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder> {
     private Context context;
     private List<CookingNote> cookingNoteList;
-    public void setData( List<CookingNote> list){
+
+    public void setData(List<CookingNote> list) {
         this.cookingNoteList = list;
         notifyDataSetChanged();
     }
+
     @NonNull
     @Override
     public com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,18 +47,17 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
     @Override
     public void onBindViewHolder(@NonNull com.example.cookingrecipesmanager.library.Adapter.LibraryAdapter.LibraryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         CookingNote note = cookingNoteList.get(position);
-        if(note == null){
+        if (note == null) {
             return;
         }
         holder.title.setText(note.getTitle());
         holder.author.setText(note.getAuthor());
-        holder.like.setText(String.valueOf(note.recipe.aggregateLikes)+ " like");
-        holder.time.setText(String.valueOf(note.recipe.readyInMinutes)+ " min");
+        holder.like.setText(String.valueOf(note.recipe.aggregateLikes) + " like");
+        holder.time.setText(String.valueOf(note.recipe.readyInMinutes) + " min");
         Picasso.get().load(note.img).into(holder.img);
-        if(note.recipe.userImage != null){
+        if (note.recipe.userImage != null) {
             Picasso.get().load(note.recipe.userImage).into(holder.userImage);
-        }
-        else {
+        } else {
             holder.userImage.setImageResource(R.drawable.ic_avatar_default);
         }
         try {
@@ -70,7 +68,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
                     PopupMenu popup = new PopupMenu(context, v);
                     popup.getMenuInflater().inflate(R.menu.menu_popup,
                             popup.getMenu());
-                    if(note.getiFavorites()){
+                    if (note.getiFavorites()) {
                         popup.getMenu().findItem(R.id.Save).setTitle("UnSave");
                     }
 
@@ -94,11 +92,11 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
 //                }
 //            });
 
-            holder.rootView.setOnClickListener(new View.OnClickListener(){
+            holder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe,  Constants.LIBRARY_NAME))
+                    ((MainActivity) context).getSupportFragmentManager().beginTransaction()
+                            .add(R.id.layoutFragment, RecipeDetailsFragment.newInstance(note.recipe, Constants.LIBRARY_NAME))
                             .commitNow();
                 }
             });
@@ -109,7 +107,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
                     Intent intent = new Intent(context, UserRecipe.class);
                     intent.putExtra("userID", note.recipe.userID);
                     context.startActivity(intent);
-                    ((MainActivity)context).finish();
+                    ((MainActivity) context).finish();
                 }
             });
         } catch (Exception e) {
@@ -120,10 +118,31 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
 
     @Override
     public int getItemCount() {
-        if(cookingNoteList!= null){
+        if (cookingNoteList != null) {
             return cookingNoteList.size();
         }
         return 0;
+    }
+
+    public void sortAsc() {
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        notifyDataSetChanged();
+    }
+
+    public void sortDes() {
+        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
+            @Override
+            public int compare(CookingNote i0, CookingNote i1) {
+                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
+            }
+        });
+        Collections.reverse(cookingNoteList);
+        notifyDataSetChanged();
     }
 
     public class LibraryViewHolder extends RecyclerView.ViewHolder {
@@ -135,35 +154,17 @@ public class LibraryAdapter extends RecyclerView.Adapter<com.example.cookingreci
         private TextView time;
         private ImageView iFavorites;
         private ImageView userImage;
+
         public LibraryViewHolder(@NonNull View itemView) {
             super(itemView);
             rootView = itemView;
-            title = itemView.findViewById(R.id.textTitle) ;
+            title = itemView.findViewById(R.id.textTitle);
             author = itemView.findViewById(R.id.textAuthor);
             img = itemView.findViewById(R.id.imageView);
             iFavorites = itemView.findViewById(R.id.imageButton);
-            like = itemView.findViewById(R.id.like) ;
+            like = itemView.findViewById(R.id.like);
             time = itemView.findViewById(R.id.time);
             userImage = itemView.findViewById(R.id.imageUser);
         }
-    }
-    public void sortAsc(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
-            @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
-            }
-        });
-        notifyDataSetChanged();
-    }
-    public void sortDes(){
-        Collections.sort(cookingNoteList, new Comparator<CookingNote>() {
-            @Override
-            public int compare(CookingNote i0, CookingNote i1) {
-                return i0.getTitle().compareToIgnoreCase(i1.getTitle());
-            }
-        });
-        Collections.reverse(cookingNoteList);
-        notifyDataSetChanged();
     }
 }

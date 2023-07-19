@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cookingrecipesmanager.MainActivity;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.Search;
 import com.example.cookingrecipesmanager.Tag;
@@ -55,8 +54,7 @@ public class DetailsTagAdapter extends RecyclerView.Adapter<DetailsTagAdapter.Ta
         });
     }
 
-    public void setData(ArrayList<Tag> tags)
-    {
+    public void setData(ArrayList<Tag> tags) {
         this.tags = tags;
     }
 
@@ -69,6 +67,7 @@ public class DetailsTagAdapter extends RecyclerView.Adapter<DetailsTagAdapter.Ta
         public View root;
         public TextView text;
         public ImageView img;
+
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
             root = itemView;

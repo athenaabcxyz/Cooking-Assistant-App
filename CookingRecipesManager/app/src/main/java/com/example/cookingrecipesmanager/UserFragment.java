@@ -36,34 +36,29 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class UserFragment extends Fragment {
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    String uid;
-
-    {
-        assert user != null;
-        uid = user.getUid();
-    }
-
-    List<User> listAll = new ArrayList<>();
-    List<User> listMy = new ArrayList<>();
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String uid;
+    List<User> listAll = new ArrayList<>();
+    List<User> listMy = new ArrayList<>();
+    Context thisContext;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-
-    Context thisContext;
     private RecyclerView rcl;
     private UserAdapter adapter;
     private Button btnMyRecipe;
     private Button btnGetAll;
     private boolean isAllRecipe = true;
+
+    {
+        assert user != null;
+        uid = user.getUid();
+    }
 
 
     public UserFragment() {
@@ -183,13 +178,13 @@ public class UserFragment extends Fragment {
         }
     }
 
-    public void getData(){
+    public void getData() {
         List<User> newdata = new ArrayList<>();
         db.collection("Users").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> listUser = queryDocumentSnapshots.getDocuments();
-                for (DocumentSnapshot documentSnapshot: listUser){
+                for (DocumentSnapshot documentSnapshot : listUser) {
                     User newUser = documentSnapshot.toObject(User.class);
                     assert newUser != null;
                     listAll.add(newUser);

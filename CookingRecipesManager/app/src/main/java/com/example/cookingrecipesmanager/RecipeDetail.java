@@ -18,7 +18,6 @@ public class RecipeDetail {
     public ArrayList<ExtendedIngredient> ingredientsList;
 
 
-
     public void CreateStepList(ArrayList<CookingStep> data) {
         cookingStepsList = data;
     }

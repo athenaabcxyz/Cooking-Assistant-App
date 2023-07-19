@@ -1,30 +1,18 @@
 package com.example.cookingrecipesmanager;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -33,9 +21,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cookingrecipesmanager.CookingStep;
-import com.example.cookingrecipesmanager.R;
-import com.example.cookingrecipesmanager.RecipeDetail;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
 import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 import com.example.cookingrecipesmanager.database.Model.Length;
@@ -44,17 +36,12 @@ import com.example.cookingrecipesmanager.database.Model.Step;
 import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.IngredientAdapter;
 import com.example.cookingrecipesmanager.recipetracker.Adapter.RecipeCreaterAdapter;
-import com.example.cookingrecipesmanager.recipetracker.Adapter.StepListAdapter;
-import com.example.cookingrecipesmanager.recipetracker.Adapter.TagListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.AggregateQuery;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -66,19 +53,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class RecipeCreater extends AppCompatActivity {
 
+    final int GALLERY_REQ_CODE = 1000;
     RecyclerView stepList;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-
-    final int GALLERY_REQ_CODE = 1000;
-
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-    private PopupWindow popupWindow;
     EditText recipeName;
     EditText description;
     int currentRecipeQuantity;
@@ -115,7 +97,6 @@ public class RecipeCreater extends AppCompatActivity {
     EditText quantity;
     IngredientAdapter ingredientAdapter;
     RecipeCreaterAdapter recipeCreaterAdapter;
-
     TextView textTagHint;
     TextView textIngredientHint;
     TextView textStepHint;
@@ -123,18 +104,18 @@ public class RecipeCreater extends AppCompatActivity {
     Recipe paramRecipe;
     Recipe newRecipe;
     String before_screen;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            try{
+        if (extras != null) {
+            try {
                 paramRecipe = (Recipe) extras.getSerializable("RECIPE");
                 before_screen = (String) extras.getSerializable("BEFORE_SCREEN");
-                Toast.makeText(this, "Name recipe: "+ paramRecipe.title, Toast.LENGTH_SHORT).show();
-            }
-            catch (Exception e){
+                Toast.makeText(this, "Name recipe: " + paramRecipe.title, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
 
             }
         }
@@ -202,10 +183,9 @@ public class RecipeCreater extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
                 int count = 0;
-                for(DocumentSnapshot snapshot:snapshotList)
-                {
+                for (DocumentSnapshot snapshot : snapshotList) {
                     Recipe countRecipe = snapshot.toObject(Recipe.class);
-                    if(count<countRecipe.id)
+                    if (count < countRecipe.id)
                         count = countRecipe.id;
                 }
                 currentRecipeQuantity = count + 1;
@@ -219,7 +199,7 @@ public class RecipeCreater extends AppCompatActivity {
         tagList = new ArrayList<>();
 
         //LoadData
-        if(paramRecipe != null){
+        if (paramRecipe != null) {
             imageURI = Uri.parse(paramRecipe.image);
             Picasso.get().load(paramRecipe.image).into(recipeImage);
             addImage.setVisibility(View.GONE);
@@ -230,45 +210,39 @@ public class RecipeCreater extends AppCompatActivity {
             serving.setText(String.valueOf(paramRecipe.servings));
             price.setText(String.valueOf(paramRecipe.pricePerServing));
 
-            for (String tagName : paramRecipe.dishTypes){
+            for (String tagName : paramRecipe.dishTypes) {
                 Tag data = new Tag(tagName, false);
                 tagList.add(data);
             }
-            StringBuilder prepareInstruction= new StringBuilder("Prepare these ingredients: \n");
-            for (ExtendedIngredient ingredient:paramRecipe.extendedIngredients)
-            {
+            StringBuilder prepareInstruction = new StringBuilder("Prepare these ingredients: \n");
+            for (ExtendedIngredient ingredient : paramRecipe.extendedIngredients) {
                 prepareInstruction.append(" - ").append(ingredient.original).append("\n");
                 ingredients.add(ingredient);
             }
             //cookingSteps.add(new CookingStep(prepareInstruction.toString(), "Prepare", 0));
             AnalyzedInstruction instruction = paramRecipe.analyzedInstructions.get(0);
 
-            for(Step step:instruction.steps)
-            {
+            for (Step step : instruction.steps) {
                 String instructionDetail = step.step;
                 int time = 0;
-                String type="Basic";
-                if(step.length!=null)
-                {
-                    switch (step.length.unit)
-                    {
+                String type = "Basic";
+                if (step.length != null) {
+                    switch (step.length.unit) {
                         case "seconds":
-                            time=step.length.number;
+                            time = step.length.number;
                             break;
                         case "minutes":
-                            time=step.length.number*60;
+                            time = step.length.number * 60;
                             break;
                         case "hours":
-                            time=step.length.number*3600;
+                            time = step.length.number * 3600;
                             break;
                         default:
 
                     }
-                    type="Timer";
-                }
-                else
-                {
-                    type="Basic";
+                    type = "Timer";
+                } else {
+                    type = "Basic";
                 }
                 cookingSteps.add(new CookingStep(instructionDetail, type, time));
 
@@ -371,10 +345,10 @@ public class RecipeCreater extends AppCompatActivity {
                     Toast.makeText(RecipeCreater.this, "Please input description.", Toast.LENGTH_SHORT).show();
                 } else {
                     ExtendedIngredient newIngredient = new ExtendedIngredient();
-                    newIngredient.unit=unit.getText().toString();
-                    newIngredient.amount=Double.parseDouble(quantity.getText().toString());
-                    newIngredient.name=ingredient.getText().toString();
-                    newIngredient.original= quantity.getText().toString()+" "+unit.getText().toString()+" of "+ingredient.getText().toString();
+                    newIngredient.unit = unit.getText().toString();
+                    newIngredient.amount = Double.parseDouble(quantity.getText().toString());
+                    newIngredient.name = ingredient.getText().toString();
+                    newIngredient.original = quantity.getText().toString() + " " + unit.getText().toString() + " of " + ingredient.getText().toString();
                     recipe.ingredientsList.add(newIngredient);
                     ingredientAdapter.notifyItemInserted(recipe.ingredientsList.size() - 1);
                     popupWindow.dismiss();
@@ -442,10 +416,9 @@ public class RecipeCreater extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
-                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                    if (spinner.getSelectedItem().toString().equals("Timer")) {
                         group_time.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         group_time.setVisibility(View.GONE);
                         time.setText("");
                     }
@@ -454,10 +427,9 @@ public class RecipeCreater extends AppCompatActivity {
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
-                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                    if (spinner.getSelectedItem().toString().equals("Timer")) {
                         group_time.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         group_time.setVisibility(View.GONE);
                         time.setText("");
                     }
@@ -497,9 +469,9 @@ public class RecipeCreater extends AppCompatActivity {
                 for (int i = 0; i <= recipe.cookingStepsList.size() - 1; i++)
                     totalTime += recipe.cookingStepsList.get(i).timerBySecond;
                 if (!readyTime.getText().toString().equals("") && Integer.parseInt(readyTime.getText().toString()) * 60 < totalTime)
-                    Toast.makeText(RecipeCreater.this, "Ready time must bigger than the total time taken by every single step.\nYour total time is "+totalTime%60+" minute(s) and "+(totalTime-(totalTime%60)*60)+" second(s)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecipeCreater.this, "Ready time must bigger than the total time taken by every single step.\nYour total time is " + totalTime % 60 + " minute(s) and " + (totalTime - (totalTime % 60) * 60) + " second(s)", Toast.LENGTH_SHORT).show();
                 else if (notice.length() > 5) {
-                    Toast.makeText(RecipeCreater.this, notice.toString()+"\nPlease fill in all required information before saving.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecipeCreater.this, notice.toString() + "\nPlease fill in all required information before saving.", Toast.LENGTH_SHORT).show();
                 } else {
                     newRecipe = new Recipe();
                     newRecipe.title = recipeName.getText().toString();
@@ -537,7 +509,7 @@ public class RecipeCreater extends AppCompatActivity {
                     newRecipe.id = currentRecipeQuantity;
                     newRecipe.summary = summary.getText().toString();
                     String newPath = imageURI.toString();
-                    if(paramRecipe == null || paramRecipe!= null && newPath != paramRecipe.image ){
+                    if (paramRecipe == null || paramRecipe != null && newPath != paramRecipe.image) {
                         storageRef = storage.getReference("images/" + newRecipe.id);
                         storageRef.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -550,10 +522,9 @@ public class RecipeCreater extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
                                                 Toast.makeText(RecipeCreater.this, "Save recipe successfully!", Toast.LENGTH_SHORT).show();
-                                                if(paramRecipe != null){
+                                                if (paramRecipe != null) {
                                                     DeleteRecipe();
-                                                }
-                                                else {
+                                                } else {
                                                     ShowSuccess();
                                                 }
                                             }
@@ -568,17 +539,15 @@ public class RecipeCreater extends AppCompatActivity {
                                 Toast.makeText(RecipeCreater.this, "Failed to save recipe.", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }
-                    else{
+                    } else {
                         newRecipe.image = paramRecipe.image;
                         db.collection("recipes").add(newRecipe).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Toast.makeText(RecipeCreater.this, "Save recipe successfully!", Toast.LENGTH_SHORT).show();
-                                if(paramRecipe != null){
+                                if (paramRecipe != null) {
                                     DeleteRecipe();
-                                }
-                                else {
+                                } else {
                                     ShowSuccess();
                                 }
                             }
@@ -620,29 +589,28 @@ public class RecipeCreater extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(paramRecipe != null){
-            if(newRecipe == null){
+        if (paramRecipe != null) {
+            if (newRecipe == null) {
                 newRecipe = paramRecipe;
             }
             Intent intent = new Intent(RecipeCreater.this, MainActivity.class);
             intent.putExtra("EDIT_RECIPE", newRecipe);
             intent.putExtra("BEFORE_SCREEN", before_screen);
             startActivity(intent);
-        }
-        else{
+        } else {
             Intent intent = new Intent(RecipeCreater.this, MainActivity.class);
             intent.putExtra("CREATE_RECIPE", true);
             startActivity(intent);
         }
     }
 
-    public void DeleteRecipe(){
+    public void DeleteRecipe() {
         db.collection("recipes")
                 .whereEqualTo("id", paramRecipe.id)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             for (DocumentSnapshot document : task.getResult()) {
                                 db.collection("recipes").document(document.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -652,15 +620,15 @@ public class RecipeCreater extends AppCompatActivity {
                                 });
                                 break;
                             }
-                        }
-                        else {
+                        } else {
                             Toast.makeText(RecipeCreater.this, "Khong co du lieu phu hop", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-    public void ShowSuccessAndBack (){
-        View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_success,null);
+
+    public void ShowSuccessAndBack() {
+        View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_success, null);
 
         TextView OK = view.findViewById(R.id.OK);
         TextView description = view.findViewById(R.id.textDesCription);
@@ -681,8 +649,9 @@ public class RecipeCreater extends AppCompatActivity {
             }
         });
     }
-    public void ShowSuccess (){
-        View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_success,null);
+
+    public void ShowSuccess() {
+        View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_success, null);
 
         TextView OK = view.findViewById(R.id.OK);
         TextView description = view.findViewById(R.id.textDesCription);
@@ -702,8 +671,9 @@ public class RecipeCreater extends AppCompatActivity {
             }
         });
     }
-    public void ShowFailure (){
-        View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_fail,null);
+
+    public void ShowFailure() {
+        View view = LayoutInflater.from(RecipeCreater.this).inflate(R.layout.dialog_fail, null);
 
         TextView OK = view.findViewById(R.id.OK);
         TextView description = view.findViewById(R.id.textDesCription);

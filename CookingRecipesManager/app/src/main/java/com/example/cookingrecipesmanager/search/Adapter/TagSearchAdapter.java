@@ -11,11 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cookingrecipesmanager.CookingNote;
 import com.example.cookingrecipesmanager.R;
 import com.example.cookingrecipesmanager.Tag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagViewHolder> {
@@ -24,14 +22,11 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
 
     private ItemClickListener itemClickListener;
 
-    public interface ItemClickListener{
-        void onItemClick(Tag tag, TagViewHolder holder);
-    }
-    public TagSearchAdapter( ItemClickListener itemClickListener) {
+    public TagSearchAdapter(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
     }
 
-    public void setData(List<Tag> list){
+    public void setData(List<Tag> list) {
         this.tagList = list;
         notifyDataSetChanged();
     }
@@ -47,15 +42,14 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
         Tag tag = tagList.get(position);
-        if(tag == null){
+        if (tag == null) {
             return;
         }
         holder.name.setText(tag.getName());
-        if(tag.getClicked() == true){
+        if (tag.getClicked() == true) {
             holder.name.setTextColor(context.getResources().getColor(R.color.white, null));
             holder.content.getBackground().setTint(context.getResources().getColor(R.color.blue, null));
-        }
-        else {
+        } else {
             holder.name.setTextColor(context.getResources().getColor(R.color.text, null));
             holder.content.getBackground().setTint(context.getResources().getColor(R.color.white, null));
         }
@@ -80,20 +74,24 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
 
     @Override
     public int getItemCount() {
-        if(tagList!= null){
+        if (tagList != null) {
             return tagList.size();
         }
         return 0;
     }
 
-    public class TagViewHolder extends RecyclerView.ViewHolder{
+    public interface ItemClickListener {
+        void onItemClick(Tag tag, TagViewHolder holder);
+    }
+
+    public class TagViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
-        private ImageView img;
         public LinearLayout content;
+        private ImageView img;
 
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.textName) ;
+            name = itemView.findViewById(R.id.textName);
             img = itemView.findViewById(R.id.imageIcon);
             content = itemView.findViewById(R.id.tag_content);
 

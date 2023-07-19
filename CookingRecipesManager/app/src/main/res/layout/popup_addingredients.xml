@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <RelativeLayout
+        android:id="@+id/around_popup_ingredient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/around_popup_ingredient"
         android:background="#94000000"
-        android:padding="10dp"
-        >
+        android:padding="10dp">
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            >
+            android:layout_centerVertical="true">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,73 +34,70 @@
                     android:text="ADD NEW INGREDIENT"
                     android:textColor="@color/black"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <!-- ============ NAME =========== -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="100"
                     android:layout_marginTop="45dp"
-                    >
+                    android:layout_weight="100">
+
                     <TextView
                         android:id="@+id/textView8"
-                        android:textColor="@color/black"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="40"
                         android:text="Ingredient name: "
+                        android:textColor="@color/black"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/ingredient"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight="60"
                         android:background="@drawable/border_none"
+                        android:backgroundTint="#F7F6F4"
                         android:ems="10"
                         android:hint="Name"
                         android:inputType="text"
                         android:textAlignment="center"
                         android:textColor="@color/text"
-                        android:textSize="18dp"
-                        android:backgroundTint="#F7F6F4"
-                        />
+                        android:textSize="18dp" />
                 </LinearLayout>
 
                 <!-- ============ QUANTITY =========== -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="100"
                     android:layout_marginTop="45dp"
-                    >
+                    android:layout_weight="100">
+
                     <TextView
                         android:id="@+id/textView15"
-                        android:textColor="@color/text"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="40"
                         android:text="Quantity: "
+                        android:textColor="@color/text"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/quantity"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight="60"
                         android:background="@drawable/border_none"
+                        android:backgroundTint="#F7F6F4"
                         android:ems="10"
                         android:hint="Quantity"
                         android:inputType="number"
                         android:textAlignment="center"
                         android:textColor="@color/text"
-                        android:textSize="18dp"
-                        android:backgroundTint="#F7F6F4"
-                        />
+                        android:textSize="18dp" />
                 </LinearLayout>
 
 
@@ -110,31 +105,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="100"
                     android:layout_marginTop="45dp"
-                    >
+                    android:layout_weight="100">
+
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="40"
-                        android:textColor="@color/text"
                         android:text="Unit: "
+                        android:textColor="@color/text"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
+
                     <EditText
                         android:id="@+id/unit"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight="60"
                         android:background="@drawable/border_none"
+                        android:backgroundTint="#F7F6F4"
                         android:ems="10"
                         android:hint="Messure unit"
                         android:textAlignment="center"
-                        android:textColor="@color/text"
-                        android:backgroundTint="#F7F6F4"
-                        />
+                        android:textColor="@color/text" />
                 </LinearLayout>
 
                 <!-- ============ BTN =========== -->
@@ -142,14 +136,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="55dp"
-                    >
+                    android:layout_marginTop="55dp">
+
                     <Button
                         android:id="@+id/save_edit"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:text="Save" />
+
                     <Button
                         android:id="@+id/cancel_edit"
                         android:layout_width="100dp"

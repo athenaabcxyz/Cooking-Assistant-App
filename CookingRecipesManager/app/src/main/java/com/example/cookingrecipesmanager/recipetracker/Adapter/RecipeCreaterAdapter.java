@@ -1,68 +1,16 @@
 package com.example.cookingrecipesmanager.recipetracker.Adapter;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
-import com.example.cookingrecipesmanager.R;
-import com.example.cookingrecipesmanager.CookingStep;
-import com.example.cookingrecipesmanager.RecipeCreater;
-import com.example.cookingrecipesmanager.Tag;
-
-import java.io.Console;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import kotlinx.coroutines.Delay;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -71,37 +19,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.cookingrecipesmanager.CookingStep;
 import com.example.cookingrecipesmanager.R;
-import com.example.cookingrecipesmanager.RecipeDetail;
-import com.example.cookingrecipesmanager.database.Model.AnalyzedInstruction;
-import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
-import com.example.cookingrecipesmanager.database.Model.Length;
-import com.example.cookingrecipesmanager.database.Model.Recipe;
-import com.example.cookingrecipesmanager.database.Model.Step;
-import com.example.cookingrecipesmanager.home.Adapter.TagAdapter;
-import com.example.cookingrecipesmanager.recipetracker.Adapter.IngredientAdapter;
-import com.example.cookingrecipesmanager.recipetracker.Adapter.RecipeCreaterAdapter;
-import com.example.cookingrecipesmanager.recipetracker.Adapter.StepListAdapter;
-import com.example.cookingrecipesmanager.recipetracker.Adapter.TagListAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.AggregateQuery;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterViewHolder> {
     public int timeCounter;
@@ -181,7 +107,7 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                     break;
             }
             description.setText(stepList.get(position).stepIntruction);
-            String timerBySecond = ""+stepList.get(position).timerBySecond;
+            String timerBySecond = "" + stepList.get(position).timerBySecond;
             time.setText(timerBySecond);
             buttonSave.setOnClickListener(view1 -> {
                 if (description.getText().toString().equals("")) {
@@ -190,13 +116,13 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                     int timer = 0;
                     if (!time.getText().toString().equals(""))
                         timer = Integer.parseInt(time.getText().toString());
-                    stepList.get(position).stepType=spinner.getSelectedItem().toString();
-                    stepList.get(position).stepIntruction=description.getText().toString();
+                    stepList.get(position).stepType = spinner.getSelectedItem().toString();
+                    stepList.get(position).stepIntruction = description.getText().toString();
                     int timerSave = 0;
-                    if(time.getText().toString().equals(""))
-                    stepList.get(position).timerBySecond=timerSave;
+                    if (time.getText().toString().equals(""))
+                        stepList.get(position).timerBySecond = timerSave;
                     else
-                        stepList.get(position).timerBySecond=Integer.parseInt(time.getText().toString());
+                        stepList.get(position).timerBySecond = Integer.parseInt(time.getText().toString());
                     notifyDataSetChanged();
                     popupWindow.dismiss();
                 }
@@ -210,10 +136,9 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
-                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                    if (spinner.getSelectedItem().toString().equals("Timer")) {
                         group_time.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         group_time.setVisibility(View.GONE);
                         time.setText("");
                     }
@@ -222,10 +147,9 @@ public class RecipeCreaterAdapter extends RecyclerView.Adapter<RecipeCreaterView
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
                     time.setEnabled(spinner.getSelectedItem().toString().equals("Timer"));
-                    if(spinner.getSelectedItem().toString().equals("Timer")){
+                    if (spinner.getSelectedItem().toString().equals("Timer")) {
                         group_time.setVisibility(View.VISIBLE);
-                    }
-                    else {
+                    } else {
                         group_time.setVisibility(View.GONE);
                         time.setText("");
                     }
@@ -273,9 +197,9 @@ class RecipeCreaterViewHolder extends RecyclerView.ViewHolder {
     public RecipeCreaterViewHolder(@NonNull View itemView) {
         super(itemView);
         stepName = itemView.findViewById(R.id.stepName);
-        step=itemView.findViewById(R.id.step);
-        textTimer=itemView.findViewById(R.id.timer);
-        delete= itemView.findViewById(R.id.step_item_delete);
-        time_group=itemView.findViewById(R.id.time_group);
+        step = itemView.findViewById(R.id.step);
+        textTimer = itemView.findViewById(R.id.timer);
+        delete = itemView.findViewById(R.id.step_item_delete);
+        time_group = itemView.findViewById(R.id.time_group);
     }
 }

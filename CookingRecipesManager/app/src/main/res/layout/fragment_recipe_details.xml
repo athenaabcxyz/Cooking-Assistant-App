@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
 
 
     android:layout_width="match_parent"
@@ -85,14 +84,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
+                android:ellipsize="end"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:paddingStart="24dp"
                 android:paddingEnd="32dp"
                 android:text="RecipeName"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:textColor="?android:colorForeground"
-                android:maxLines="1"
-                android:ellipsize="end"/>
+                android:textColor="?android:colorForeground" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -120,15 +119,14 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/viewStepRecipe"
         style="@style/ThemeOverlay.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:soundEffectsEnabled="true"
-        android:src="@drawable/baseline_restaurant_24"
         android:contentDescription="TODO"
-        android:id="@+id/viewStepRecipe"
-        />
+        android:soundEffectsEnabled="true"
+        android:src="@drawable/baseline_restaurant_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

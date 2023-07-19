@@ -30,7 +30,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     Button btnReset;
     TextInputLayout textEmail;
 
-    float v= 0;
+    float v = 0;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -66,16 +66,14 @@ public class ForgetPasswordActivity extends AppCompatActivity {
 
                 String email = textEmail.getEditText().getText().toString().trim();
 
-                if (TextUtils.isEmpty(email))
-                {
+                if (TextUtils.isEmpty(email)) {
                     textEmail.setError("Please enter your email");
                     textEmail.setFocusable(true);
                     textEmail.setErrorIconDrawable(null);
                     return;
                 }
 
-                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
-                {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     textEmail.setError("Invalid email");
                     textEmail.setFocusable(true);
                     textEmail.setErrorIconDrawable(null);
@@ -85,61 +83,58 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 progressDialog.show();
 
                 firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                progressDialog.dismiss();
-                                if (task.isSuccessful())
-                                {
-                                    View view = LayoutInflater.from(ForgetPasswordActivity.this).inflate(R.layout.dialog_success,null);
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            View view = LayoutInflater.from(ForgetPasswordActivity.this).inflate(R.layout.dialog_success, null);
 
-                                    TextView OK = view.findViewById(R.id.OK);
-                                    TextView description = view.findViewById(R.id.textDesCription);
+                            TextView OK = view.findViewById(R.id.OK);
+                            TextView description = view.findViewById(R.id.textDesCription);
 
-                                    description.setText("Please check your mail to reset password.");
+                            description.setText("Please check your mail to reset password.");
 
-                                    final AlertDialog.Builder builder = new AlertDialog.Builder(ForgetPasswordActivity.this);
-                                    builder.setView(view);
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(ForgetPasswordActivity.this);
+                            builder.setView(view);
 
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
 
-                                    OK.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            onBackPressed();
-                                        }
-                                    });
+                            OK.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    onBackPressed();
                                 }
-                                else
-                                {
-                                    View view = LayoutInflater.from(ForgetPasswordActivity.this).inflate(R.layout.dialog_fail,null);
+                            });
+                        } else {
+                            View view = LayoutInflater.from(ForgetPasswordActivity.this).inflate(R.layout.dialog_fail, null);
 
-                                    TextView OK = view.findViewById(R.id.OK);
-                                    TextView description = view.findViewById(R.id.textDesCription);
+                            TextView OK = view.findViewById(R.id.OK);
+                            TextView description = view.findViewById(R.id.textDesCription);
 
-                                    description.setText("Please check your email address carefully again.");
+                            description.setText("Please check your email address carefully again.");
 
-                                    final AlertDialog.Builder builder = new AlertDialog.Builder(ForgetPasswordActivity.this);
-                                    builder.setView(view);
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(ForgetPasswordActivity.this);
+                            builder.setView(view);
 
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
 
-                                    OK.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            dialog.dismiss();
-                                        }
-                                    });
+                            OK.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
                                 }
-                            }
-                            }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                progressDialog.dismiss();
-                                //Toast.makeText(ForgetPasswordActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                            });
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        //Toast.makeText(ForgetPasswordActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -156,15 +151,15 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         super.onResume();
         CheckInternet();
     }
+
     private void CheckInternet() {
         registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-    protected void unregistorNetwork(){
+    protected void unregistorNetwork() {
         try {
             unregisterReceiver(broadcastReceiver);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
     }

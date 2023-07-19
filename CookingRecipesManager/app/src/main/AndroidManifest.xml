@@ -31,9 +31,6 @@
             android:name=".ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".database.DatabaseGenerator"
-            android:exported="true" />
-        <activity
             android:name=".recipetracker.RecipeStepPreview"
             android:exported="true" />
         <activity

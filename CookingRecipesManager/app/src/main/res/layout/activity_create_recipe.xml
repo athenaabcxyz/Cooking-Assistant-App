@@ -4,94 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-<!--    =================== Nav Bar ==================   -->
+    android:orientation="vertical">
+    <!--    =================== Nav Bar ==================   -->
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:id="@+id/header"
-        >
+        android:paddingTop="20dp">
+
         <LinearLayout
             android:id="@+id/group_title"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_marginRight="5dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:gravity="right"
-            android:weightSum="100"
-            >
+            android:weightSum="100">
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="40"
                 android:text="Recipe"
-                android:textSize="25sp"
-                android:textStyle="bold"
                 android:textColor="@color/text"
-                android:layout_gravity="center_vertical"
-                />
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/save_recipe"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="30"
-                android:text="Save"
-                android:textStyle="bold"
-                android:elevation="2dp"
                 android:layout_margin="1dp"
-                android:stateListAnimator="@null"
+                android:layout_weight="30"
                 android:backgroundTint="#2D67F6"
-                >
-            </Button>
+                android:elevation="2dp"
+                android:stateListAnimator="@null"
+                android:text="Save"
+                android:textStyle="bold"></Button>
+
             <Button
                 android:id="@+id/cancel_recipe"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:layout_margin="1dp"
                 android:layout_weight="30"
                 android:backgroundTint="@color/white"
-                android:textColor="#333333"
-                android:textStyle="bold"
                 android:elevation="2dp"
-                android:layout_margin="1dp"
                 android:stateListAnimator="@null"
-                >
-            </Button>
+                android:text="Cancel"
+                android:textColor="#333333"
+                android:textStyle="bold"></Button>
         </LinearLayout>
+
         <LinearLayout
-            android:layout_below="@id/group_title"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/grey2"/>
+            android:layout_below="@id/group_title"
+            android:background="@color/grey2" />
     </RelativeLayout>
 
-<!--    =================== Content ==================   -->
+    <!--    =================== Content ==================   -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".recipetracker.RecipeStepPreview"
-            android:orientation="vertical"
             android:background="#0f888888"
-            >
+            android:orientation="vertical"
+            tools:context=".recipetracker.RecipeStepPreview">
             <!-- =========================== Image ============================== -->
             <RelativeLayout
                 android:id="@+id/add_image_group"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/background_image_2"
-                >
+                android:background="@drawable/background_image_2">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#73E8E8E8"
-                    />
+                    android:background="#73E8E8E8" />
 
                 <!-- ============ RECIPE IMAGE ============= -->
                 <ImageView
@@ -100,34 +95,32 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
 
-                />
+                    />
                 <!-- ============ BTN ADD IMAGE ============= -->
                 <LinearLayout
+                    android:id="@+id/addImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:id="@+id/addImage"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="8dp"
-                    >
+                    android:layout_marginTop="8dp">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_camera"
                         android:layout_gravity="center"
-                        app:tint="@color/black"
                         android:layout_marginRight="3dp"
-                        >
-                    </ImageView>
+                        android:src="@android:drawable/ic_menu_camera"
+                        app:tint="@color/black"></ImageView>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="Add Image"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:layout_gravity="center"
                         android:textSize="18sp"
-                        >
+                        android:textStyle="bold">
 
                     </TextView>
 
@@ -135,72 +128,71 @@
 
                 <!-- ============ BTN CHANGE AND DELETE IMAGE ============= -->
                 <LinearLayout
+                    android:id="@+id/group_change_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#C3787878"
-                    android:background="@drawable/border"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:id="@+id/group_change_image"
-                    >
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/border"
+                    android:backgroundTint="#C3787878"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="5dp">
+
                     <LinearLayout
+                        android:id="@+id/changeImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/changeImage"
-                        android:layout_gravity="center"
-                        >
+                        android:layout_gravity="center">
+
                         <ImageView
                             android:id="@+id/imageView2"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            app:srcCompat="@android:drawable/ic_popup_sync"
-                            android:scaleType="centerCrop"
                             android:layout_marginRight="2dp"
-                            app:tint="@color/white"
-                            />
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@android:drawable/ic_popup_sync"
+                            app:tint="@color/white" />
+
                         <TextView
                             android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textColor="@color/white"
                             android:text="Change"
+                            android:textColor="@color/white"
                             android:textSize="18dp"
-                            android:textStyle="bold"
-                            />
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
-                        android:layout_below="@id/group_title"
                         android:layout_width="3dp"
                         android:layout_height="match_parent"
-                        android:background="@color/grey"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
+                        android:layout_below="@id/group_title"
                         android:layout_gravity="center"
-                        />
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="1dp"
+                        android:background="@color/grey" />
+
                     <LinearLayout
+                        android:id="@+id/deleteImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/deleteImage"
-                        android:layout_gravity="center"
-                        >
+                        android:layout_gravity="center">
+
                         <ImageView
                             android:id="@+id/imageViewDelete"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            app:srcCompat="@drawable/delete_icon"
-                            android:scaleType="centerCrop"
                             android:layout_marginRight="2dp"
-                            app:tint="@color/white"
+                            android:scaleType="centerCrop"
                             app:backgroundTint="@color/white"
-                            />
+                            app:srcCompat="@drawable/delete_icon"
+                            app:tint="@color/white" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -208,13 +200,13 @@
 
             <!-- =========================== Info ============================== -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardview3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                android:id="@+id/cardview3"
-                app:contentPadding="10dp"
-               >
+                app:contentPadding="10dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -227,150 +219,150 @@
                         android:id="@+id/recipeName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:hint="Please Fill Recipe Name"
-                        android:textColor="@color/text"
-                        android:background="@drawable/border_none"
-                        android:padding="18dp"
-                        android:gravity="center"
-                        android:backgroundTint="#0f888888"
                         android:layout_marginTop="10dp"
-                        />
+                        android:background="@drawable/border_none"
+                        android:backgroundTint="#0f888888"
+                        android:gravity="center"
+                        android:hint="Please Fill Recipe Name"
+                        android:padding="18dp"
+                        android:textColor="@color/text"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <!--   =============== SUMMARY ===============  -->
                     <TextView
                         android:id="@+id/textView120"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Summary"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/grey4"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="10dp"
-                        />
+                        android:text="Summary"
+                        android:textColor="@color/grey4"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
+
                     <EditText
                         android:id="@+id/summary"
                         android:layout_width="match_parent"
-                        android:textColor="@color/text"
                         android:layout_height="178dp"
-                        android:ems="10"
-                        android:gravity="start|top"
-                        android:inputType="textMultiLine"
                         android:background="@drawable/border_none"
                         android:backgroundTint="#0f888888"
+                        android:ems="10"
+                        android:gravity="start|top"
                         android:hint="Type in your summary of the recipe."
+                        android:inputType="textMultiLine"
                         android:padding="10dp"
-                        />
+                        android:textColor="@color/text" />
 
                     <!--   =============== PRICE ===============  -->
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
+
                     <RelativeLayout
+                        android:id="@+id/group_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/group_price"
-                        android:layout_marginTop="20dp"
-                        >
+                        android:layout_marginTop="20dp">
+
                         <TextView
                             android:id="@+id/textView121"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Price per serving"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/grey4"
                             android:layout_centerVertical="true"
-                            />
+                            android:text="Price per serving"
+                            android:textColor="@color/grey4"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
                         <EditText
                             android:id="@+id/price"
                             android:layout_width="150dp"
                             android:layout_height="42dp"
-                            android:ems="10"
-                            android:background="@drawable/border_none"
-                            android:backgroundTint="#0f888888"
-                            android:textColor="@color/text"
-                            android:inputType="numberDecimal"
-                            android:hint="$"
-                            android:gravity="center"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            />
+                            android:background="@drawable/border_none"
+                            android:backgroundTint="#0f888888"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:hint="$"
+                            android:inputType="numberDecimal"
+                            android:textColor="@color/text" />
                     </RelativeLayout>
 
                     <!--   =============== MINUTE ===============  -->
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
+
                     <RelativeLayout
+                        android:id="@+id/group_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/group_time"
-                        android:layout_marginTop="20dp"
-                        >
+                        android:layout_marginTop="20dp">
+
                         <TextView
                             android:id="@+id/textView123"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ready in minute"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/grey4"
                             android:layout_centerVertical="true"
-                            />
+                            android:text="Ready in minute"
+                            android:textColor="@color/grey4"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
                         <EditText
                             android:id="@+id/readyTime"
                             android:layout_width="150dp"
-                            android:textColor="@color/text"
                             android:layout_height="42dp"
-                            android:ems="10"
-                            android:inputType="number"
-                            android:background="@drawable/border_none"
-                            android:backgroundTint="#0f888888"
-                            android:gravity="center"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:hint="minute"/>
+                            android:background="@drawable/border_none"
+                            android:backgroundTint="#0f888888"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:hint="minute"
+                            android:inputType="number"
+                            android:textColor="@color/text" />
                     </RelativeLayout>
 
                     <!--   =============== PEOPLE ===============  -->
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
+
                     <RelativeLayout
+                        android:id="@+id/group_serving"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/group_serving"
-                        android:layout_marginTop="20dp"
-                        >
+                        android:layout_marginTop="20dp">
+
                         <TextView
                             android:id="@+id/textView124"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Serving"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/grey4"
                             android:layout_centerVertical="true"
-                        />
+                            android:text="Serving"
+                            android:textColor="@color/grey4"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+
                         <EditText
                             android:id="@+id/serving"
                             android:layout_width="150dp"
                             android:layout_height="42dp"
-                            android:inputType="number"
-                            android:ems="10"
-                            android:hint="people"
-                            android:background="@drawable/border_none"
-                            android:backgroundTint="#0f888888"
-                            android:gravity="center"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                        />
+                            android:background="@drawable/border_none"
+                            android:backgroundTint="#0f888888"
+                            android:ems="10"
+                            android:gravity="center"
+                            android:hint="people"
+                            android:inputType="number" />
                     </RelativeLayout>
 
 
@@ -379,48 +371,50 @@
 
             <!-- =========================== Tags ============================== -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardview"
+                android:layout_marginTop="10dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:contentPadding="10dp"
-                android:layout_marginTop="10dp"
 
                 >
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/textView10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tag list"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/grey4"
                         android:layout_marginBottom="10dp"
-                        />
+                        android:text="Tag list"
+                        android:textColor="@color/grey4"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
                     <Space
                         android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        />
+                        android:layout_height="8dp" />
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/text_tags_hint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Add here"
-                            android:textSize="18sp"
-                            android:textColor="@color/grey4"
                             android:layout_marginLeft="10dp"
                             android:layout_marginTop="10dp"
-                            android:visibility="gone"
-                            />
+                            android:text="Add here"
+                            android:textColor="@color/grey4"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/tagList"
                             android:layout_width="match_parent"
@@ -433,137 +427,137 @@
                             />
 
                     </RelativeLayout>
+
                     <Button
                         android:id="@+id/addTag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Add Tag"
                         android:layout_gravity="center"
-                        app:icon="@android:drawable/ic_input_add"
+                        android:layout_marginTop="10dp"
                         android:backgroundTint="@color/white"
-                        app:iconTint="@color/grey4"
-                        app:iconSize="20sp"
-                        android:textSize="14sp"
-                        android:textColor="@color/grey4"
-                        android:textStyle="bold"
                         android:stateListAnimator="@null"
-                   />
+                        android:text="Add Tag"
+                        android:textColor="@color/grey4"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:icon="@android:drawable/ic_input_add"
+                        app:iconSize="20sp"
+                        app:iconTint="@color/grey4" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- =========================== Ingredients ============================== -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardview1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardview1"
+                android:layout_marginTop="10dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:contentPadding="10dp"
-                android:layout_marginTop="10dp"
-                >
+                app:contentPadding="10dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/textView11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Ingredients List"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/grey4"
                         android:layout_marginBottom="10dp"
-                        />
+                        android:text="Ingredients List"
+                        android:textColor="@color/grey4"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
                     <Space
                         android:layout_width="match_parent"
-                        android:layout_height="8dp"
-                        />
+                        android:layout_height="8dp" />
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/text_ingredients_hint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Please choose ingredients for food"
-                            android:textSize="18sp"
-                            android:textColor="@color/grey4"
-                            android:layout_marginTop="15dp"
                             android:layout_marginLeft="42dp"
-                            android:visibility="gone"
-                            />
+                            android:layout_marginTop="15dp"
+                            android:text="Please choose ingredients for food"
+                            android:textColor="@color/grey4"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/ingredientsList"
                             android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            />
+                            android:layout_height="150dp" />
                     </RelativeLayout>
 
                     <Button
                         android:id="@+id/addIngredients"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Add Ingredients"
                         android:layout_gravity="center"
-                        app:icon="@android:drawable/ic_input_add"
+                        android:layout_marginTop="10dp"
                         android:backgroundTint="@color/white"
-                        app:iconTint="@color/grey4"
-                        app:iconSize="20sp"
-                        android:textSize="14sp"
-                        android:textColor="@color/grey4"
-                        android:textStyle="bold"
                         android:stateListAnimator="@null"
-                        />
+                        android:text="Add Ingredients"
+                        android:textColor="@color/grey4"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:icon="@android:drawable/ic_input_add"
+                        app:iconSize="20sp"
+                        app:iconTint="@color/grey4" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- =========================== Step List ============================== -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardview2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                android:id="@+id/cardview2"
-                app:contentPadding="10dp"
-                android:layout_marginTop="10dp"
-                >
+                app:contentPadding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/textView6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Step List"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/grey4"
                         android:layout_marginBottom="10dp"
-                        />
+                        android:text="Step List"
+                        android:textColor="@color/grey4"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
                     <Space
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/text_step_hint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Please add steps for recipe"
-                            android:textSize="18sp"
-                            android:textColor="@color/grey4"
-                            android:layout_marginTop="15dp"
                             android:layout_marginLeft="40dp"
-                            android:visibility="gone"
-                            />
+                            android:layout_marginTop="15dp"
+                            android:text="Please add steps for recipe"
+                            android:textColor="@color/grey4"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/stepList"
                             android:layout_width="match_parent"
@@ -574,18 +568,17 @@
                         android:id="@+id/addStep"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Add Step"
                         android:layout_gravity="center"
-                        app:icon="@android:drawable/ic_input_add"
+                        android:layout_marginTop="10dp"
                         android:backgroundTint="@color/white"
-                        app:iconTint="@color/grey4"
-                        app:iconSize="20sp"
-                        android:textSize="14sp"
-                        android:textColor="@color/grey4"
-                        android:textStyle="bold"
                         android:stateListAnimator="@null"
-                        />
+                        android:text="Add Step"
+                        android:textColor="@color/grey4"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:icon="@android:drawable/ic_input_add"
+                        app:iconSize="20sp"
+                        app:iconTint="@color/grey4" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

@@ -8,16 +8,27 @@ import androidx.annotation.NonNull;
 import com.example.cookingrecipesmanager.database.Model.Recipe;
 
 public class CookingNote implements Parcelable {
+    public static final Creator<CookingNote> CREATOR = new Creator<CookingNote>() {
+        @Override
+        public CookingNote createFromParcel(Parcel in) {
+            return new CookingNote(in);
+        }
+
+        @Override
+        public CookingNote[] newArray(int size) {
+            return new CookingNote[size];
+        }
+    };
     public int id;
     public Recipe recipe;
+    public String img;
     private String title;
     private String author;
     private String description;
-    public String img;
     private Float evaluate;
     private Boolean iFavorites;
 
-    public CookingNote(Recipe recipe, Integer recipeID,String title, String author, String description, String img, Float evaluate, Boolean iFavorites) {
+    public CookingNote(Recipe recipe, Integer recipeID, String title, String author, String description, String img, Float evaluate, Boolean iFavorites) {
         this.recipe = recipe;
         this.id = recipeID;
         this.title = title;
@@ -42,18 +53,6 @@ public class CookingNote implements Parcelable {
         iFavorites = tmpIFavorites == 0 ? null : tmpIFavorites == 1;
     }
 
-    public static final Creator<CookingNote> CREATOR = new Creator<CookingNote>() {
-        @Override
-        public CookingNote createFromParcel(Parcel in) {
-            return new CookingNote(in);
-        }
-
-        @Override
-        public CookingNote[] newArray(int size) {
-            return new CookingNote[size];
-        }
-    };
-
     public String getTitle() {
         return title;
     }
@@ -66,10 +65,12 @@ public class CookingNote implements Parcelable {
         return author;
     }
 
-    public String getDescription() { return description; }
-
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getImg() {

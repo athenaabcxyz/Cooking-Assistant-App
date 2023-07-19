@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical"
-    >
+    tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:id="@+id/header"
-        >
+        android:paddingTop="20dp"
+        android:paddingRight="20dp">
 
         <RelativeLayout
+            android:id="@+id/search_view_border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border_none"
-            android:id="@+id/search_view_border"
-            android:backgroundTint="#FFFFFF"
-            >
+            android:backgroundTint="#FFFFFF">
 
             <ImageView
                 android:id="@+id/back"
                 android:layout_width="33dp"
                 android:layout_height="33dp"
-                android:src="@drawable/icons_back"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                />
+                android:src="@drawable/icons_back" />
 
             <SearchView
                 android:id="@+id/search_view"
@@ -48,47 +43,47 @@
                 android:iconifiedByDefault="false"
                 android:queryBackground="@android:color/transparent"
                 android:queryHint="Search here" />
+
             <ImageView
                 android:id="@+id/sort"
                 android:layout_width="23dp"
                 android:layout_height="23dp"
-                android:src="@drawable/icons_sort"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                />
+                android:src="@drawable/icons_sort" />
 
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@id/search_view_border"
             android:id="@+id/search_rcl_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/search_view_border"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            />
+            android:paddingBottom="15dp" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#F1F0F0"/>
+        android:background="#F1F0F0" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcl_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
-        android:paddingTop="15dp"
-        android:clipToPadding="false"
-        />
+        android:paddingTop="15dp" />
+
     <ImageView
+        android:id="@+id/img_not_found"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:background="@drawable/not_found"
-        android:visibility="gone"
-        android:id="@+id/img_not_found"
-        >
+        android:visibility="gone">
 
     </ImageView>
 

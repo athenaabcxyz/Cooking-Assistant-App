@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.cookingrecipesmanager.R;
-import com.example.cookingrecipesmanager.RecipeCreater;
 import com.example.cookingrecipesmanager.database.Model.ExtendedIngredient;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapterVie
     public void onBindViewHolder(@NonNull IngredientAdapterViewHolder holder, int position) {
         ExtendedIngredient data = ingredientList.get(position);
         holder.ingredient.setText(ingredientList.get(position).original);
-        holder.number.setText(String.valueOf(position+1));
+        holder.number.setText(String.valueOf(position + 1));
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +71,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapterVie
             EditText ingredient = popupView.findViewById(R.id.ingredient);
 
             unit.setText(ingredientList.get(position).unit);
-            String newString = ingredientList.get(position).amount+"";
+            String newString = ingredientList.get(position).amount + "";
             quantity.setText(newString);
             ingredient.setText(ingredientList.get(position).name);
             Button buttonSave = popupView.findViewById(R.id.save_edit);
@@ -82,10 +81,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapterVie
                 if (ingredient.getText().toString().equals("") || unit.getText().toString().equals("")) {
                     Toast.makeText(context, "Please input description.", Toast.LENGTH_SHORT).show();
                 } else {
-                    ingredientList.get(position).unit=unit.getText().toString();
-                    ingredientList.get(position).amount=Double.parseDouble(quantity.getText().toString());
-                    ingredientList.get(position).name=ingredient.getText().toString();
-                    ingredientList.get(position).original= quantity.getText().toString()+" "+unit.getText().toString()+" of "+ingredient.getText().toString();
+                    ingredientList.get(position).unit = unit.getText().toString();
+                    ingredientList.get(position).amount = Double.parseDouble(quantity.getText().toString());
+                    ingredientList.get(position).name = ingredient.getText().toString();
+                    ingredientList.get(position).original = quantity.getText().toString() + " " + unit.getText().toString() + " of " + ingredient.getText().toString();
                     notifyDataSetChanged();
                     popupWindow.dismiss();
                 }
@@ -114,16 +113,18 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapterVie
         return ingredientList.size();
     }
 }
-class IngredientAdapterViewHolder extends RecyclerView.ViewHolder{
+
+class IngredientAdapterViewHolder extends RecyclerView.ViewHolder {
 
     TextView ingredient;
     CardView ingredientCard;
     TextView number;
     ImageView delete;
+
     public IngredientAdapterViewHolder(@NonNull View itemView) {
         super(itemView);
-        ingredientCard=itemView.findViewById(R.id.ingredientCardView);
-        ingredient=itemView.findViewById(R.id.ingredient_name);
+        ingredientCard = itemView.findViewById(R.id.ingredientCardView);
+        ingredient = itemView.findViewById(R.id.ingredient_name);
         number = itemView.findViewById(R.id.ingredient_number);
         delete = itemView.findViewById(R.id.ingredient_delete);
     }
