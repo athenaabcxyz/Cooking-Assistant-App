@@ -349,7 +349,14 @@ public class RecipeDetailsFragment extends Fragment {
         binding.content.listTags.setAdapter(adapter);
 
         binding.content.listIngredient.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients.subList(0, 3)));
+        int ingredientListLength = mParamRecipe.extendedIngredients.size();
+        if(ingredientListLength>3)
+            ingredientListLength=3;
+        else
+        {
+            binding.content.btnIngredientsExpand.setEnabled(false);
+        }
+        binding.content.listIngredient.setAdapter(new IngredientAdapter(mParamRecipe.extendedIngredients.subList(0, ingredientListLength)));
 
         binding.content.btnIngredientsExpand.setOnClickListener(new View.OnClickListener() {
             @Override
