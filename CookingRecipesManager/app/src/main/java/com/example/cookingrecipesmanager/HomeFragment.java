@@ -278,6 +278,9 @@ public class HomeFragment extends Fragment {
                 listTrend.add(listRecipe.get(i));
             }
         }
+        else{
+            listTrend = listRecipe;
+        }
         trendAdapter = new TrendAdapter();
         trendAdapter.setData(listTrend);
         rcl_trend.setAdapter(trendAdapter);

@@ -7,12 +7,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.cookingrecipesmanager.database.Model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +39,10 @@ public class SettingFragment extends Fragment {
     private LinearLayout layoutChangePassword, layoutLogout, layoutUser;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
+    private ImageView avatar;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    User currentUser;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -74,6 +85,8 @@ public class SettingFragment extends Fragment {
         progressDialog = new ProgressDialog(getActivity());
         layoutChangePassword = view.findViewById(R.id.layoutChangePassword);
         layoutUser = view.findViewById(R.id.layoutUser);
+        avatar = view.findViewById(R.id.imageUser);
+        getUser();
 
         layoutChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,5 +134,34 @@ public class SettingFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private void getUser() {
+        db.collection("Users").document(user.getUid()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        currentUser = documentSnapshot.toObject(User.class);
+                        assert currentUser != null;
+                        try {
+
+                            if (currentUser.image != null) {
+                                Picasso.get().load(currentUser.image).into(avatar);
+                            }
+                            else{
+                                avatar.setImageResource(R.drawable.ic_avatar_default);
+                            }
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUser();
     }
 }
