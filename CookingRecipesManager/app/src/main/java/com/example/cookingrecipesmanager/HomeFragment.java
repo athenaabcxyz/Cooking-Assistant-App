@@ -122,14 +122,60 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(thiscontext, RecyclerView.HORIZONTAL, false);
         rcl_trend = rootView.findViewById(R.id.rcl_trend);
         rcl_trend.setLayoutManager(linearLayoutManager);
+        trendAdapter = new TrendAdapter();
+        rcl_trend.setAdapter(trendAdapter);
 
         StaggeredGridLayoutManager linearLayoutManager2 = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
         rcl_tag = rootView.findViewById(R.id.rcl_tag);
         rcl_tag.setLayoutManager(linearLayoutManager2);
+        tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
+            @Override
+            public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
+//                                if(holder.name.getTextColors().getDefaultColor() == getResources().getColor(R.color.text, null)){
+//                                    holder.name.setTextColor(getResources().getColor(R.color.white, null));
+//                                    holder.content.getBackground().setTint(getResources().getColor(R.color.blue, null));
+//                                    tagListClicked.add(tag);
+//                                }
+//                                else {
+//                                    holder.name.setTextColor(getResources().getColor(R.color.text, null));
+//                                    holder.content.getBackground().setTint(getResources().getColor(R.color.white, null));
+////                    holder.getImg().setImageResource(R.drawable.mon3);
+//                                    tagListClicked.remove(tag);
+//
+//                                }
+//                                if (tag.getClicked()==false && tag.getName()=="All"){
+//                                    for(Tag item: listTag){
+//                                        item.setClicked(false);
+//                                    }
+//                                    tag.setClicked(true);
+//                                }
+//                                else if(tag.getClicked()==false){
+//                                    tag.setClicked(true);
+//                                    if(listTag.get(0).getClicked()){
+//                                        listTag.get(0).setClicked(false);
+//                                    }
+//                                }
+//                                else{
+//                                    tag.setClicked(false);
+//                                }
+                if (tag.getClicked() == false) {
+                    tag.setClicked(true);
+
+                } else {
+                    tag.setClicked(false);
+                }
+                tagAdapter.setData(listTag);
+                tagAdapter.notifyDataSetChanged();
+                loadDishList();
+            }
+        });
+        rcl_tag.setAdapter(tagAdapter);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         rcl_dish = rootView.findViewById(R.id.rcl_lib);
         rcl_dish.setLayoutManager(layoutManager);
+        dishAdapter = new DishAdapter();
+        rcl_dish.setAdapter(dishAdapter);
 
 //       ------------------ Intent to Search -------------------------
         SearchView searchView = (SearchView) rootView.findViewById(R.id.search_view);
@@ -203,62 +249,19 @@ public class HomeFragment extends Fragment {
                                         recipe.userName = name;
                                         recipe.userImage = image;
                                         listRecipe.add(recipe);
+                                        loadTrendList();
+                                        loadTagList();
+                                        loadDishList();
                                     }
                                 });
                             } else {
                                 recipe.userName = "UserName";
                                 listRecipe.add(recipe);
-                            }
-                        }
-
-                        tagAdapter = new TagAdapter(new TagAdapter.ItemClickListener() {
-                            @Override
-                            public void onItemClick(Tag tag, TagAdapter.TagViewHolder holder) {
-//                                if(holder.name.getTextColors().getDefaultColor() == getResources().getColor(R.color.text, null)){
-//                                    holder.name.setTextColor(getResources().getColor(R.color.white, null));
-//                                    holder.content.getBackground().setTint(getResources().getColor(R.color.blue, null));
-//                                    tagListClicked.add(tag);
-//                                }
-//                                else {
-//                                    holder.name.setTextColor(getResources().getColor(R.color.text, null));
-//                                    holder.content.getBackground().setTint(getResources().getColor(R.color.white, null));
-////                    holder.getImg().setImageResource(R.drawable.mon3);
-//                                    tagListClicked.remove(tag);
-//
-//                                }
-//                                if (tag.getClicked()==false && tag.getName()=="All"){
-//                                    for(Tag item: listTag){
-//                                        item.setClicked(false);
-//                                    }
-//                                    tag.setClicked(true);
-//                                }
-//                                else if(tag.getClicked()==false){
-//                                    tag.setClicked(true);
-//                                    if(listTag.get(0).getClicked()){
-//                                        listTag.get(0).setClicked(false);
-//                                    }
-//                                }
-//                                else{
-//                                    tag.setClicked(false);
-//                                }
-                                if (tag.getClicked() == false) {
-                                    tag.setClicked(true);
-
-                                } else {
-                                    tag.setClicked(false);
-                                }
-                                tagAdapter.setData(listTag);
-                                tagAdapter.notifyDataSetChanged();
+                                loadTrendList();
+                                loadTagList();
                                 loadDishList();
                             }
-                        });
-
-                        rcl_tag.setAdapter(tagAdapter);
-                        dishAdapter = new DishAdapter();
-                        rcl_dish.setAdapter(dishAdapter);
-                        loadTrendList();
-                        loadTagList();
-                        loadDishList();
+                        }
                         progressDialog.dismiss();
 
                     }
@@ -281,9 +284,8 @@ public class HomeFragment extends Fragment {
         else{
             listTrend = listRecipe;
         }
-        trendAdapter = new TrendAdapter();
         trendAdapter.setData(listTrend);
-        rcl_trend.setAdapter(trendAdapter);
+        trendAdapter.notifyDataSetChanged();
     }
 
     public void loadTagList() {
@@ -308,7 +310,7 @@ public class HomeFragment extends Fragment {
             listTag.get(0).setClicked(true);
         }
         tagAdapter.setData(listTag);
-
+        tagAdapter.notifyDataSetChanged();
     }
 
     public void loadDishList() {
@@ -341,7 +343,7 @@ public class HomeFragment extends Fragment {
             rcl_dish.setBackground(null);
         }
         dishAdapter.setData(listDish);
-
+        dishAdapter.notifyDataSetChanged();
     }
 
 }
