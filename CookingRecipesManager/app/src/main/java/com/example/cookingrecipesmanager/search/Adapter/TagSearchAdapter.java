@@ -53,6 +53,7 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
             holder.name.setTextColor(context.getResources().getColor(R.color.text, null));
             holder.content.getBackground().setTint(context.getResources().getColor(R.color.white, null));
         }
+        holder.delete.setVisibility(View.GONE);
 //        holder.img.setImageResource(tag.getImg());
         holder.content.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +89,13 @@ public class TagSearchAdapter extends RecyclerView.Adapter<TagSearchAdapter.TagV
         public TextView name;
         public LinearLayout content;
         private ImageView img;
-
+        private ImageView delete;
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.textName);
             img = itemView.findViewById(R.id.imageIcon);
             content = itemView.findViewById(R.id.tag_content);
-
+            delete = itemView.findViewById(R.id.imageIconDelete);
         }
 
         public ImageView getImg() {
