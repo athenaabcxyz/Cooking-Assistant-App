@@ -8,7 +8,7 @@ public class User implements Serializable {
     public String name;
     public String image;
     public String uid;
-    public ArrayList<Integer> likedRecipes;
-    public ArrayList<Integer> savedRecipes;
+    public ArrayList<Long> likedRecipes;
+    public ArrayList<Long> savedRecipes;
 
 }

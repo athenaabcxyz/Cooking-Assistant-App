@@ -104,14 +104,20 @@ public class RecipeDetailsFragment extends Fragment {
                 User user = documentSnapshot.toObject(User.class);
                 assert user != null;
                 if (user.likedRecipes != null) {
-                    user.likedRecipes.forEach(new Consumer<Integer>() {
-                        @Override
-                        public void accept(Integer integer) {
-                            if (integer == mParamRecipe.id) {
-                                bLiked = true;
-                            }
+                    for (long item : user.likedRecipes){
+                        if(item == mParamRecipe.id){
+                            bLiked = true;
+                            break;
                         }
-                    });
+                    }
+//                    user.likedRecipes.forEach(new Consumer<Integer>() {
+//                        @Override
+//                        public void accept(Integer integer) {
+//                            if (integer == mParamRecipe.id) {
+//                                bLiked = true;
+//                            }
+//                        }
+//                    });
                 }
                 UpdateLikeBtn();
             }
@@ -567,6 +573,14 @@ public class RecipeDetailsFragment extends Fragment {
                                                 onBack();
                                             }
                                         });
+                                        dialog.setOnCancelListener(
+                                                new DialogInterface.OnCancelListener() {
+                                                    @Override
+                                                    public void onCancel(DialogInterface dialog) {
+                                                        onBack();
+                                                    }
+                                                }
+                                        );
                                     }
                                 });
                             }

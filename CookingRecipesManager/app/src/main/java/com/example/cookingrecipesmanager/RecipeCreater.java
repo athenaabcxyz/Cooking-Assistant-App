@@ -2,6 +2,7 @@ package com.example.cookingrecipesmanager;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,7 +52,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RecipeCreater extends AppCompatActivity {
@@ -63,7 +67,7 @@ public class RecipeCreater extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     EditText recipeName;
     EditText description;
-    int currentRecipeQuantity;
+    long currentRecipeQuantity;
     EditText time;
     Spinner spinner;
     LinearLayoutManager linearLayoutManagerForStep;
@@ -178,19 +182,21 @@ public class RecipeCreater extends AppCompatActivity {
         });
 
         //Create id recipe
-        db.collection("recipes").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
-                int count = 0;
-                for (DocumentSnapshot snapshot : snapshotList) {
-                    Recipe countRecipe = snapshot.toObject(Recipe.class);
-                    if (count < countRecipe.id)
-                        count = countRecipe.id;
-                }
-                currentRecipeQuantity = count + 1;
-            }
-        });
+        createID();
+//        db.collection("recipes").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                List<DocumentSnapshot> snapshotList = queryDocumentSnapshots.getDocuments();
+//                int count = 0;
+//                for (DocumentSnapshot snapshot : snapshotList) {
+//                    Recipe countRecipe = snapshot.toObject(Recipe.class);
+//                    if (count < countRecipe.id)
+//                        count = countRecipe.id;
+//                }
+//                currentRecipeQuantity = count + 1;
+//
+//            }
+//        });
 
         //Create data sample for testing
         recipe = new RecipeDetail();
@@ -452,6 +458,8 @@ public class RecipeCreater extends AppCompatActivity {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Save.setEnabled(false);
+                Cancel.setEnabled(false);
                 StringBuilder notice = new StringBuilder();
                 if (tagList.size() == 0)
                     notice.append("- Your recipe tag(s) is empty.\n");
@@ -525,7 +533,7 @@ public class RecipeCreater extends AppCompatActivity {
                                                 if (paramRecipe != null) {
                                                     DeleteRecipe();
                                                 } else {
-                                                    ShowSuccess();
+                                                    ShowSuccessAndBack();
                                                 }
                                             }
                                         });
@@ -648,6 +656,17 @@ public class RecipeCreater extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        dialog.setOnCancelListener(
+                new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        dialog.dismiss();
+                        onBackPressed();
+                    }
+                }
+        );
+        Save.setEnabled(true);
+        Cancel.setEnabled(true);
     }
 
     public void ShowSuccess() {
@@ -670,6 +689,8 @@ public class RecipeCreater extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+        Save.setEnabled(true);
+        Cancel.setEnabled(true);
     }
 
     public void ShowFailure() {
@@ -690,7 +711,17 @@ public class RecipeCreater extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                Save.setEnabled(true);
+                Cancel.setEnabled(true);
             }
         });
+    }
+
+    public void createID(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date();
+        String newDate = dateFormat.format(date);
+        Long newId = Long.valueOf(newDate);
+        currentRecipeQuantity = newId;
     }
 }

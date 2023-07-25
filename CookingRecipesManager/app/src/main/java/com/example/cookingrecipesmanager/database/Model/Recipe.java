@@ -7,7 +7,7 @@ public class Recipe implements Serializable {
     public int aggregateLikes;
     public double pricePerServing;
     public ArrayList<ExtendedIngredient> extendedIngredients;
-    public int id;
+    public long id;
     public String title;
     public int readyInMinutes;
     public int servings;
