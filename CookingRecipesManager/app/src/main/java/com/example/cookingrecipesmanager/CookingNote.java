@@ -19,7 +19,7 @@ public class CookingNote implements Parcelable {
             return new CookingNote[size];
         }
     };
-    public int id;
+    public long id;
     public Recipe recipe;
     public String img;
     private String title;
@@ -28,7 +28,7 @@ public class CookingNote implements Parcelable {
     private Float evaluate;
     private Boolean iFavorites;
 
-    public CookingNote(Recipe recipe, Integer recipeID, String title, String author, String description, String img, Float evaluate, Boolean iFavorites) {
+    public CookingNote(Recipe recipe, Long recipeID, String title, String author, String description, String img, Float evaluate, Boolean iFavorites) {
         this.recipe = recipe;
         this.id = recipeID;
         this.title = title;
